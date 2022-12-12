@@ -1,11 +1,13 @@
 import 'package:appwrite/appwrite.dart';
 
-class AppwriteServiceRepository {
+class AppwriteRepository {
+  AppwriteRepository() {}
+
   Client getClient() {
     Client client = Client()
-        .setEndpoint('http://localhost/v1')
+        .setEndpoint('https://127.0.0.1/v1')
         .setProject('63934922910ffd76d406')
-        .setSelfSigned(status: true);
+        .setSelfSigned();
     return client;
   }
 

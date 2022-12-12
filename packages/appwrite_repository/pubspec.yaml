@@ -1,0 +1,12 @@
+name: appwrite_repository
+description: Appwrite Api
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.16.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  appwrite: ^8.1.0

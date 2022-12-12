@@ -1,29 +1,43 @@
-import 'dart:async';
+// import 'dart:async';
+import 'package:appwrite_repository/appwrite_repository.dart';
+import 'package:appwrite/appwrite.dart';
 
-// enum AuthenticationStatus { unknown, authenticated, unauthenticated }
+class LogInFailure implements Exception {
+  const LogInFailure([
+    this.message = 'Si è verificato un errore sconosciuto!',
+  ]);
+
+  factory LogInFailure.fromCode(String code) {
+    switch (code) {
+      case 'user-not-found':
+        return const LogInFailure(
+          'Email/Username o password non corretta.',
+        );
+      default:
+        return const LogInFailure();
+    }
+  }
+
+  final String message;
+}
 
 class AuthenticationRepository {
-  // final _controller = StreamController<AuthenticationStatus>();
+  late final AppwriteRepository appwriteRepository;
+  late final Client client;
+  late final Account account;
 
-  // Stream<AuthenticationStatus> get status async* {
-  //   await Future<void>.delayed(const Duration(seconds: 1));
-  //   yield AuthenticationStatus.unauthenticated;
-  //   yield* _controller.stream;
-  // }
+  AuthenticationRepository() {
+    appwriteRepository = AppwriteRepository();
+    client = appwriteRepository.getClient();
+    account = Account(client);
+  }
 
-  // Future<void> logIn({
-  //   required String username,
-  //   required String password,
-  // }) async {
-  //   await Future.delayed(
-  //     const Duration(milliseconds: 300),
-  //     () => _controller.add(AuthenticationStatus.authenticated),
-  //   );
-  // }
-
-  // void logOut() {
-  //   _controller.add(AuthenticationStatus.unauthenticated);
-  // }
-
-  // void dispose() => _controller.close();
+  Future<void> loginWithEmailAndPassword(String email, String password) async {
+    print("AuthRepo: login");
+    try {
+      await account.createEmailSession(email: email, password: password);
+    } on AppwriteException catch (e) {
+      throw LogInFailure(e.message!);
+    }
+  }
 }

@@ -1,4 +1,7 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lavoratori_stagionali/src/authentication/cubit/auth_cubit.dart';
 import 'package:lavoratori_stagionali/src/authentication/view/login_form.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -6,11 +9,15 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 200),
-          child: LoginForm(),
+          padding: const EdgeInsets.symmetric(horizontal: 200),
+          child: BlocProvider(
+            create: (context) =>
+                AuthCubit(authenticationRepository: AuthenticationRepository()),
+            child: const LoginForm(),
+          ),
         ),
       ),
     );

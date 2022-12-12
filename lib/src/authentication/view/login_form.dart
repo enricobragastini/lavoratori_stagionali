@@ -8,27 +8,36 @@ class LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset(
-            'assets/images/logo.png',
-            width: 150,
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            "LOGIN",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          const _EmailInput(),
-          const SizedBox(height: 8),
-          const _PasswordInput(),
-          const SizedBox(height: 8),
-          const _LoginButton(),
-        ],
+    return BlocListener<AuthCubit, AuthState>(
+      listener: (context, state) {
+        if (state.status == FormStatus.submissionFailure) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(SnackBar(content: Text(state.errorMessage!)));
+        }
+      },
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/images/logo.png',
+              width: 150,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              "LOGIN",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            const _EmailInput(),
+            const SizedBox(height: 8),
+            const _PasswordInput(),
+            const SizedBox(height: 8),
+            const _LoginButton(),
+          ],
+        ),
       ),
     );
   }
@@ -84,6 +93,15 @@ class _LoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(onPressed: () {}, child: const Text("Login"));
+    return BlocBuilder<AuthCubit, AuthState>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      builder: (context, state) {
+        return ElevatedButton(
+            onPressed: (state.status == FormStatus.valid)
+                ? () => context.read<AuthCubit>().loginWithCredentials()
+                : null,
+            child: const Text("Login"));
+      },
+    );
   }
 }
