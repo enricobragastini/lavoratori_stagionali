@@ -10,7 +10,6 @@ import '../app.dart';
 
 GoRouter goRouter(BuildContext context) {
   return GoRouter(
-      initialLocation: '/login',
       routes: [
         GoRoute(
           path: '/login',
