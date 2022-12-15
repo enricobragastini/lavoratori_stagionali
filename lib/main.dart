@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:window_size/window_size.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:lavoratori_stagionali/src/app.dart';
+import 'package:authentication_repository/authentication_repository.dart';
+import 'package:lavoratori_stagionali/app/app.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,7 +15,14 @@ void main() {
     setWindowMinSize(const Size(1100, 700));
   }
 
+  AuthenticationRepository authenticationRepository =
+      AuthenticationRepository();
+
   runApp(
-    const App(),
+    BlocProvider(
+      create: (context) =>
+          AppBloc(authenticationRepository: authenticationRepository),
+      child: const AppView(),
+    ),
   );
 }

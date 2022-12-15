@@ -11,15 +11,10 @@ dependencies:
     sdk: flutter
   appwrite_repository:
     path: ../appwrite_repository
+  employees_repository:
+    path: ../employees_repository
+  rxdart: ^0.27.7
 
 dev_dependencies:
   very_good_analysis: ^3.1.0
 
-
-
-
-
-# dependencies:
-#   flutter:
-#     sdk: flutter
-#   appwrite: ^8.1.0

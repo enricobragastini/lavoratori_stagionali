@@ -43,12 +43,15 @@ dependencies:
       path: plugins/window_size
       ref: a738913c8ce2c9f47515382d40827e794a334274
   appwrite: ^8.1.0
-  bloc: ^8.1.0
   flutter_bloc: ^8.1.1
   equatable: ^2.0.5
 
   authentication_repository:
     path: packages/authentication_repository
+  employees_repository:
+    path: packages/employees_repository
+  json_serializable: ^6.5.4
+  rxdart: ^0.27.7
 
 
 dev_dependencies:
