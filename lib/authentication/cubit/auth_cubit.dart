@@ -42,6 +42,5 @@ class AuthCubit extends Cubit<AuthState> {
       emit(state.copyWith(
           status: FormStatus.submissionFailure, errorMessage: e.message));
     }
-    authenticationRepository.currentEmployee;
   }
 }

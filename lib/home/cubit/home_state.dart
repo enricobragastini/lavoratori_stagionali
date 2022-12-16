@@ -1,10 +1,12 @@
 part of 'home_cubit.dart';
 
-abstract class HomeState extends Equatable {
-  const HomeState();
+enum HomeTab { page1, page2 }
+
+class HomeState extends Equatable {
+  const HomeState({this.selectedTab = HomeTab.page1});
+
+  final HomeTab selectedTab;
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [selectedTab];
 }
-
-class HomeInitial extends HomeState {}

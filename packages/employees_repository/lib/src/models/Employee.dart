@@ -55,4 +55,9 @@ class Employee extends Equatable {
   @override
   List<Object?> get props =>
       [id, firstname, lastname, email, phone, birthday, username];
+
+  @override
+  String toString() {
+    return "$firstname $lastname ($email - $phone)";
+  }
 }

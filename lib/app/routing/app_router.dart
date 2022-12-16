@@ -19,17 +19,17 @@ GoRouter goRouter(BuildContext context) {
           ),
         ),
         GoRoute(
-          path: '/',
+          path: '/home-page',
           builder: (context, state) => const HomePage(),
         )
       ],
       redirect: ((context, state) {
-        switch (BlocProvider.of<AppBloc>(context).state.status) {
+        final status = BlocProvider.of<AppBloc>(context).state.status;
+        print("_goRouterRedirect triggered: $status");
+        switch (status) {
           case AuthenticationStatus.authenticated:
-            return '/';
+            return '/home-page';
           case AuthenticationStatus.unauthenticated:
-            return '/login';
-          case AuthenticationStatus.unknown:
             return '/login';
         }
       }),

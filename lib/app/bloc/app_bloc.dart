@@ -11,9 +11,11 @@ part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> with ChangeNotifier {
   AppBloc({required AuthenticationRepository authenticationRepository})
+      // ignore: prefer_initializing_formals
       : authenticationRepository = authenticationRepository,
         super(const AppState.unknown()) {
     on<AppAuthenticationStatusChanged>(_authenticationStatusChanged);
+    on<AppLogoutRequested>(_onAppLogOutRequested);
     authenticationStreamSubscription = authenticationRepository.stream
         .listen((status) => add(AppAuthenticationStatusChanged(status)));
   }
@@ -24,24 +26,29 @@ class AppBloc extends Bloc<AppEvent, AppState> with ChangeNotifier {
 
   Future<void> _authenticationStatusChanged(
       AppAuthenticationStatusChanged event, Emitter<AppState> emit) async {
+    print("_goRouterRedirect triggered: ${event.status}");
     switch (event.status) {
       case AuthenticationStatus.unauthenticated:
         return emit(const AppState.unauthenticated());
       case AuthenticationStatus.authenticated:
         final employee = _tryGetEmployee();
+        print(authenticationRepository.loggedInEmployee);
         return emit(
           employee != null
               ? AppState.authenticated(employee)
               : const AppState.unauthenticated(),
         );
-      case AuthenticationStatus.unknown:
-        return emit(const AppState.unknown());
     }
   }
 
+  void _onAppLogOutRequested(AppLogoutRequested event, Emitter<AppState> emit) {
+    authenticationRepository.logout();
+    emit(const AppState.unauthenticated());
+  }
+
   Employee? _tryGetEmployee() {
-    if (authenticationRepository.currentEmployee != Employee.empty) {
-      return authenticationRepository.currentEmployee;
+    if (authenticationRepository.loggedInEmployee != Employee.empty) {
+      return authenticationRepository.loggedInEmployee;
     } else {
       return null;
     }
