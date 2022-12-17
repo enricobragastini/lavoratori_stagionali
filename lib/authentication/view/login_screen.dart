@@ -16,7 +16,7 @@ class LoginScreen extends StatelessWidget {
       body: Container(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 200),
+            padding: const EdgeInsets.symmetric(horizontal: 300),
             child: BlocProvider(
               create: (context) =>
                   AuthCubit(authenticationRepository: authenticationRepository),

@@ -12,11 +12,11 @@ class AppView extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       restorationScopeId: 'app',
       title: 'Lavoratori Stagionali',
-      themeMode: ThemeMode.dark,
-      darkTheme: ThemeData(
-        brightness: Brightness.light,
-        /* dark theme settings */
-      ),
+      theme: ThemeData(
+          // Define the default brightness and colors.
+          brightness: Brightness.light,
+          colorScheme: ColorScheme.fromSwatch()
+              .copyWith(primary: const Color(0xFF4059AD))),
     );
   }
 }

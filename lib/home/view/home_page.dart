@@ -23,21 +23,16 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-            context.select((HomeCubit cubit) => cubit.state.selectedTab).name),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            tooltip: "Logout",
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (context) => const CustomAlertDialog());
-            },
-          )
-        ],
-      ),
+      floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.logout),
+          tooltip: "Logout",
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (context) => const CustomAlertDialog());
+          }),
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniStartDocked,
       body: IndexedStack(
         index:
             context.select((HomeCubit cubit) => cubit.state.selectedTab).index,
@@ -64,8 +59,14 @@ class Page1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Center(child: Text("Page 1")),
-    );
+        backgroundColor: Colors.redAccent,
+        body: Center(
+          child: Text(
+            "Page 1",
+            style: TextStyle(
+                fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+        ));
   }
 }
 
@@ -75,7 +76,13 @@ class Page2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Center(child: Text("Page 2")),
+      backgroundColor: Colors.green,
+      body: Center(
+          child: Text(
+        "Page 2",
+        style: TextStyle(
+            fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
+      )),
     );
   }
 }

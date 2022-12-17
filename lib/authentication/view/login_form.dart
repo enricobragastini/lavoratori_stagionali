@@ -13,7 +13,12 @@ class LoginForm extends StatelessWidget {
         if (state.status == FormStatus.submissionFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(content: Text(state.errorMessage!)));
+            ..showSnackBar(SnackBar(
+              content: Text(state.errorMessage!),
+              // backgroundColor: Theme.of(context).colorScheme.primary,
+              behavior: SnackBarBehavior.floating,
+              duration: const Duration(milliseconds: 5000),
+            ));
         }
       },
       child: SingleChildScrollView(
@@ -30,7 +35,7 @@ class LoginForm extends StatelessWidget {
               "LOGIN",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 16),
             const _EmailInput(),
             const SizedBox(height: 8),
             const _PasswordInput(),
@@ -52,7 +57,11 @@ class _EmailInput extends StatelessWidget {
       builder: (context, state) {
         return TextField(
           keyboardType: TextInputType.emailAddress,
-          decoration: const InputDecoration(labelText: "Email", helperText: ''),
+          decoration: InputDecoration(
+              labelText: "Email",
+              helperText: '',
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(15))),
           onChanged: (email) => context.read<AuthCubit>().emailChanged(email),
         );
       },
@@ -73,6 +82,8 @@ class _PasswordInput extends StatelessWidget {
           enableSuggestions: false,
           autocorrect: false,
           decoration: InputDecoration(
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
               labelText: "Password",
               helperText: '',
               suffixIcon: IconButton(
