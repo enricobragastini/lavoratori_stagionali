@@ -6,6 +6,7 @@ import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
 import 'package:employees_repository/employees_repository.dart' show Employee;
 
+// Custom Exception in caso di fallimento del login
 class LogInFailure implements Exception {
   const LogInFailure([
     this.message = 'Si è verificato un errore sconosciuto!',
@@ -14,38 +15,39 @@ class LogInFailure implements Exception {
   final String message;
 }
 
+// Possibili stati di autenticazione
 enum AuthenticationStatus { authenticated, unauthenticated }
 
 class AuthenticationRepository {
   final AppwriteRepository appwriteRepository = AppwriteRepository();
-  late final Client client;
-  late final Account account;
   late Employee loggedInEmployee;
+
+  // StreamController
+  // Fa uno streaming dello stato dell'autenticazione
   final controller = StreamController<AuthenticationStatus>();
 
   AuthenticationRepository() {
-    client = appwriteRepository.client;
-    account = appwriteRepository.accountService;
     loggedInEmployee = Employee.empty;
     controller.add(AuthenticationStatus.unauthenticated);
 
     appwriteRepository.isSessionActive.then((isSessionActive) {
-      print(isSessionActive);
+      // Se all'avvio c'è una sessione attiva
       if (isSessionActive) {
-        appwriteRepository.currentAccount.then((value) => print(value.$id));
+        // Recupera le informazioni sull'utente autenticato
         appwriteRepository.currentAccount.then((account) {
-          _updateCurrentEmployee(account);
+          updateCurrentEmployee(account);
         });
       }
     });
   }
 
+  // Funzione per il login con email e password
   Future<void> loginWithEmailAndPassword(String email, String password) async {
     try {
-      models.Session session =
-          await account.createEmailSession(email: email, password: password);
+      await appwriteRepository.account
+          .createEmailSession(email: email, password: password);
 
-      _updateCurrentEmployee(await appwriteRepository.currentAccount);
+      updateCurrentEmployee(await appwriteRepository.currentAccount);
     } on AppwriteException catch (e) {
       loggedInEmployee = Employee.empty;
 
@@ -55,28 +57,29 @@ class AuthenticationRepository {
     }
   }
 
-  void _updateCurrentEmployee(models.Account account) async {
+  // Funzione che imposta i dati dell'utente autenticato
+  void updateCurrentEmployee(models.Account account) async {
+    // Recupera le info dal database
     Map<String, dynamic> userDocument =
         await appwriteRepository.getEmployeeDocument(account.$id);
-
-    String username = account.name;
-    String email = account.email;
 
     loggedInEmployee = Employee(
       id: account.$id,
       firstname: userDocument["firstname"],
       lastname: userDocument["lastname"],
-      email: email,
+      email: account.email,
       phone: userDocument["phone"],
       birthday: DateTime.parse(userDocument["birthday"]),
-      username: username,
+      username: account.name,
     );
     controller.add(AuthenticationStatus.authenticated);
   }
 
+  // Funzione per il logout
+  // Elimina la sessione e le info utente
   Future<bool> logout() async {
     try {
-      appwriteRepository.accountService.deleteSession(sessionId: "current");
+      appwriteRepository.account.deleteSession(sessionId: "current");
       this.loggedInEmployee = Employee.empty;
       return true;
     } on AppwriteRepository {
@@ -84,6 +87,7 @@ class AuthenticationRepository {
     }
   }
 
+  // Stream dello stato di autenticazione
   Stream<AuthenticationStatus> get stream => controller.stream;
 
   void dispose() => controller.close();

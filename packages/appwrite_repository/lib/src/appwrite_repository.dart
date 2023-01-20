@@ -2,30 +2,35 @@ import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
 
 class AppwriteRepository {
-  final String _database_id = "63934940ad64e6c0c116";
-  final String _employees_collection_id = "6393495fd3f61c7eaef0";
+  // Id per accedere a database e collections
+  final String _database_id = "63a5777a35b83decd653";
+  final String _employees_collection_id = "63a5778dbd36d1734ca1";
+
+  // Client Appwrite
   late final Client client;
 
   AppwriteRepository() {
     this.client = Client()
-        .setEndpoint('https://127.0.0.1/v1')
-        .setProject('63934922910ffd76d406')
-        .setSelfSigned();
+        .setEndpoint('https://127.0.0.1:4322/v1')
+        .setProject('63a45ff8eecc92be3dda')
+        .setSelfSigned(status: true);
   }
 
+  // Servizio di storage di Appwrite
   Storage get storage => Storage(client);
 
-  Account get accountService => Account(client);
+  // Servizio di autenticazione di appwrite
+  Account get account => Account(client);
 
-  Future<models.Account> get currentAccount async => accountService.get();
+  // Riceve le informazioni utente della sessione attiva
+  Future<models.Account> get currentAccount async => account.get();
 
-  Future<models.Session> get currentSession async =>
-      accountService.getSession(sessionId: "current");
-
+  // Recupera dal database le informazioni di un Employee dato il suo userId
   Future<Map<String, dynamic>> getEmployeeDocument(String userId) async {
     Databases database = Databases(client);
 
     models.DocumentList docs = await database.listDocuments(
+        // Query al db
         databaseId: _database_id,
         collectionId: _employees_collection_id,
         queries: [Query.equal("user_id", userId)]);
@@ -33,9 +38,10 @@ class AppwriteRepository {
     return docs.documents[0].data;
   }
 
+  // Stabilisce se c'è una sessione aperta
   Future<bool> get isSessionActive async {
     try {
-      await accountService.get();
+      await account.get();
       return true;
     } on AppwriteException catch (e) {
       return false;
