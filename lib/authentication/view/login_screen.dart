@@ -13,15 +13,13 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 300),
-            child: BlocProvider(
-              create: (context) =>
-                  AuthCubit(authenticationRepository: authenticationRepository),
-              child: const LoginForm(),
-            ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 300),
+          child: BlocProvider(
+            create: (context) =>
+                AuthCubit(authenticationRepository: authenticationRepository),
+            child: const LoginForm(),
           ),
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lavoratori_stagionali/app/app.dart';
+import 'package:lavoratori_stagionali/gallery/gallery.dart';
 import 'package:lavoratori_stagionali/home/cubit/home_cubit.dart';
 
 class HomePage extends StatelessWidget {
@@ -24,19 +25,19 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.logout),
           tooltip: "Logout",
           onPressed: () {
             showDialog(
                 context: context,
                 builder: (context) => const CustomAlertDialog());
-          }),
+          },
+          child: const Icon(Icons.logout)),
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniStartDocked,
       body: IndexedStack(
         index:
             context.select((HomeCubit cubit) => cubit.state.selectedTab).index,
-        children: const [Page1(), Page2()],
+        children: const [GalleryPage(), Page2()],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _tabIndex,
@@ -45,28 +46,13 @@ class HomeView extends StatelessWidget {
           context.read<HomeCubit>().setTab(HomeTab.values[index]);
         },
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.people), label: "Workers"),
-          BottomNavigationBarItem(icon: Icon(Icons.add), label: "Aggiungi")
+          BottomNavigationBarItem(
+              icon: Icon(Icons.people), label: "Elenco lavoratori"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.add), label: "Nuovo lavoratore")
         ],
       ),
     );
-  }
-}
-
-class Page1 extends StatelessWidget {
-  const Page1({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-        backgroundColor: Colors.redAccent,
-        body: Center(
-          child: Text(
-            "Page 1",
-            style: TextStyle(
-                fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-        ));
   }
 }
 

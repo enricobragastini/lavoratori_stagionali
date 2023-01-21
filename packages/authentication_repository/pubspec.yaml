@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  appwrite: ^8.1.0
   appwrite_repository:
     path: ../appwrite_repository
   employees_repository:
