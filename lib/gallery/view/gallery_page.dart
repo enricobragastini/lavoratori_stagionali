@@ -29,7 +29,12 @@ class GalleryPage extends StatelessWidget {
                 Expanded(
                     child: ListView.builder(
                   itemCount: 20,
-                  itemBuilder: (context, index) => const WorkerCard(),
+                  itemBuilder: (context, index) => const WorkerCard(
+                    name: "Matteo",
+                    surname: "Messina Denaro",
+                    email: "mattew@cosanostra.it",
+                    telephone: "123456789",
+                  ),
                 ))
               ],
             ),
