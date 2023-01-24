@@ -2,9 +2,9 @@ import 'package:equatable/equatable.dart';
 
 class Worker extends Equatable {
   const Worker(
-      {required this.id,
+      {this.id,
       required this.firstname,
-      required this.surname,
+      required this.lastname,
       required this.birthday,
       required this.birthplace,
       required this.nationality,
@@ -12,10 +12,10 @@ class Worker extends Equatable {
       required this.phone,
       required this.address});
 
-  final String id;
+  final String? id;
   final String firstname;
-  final String surname;
-  final String birthday;
+  final String lastname;
+  final DateTime birthday;
   final String birthplace;
   final String nationality;
   final String email;
@@ -26,7 +26,7 @@ class Worker extends Equatable {
     String? id,
     String? firstname,
     String? surname,
-    String? birthday,
+    DateTime? birthday,
     String? birthplace,
     String? nationality,
     String? email,
@@ -36,7 +36,7 @@ class Worker extends Equatable {
     return Worker(
       id: id ?? this.id,
       firstname: firstname ?? this.firstname,
-      surname: surname ?? this.surname,
+      lastname: surname ?? this.lastname,
       birthday: birthday ?? this.birthday,
       birthplace: birthplace ?? this.birthplace,
       nationality: nationality ?? this.nationality,
@@ -50,7 +50,7 @@ class Worker extends Equatable {
   List<Object?> get props => [
         id,
         firstname,
-        surname,
+        lastname,
         birthday,
         birthplace,
         nationality,

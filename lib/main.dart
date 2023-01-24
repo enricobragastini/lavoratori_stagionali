@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:lavoratori_stagionali/app/app.dart';
+import 'package:workers_repository/workers_repository.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,10 +19,13 @@ void main() {
   AuthenticationRepository authenticationRepository =
       AuthenticationRepository();
 
+  WorkersRepository workersRepository = WorkersRepository();
+
   runApp(
     BlocProvider(
-      create: (context) =>
-          AppBloc(authenticationRepository: authenticationRepository),
+      create: (context) => AppBloc(
+          authenticationRepository: authenticationRepository,
+          workersRepository: workersRepository),
       child: const AppView(),
     ),
   );

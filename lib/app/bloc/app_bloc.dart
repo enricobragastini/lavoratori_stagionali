@@ -5,12 +5,15 @@ import 'package:employees_repository/employees_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:workers_repository/workers_repository.dart';
 
 part 'app_event.dart';
 part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> with ChangeNotifier {
-  AppBloc({required AuthenticationRepository authenticationRepository})
+  AppBloc(
+      {required AuthenticationRepository authenticationRepository,
+      required this.workersRepository})
       // ignore: prefer_initializing_formals
       : authenticationRepository = authenticationRepository,
         super(const AppState.unknown()) {
@@ -21,6 +24,7 @@ class AppBloc extends Bloc<AppEvent, AppState> with ChangeNotifier {
   }
 
   final AuthenticationRepository authenticationRepository;
+  final WorkersRepository workersRepository;
   late StreamSubscription<AuthenticationStatus>
       authenticationStreamSubscription;
 

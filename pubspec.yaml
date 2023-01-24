@@ -29,6 +29,8 @@ dependencies:
     path: packages/authentication_repository
   employees_repository:
     path: packages/employees_repository
+  workers_repository:
+    path: packages/workers_repository
   json_serializable: ^6.5.4
   rxdart: ^0.27.7
 
