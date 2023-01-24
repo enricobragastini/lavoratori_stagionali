@@ -20,7 +20,10 @@ GoRouter goRouter(BuildContext context) {
         ),
         GoRoute(
           path: '/home-page',
-          builder: (context, state) => const HomePage(),
+          builder: (context, state) => HomePage(
+            workersRepository:
+                BlocProvider.of<AppBloc>(context).workersRepository,
+          ),
         )
       ],
       redirect: ((context, state) {
