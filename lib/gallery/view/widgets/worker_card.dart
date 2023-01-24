@@ -3,18 +3,21 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 
 class WorkerCard extends StatelessWidget {
-  const WorkerCard({
-    Key? key,
-    required this.name,
-    required this.surname,
-    required this.email,
-    required this.telephone,
-  }) : super(key: key);
+  const WorkerCard(
+      {Key? key,
+      required this.name,
+      required this.surname,
+      required this.email,
+      required this.telephone,
+      required this.onDelete})
+      : super(key: key);
 
   final String name;
   final String surname;
   final String email;
   final String telephone;
+
+  final void Function() onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +66,7 @@ class WorkerCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const Icon(Icons.edit)
+              IconButton(onPressed: onDelete, icon: const Icon(Icons.delete))
             ],
           ),
         ),

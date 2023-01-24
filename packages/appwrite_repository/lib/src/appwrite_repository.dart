@@ -10,6 +10,10 @@ class AppwriteRepository {
   // Client Appwrite
   late final Client client;
   late final Databases database;
+  late final Realtime realtime;
+
+  // Workers Realtime Subscription
+  late final RealtimeSubscription workersSubscription;
 
   AppwriteRepository() {
     this.client = Client()
@@ -17,6 +21,8 @@ class AppwriteRepository {
         .setProject('63a45ff8eecc92be3dda')
         .setSelfSigned(status: true);
     this.database = Databases(this.client);
+    this.realtime = Realtime(this.client);
+    this.workersSubscription = realtime.subscribe(["documents"]);
   }
 
   // Servizio di storage di Appwrite
@@ -63,4 +69,26 @@ class AppwriteRepository {
       return false;
     }
   }
+
+  Future<bool> deleteWorker(String documentId) async {
+    try {
+      database.deleteDocument(
+          databaseId: _database_id,
+          collectionId: _workers_collection_id,
+          documentId: documentId);
+      return true;
+    } on AppwriteRepository catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<models.DocumentList> get workersDocumentList async {
+    return database.listDocuments(
+        databaseId: _database_id,
+        collectionId: _workers_collection_id,
+        queries: []);
+  }
+
+  Stream<RealtimeMessage> get workersStream => workersSubscription.stream;
 }

@@ -6,6 +6,7 @@ import 'package:lavoratori_stagionali/gallery/gallery.dart';
 
 import 'package:lavoratori_stagionali/home/cubit/home_cubit.dart';
 import 'package:lavoratori_stagionali/create/bloc/create_bloc.dart';
+import 'package:lavoratori_stagionali/gallery/bloc/gallery_bloc.dart';
 import 'package:workers_repository/workers_repository.dart';
 
 class HomePage extends StatelessWidget {
@@ -19,6 +20,10 @@ class HomePage extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => HomeCubit(),
+        ),
+        BlocProvider(
+          create: (context) => GalleryBloc(workersRepository: workersRepository)
+            ..add(const WorkersSubscriptionRequested()),
         ),
         BlocProvider(
           create: (context) => CreateBloc(workersRepository: workersRepository),

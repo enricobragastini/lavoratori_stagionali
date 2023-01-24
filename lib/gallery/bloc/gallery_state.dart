@@ -12,5 +12,10 @@ class GalleryState extends Equatable {
   final List<Worker> workers;
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [status, workers];
+
+  GalleryState copyWith({GalleryStatus? status, List<Worker>? workers}) {
+    return GalleryState(
+        status: status ?? this.status, workers: workers ?? this.workers);
+  }
 }
