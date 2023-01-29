@@ -2,8 +2,9 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import "package:flutter_bloc/flutter_bloc.dart";
+import 'package:textfield_tags/textfield_tags.dart';
+
 import "../bloc/create_bloc.dart";
 
 class CreatePage extends StatelessWidget {
@@ -197,10 +198,16 @@ class CreatePage extends StatelessWidget {
                                       if (value == null || value.isEmpty) {
                                         return "Questo è un campo obbligatorio";
                                       }
+                                      String pattern =
+                                          "^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\\/)\\d{4}\$";
+                                      RegExp regExp = RegExp(pattern);
+                                      if (!regExp.hasMatch(value)) {
+                                        return 'Inserire una data valida (dd/mm/yyyy)';
+                                      }
                                       try {
                                         DateFormat('dd/MM/yyyy').parse(value);
                                       } catch (e) {
-                                        return 'Inserire una data valida';
+                                        return 'Inserire una data valida (dd/mm/yyyy)';
                                       }
                                       return null;
                                     },

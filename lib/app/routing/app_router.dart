@@ -10,32 +10,37 @@ import '../app.dart';
 
 GoRouter goRouter(BuildContext context) {
   return GoRouter(
-      routes: [
-        GoRoute(
-          path: '/login',
-          builder: (context, state) => LoginScreen(
-            authenticationRepository:
-                BlocProvider.of<AppBloc>(context).authenticationRepository,
-          ),
+    routes: [
+      GoRoute(
+        path: '/login',
+        builder: (context, state) => LoginScreen(
+          authenticationRepository:
+              BlocProvider.of<AppBloc>(context).authenticationRepository,
         ),
-        GoRoute(
-          path: '/home-page',
-          builder: (context, state) => HomePage(
-            workersRepository:
-                BlocProvider.of<AppBloc>(context).workersRepository,
-          ),
-        )
-      ],
-      redirect: ((context, state) {
-        final status = BlocProvider.of<AppBloc>(context).state.status;
-        print("_goRouterRedirect triggered: $status");
-        switch (status) {
-          case AuthenticationStatus.authenticated:
-            return '/home-page';
-          case AuthenticationStatus.unauthenticated:
-            return '/login';
-        }
-      }),
-      refreshListenable:
-          GoRouterRefreshStream(BlocProvider.of<AppBloc>(context).stream));
+      ),
+      GoRoute(
+        path: '/home-page',
+        builder: (context, state) => HomePage(
+          workersRepository:
+              BlocProvider.of<AppBloc>(context).workersRepository,
+        ),
+      )
+    ],
+
+    // GoRouter ascolta i cambiamenti di stato in AppBloc
+    refreshListenable:
+        GoRouterRefreshStream(BlocProvider.of<AppBloc>(context).stream),
+
+    // Se ci sono cambiamenti di stato in AppBloc
+    // Valuta lo stato dell'autenticazione e in base a quello fa il redirect sulla pagina adeguata.
+    redirect: ((context, state) {
+      final status = BlocProvider.of<AppBloc>(context).state.status;
+      switch (status) {
+        case AuthenticationStatus.authenticated:
+          return '/home-page';
+        case AuthenticationStatus.unauthenticated:
+          return '/login';
+      }
+    }),
+  );
 }

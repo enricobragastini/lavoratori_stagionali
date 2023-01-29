@@ -19,6 +19,7 @@ class AppBloc extends Bloc<AppEvent, AppState> with ChangeNotifier {
         super(const AppState.unknown()) {
     on<AppAuthenticationStatusChanged>(_authenticationStatusChanged);
     on<AppLogoutRequested>(_onAppLogOutRequested);
+
     authenticationStreamSubscription = authenticationRepository.stream
         .listen((status) => add(AppAuthenticationStatusChanged(status)));
   }
@@ -30,24 +31,33 @@ class AppBloc extends Bloc<AppEvent, AppState> with ChangeNotifier {
 
   Future<void> _authenticationStatusChanged(
       AppAuthenticationStatusChanged event, Emitter<AppState> emit) async {
-    print("_goRouterRedirect triggered: ${event.status}");
     switch (event.status) {
       case AuthenticationStatus.unauthenticated:
         return emit(const AppState.unauthenticated());
+
       case AuthenticationStatus.authenticated:
-        final employee = _tryGetEmployee();
-        print(authenticationRepository.loggedInEmployee);
-        return emit(
-          employee != null
-              ? AppState.authenticated(employee)
-              : const AppState.unauthenticated(),
-        );
+        await ensureAuthenticated().then((authenticated) async {
+          if (authenticated) {
+            final employee = _tryGetEmployee();
+            emit(
+              employee != null
+                  ? AppState.authenticated(employee)
+                  : const AppState.unauthenticated(),
+            );
+          } else {
+            emit(const AppState.unauthenticated());
+          }
+        });
     }
   }
 
   void _onAppLogOutRequested(AppLogoutRequested event, Emitter<AppState> emit) {
     authenticationRepository.logout();
     emit(const AppState.unauthenticated());
+  }
+
+  Future<bool> ensureAuthenticated() async {
+    return await authenticationRepository.ensureLoggedIn();
   }
 
   Employee? _tryGetEmployee() {

@@ -8,49 +8,65 @@ class GalleryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(
-          child: BlocBuilder<GalleryBloc, GalleryState>(
-            builder: (context, state) {
-              return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                constraints: const BoxConstraints(maxWidth: 1400),
-                width: double.infinity,
-                height: double.infinity,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(bottom: 20.0, top: 10),
-                      child: Text(
-                        "ELENCO LAVORATORI",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.bold),
+    return BlocListener<GalleryBloc, GalleryState>(
+      listener: (context, state) {
+        if (state.status == GalleryStatus.failure) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(SnackBar(
+              content: Text("ERROR: ${state.errorMessage!}"),
+              // backgroundColor: Theme.of(context).colorScheme.primary,
+              showCloseIcon: true,
+              closeIconColor: Colors.white,
+              behavior: SnackBarBehavior.floating,
+              duration: const Duration(milliseconds: 5000),
+            ));
+        }
+      },
+      child: Scaffold(
+          backgroundColor: Colors.white,
+          body: Center(
+            child: BlocBuilder<GalleryBloc, GalleryState>(
+              builder: (context, state) {
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  constraints: const BoxConstraints(maxWidth: 1400),
+                  width: double.infinity,
+                  height: double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(bottom: 20.0, top: 10),
+                        child: Text(
+                          "ELENCO LAVORATORI",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),
-                    Expanded(
-                        child: ListView(
-                      children: [
-                        for (final worker in state.workers)
-                          WorkerCard(
-                            name: worker.firstname,
-                            surname: worker.lastname,
-                            email: worker.email,
-                            telephone: worker.phone,
-                            onDelete: () => context
-                                .read<GalleryBloc>()
-                                .add(WorkerDeleteRequested(worker: worker)),
-                          )
-                      ],
-                    ))
-                  ],
-                ),
-              );
-            },
-          ),
-        ));
+                      Expanded(
+                          child: ListView(
+                        children: [
+                          for (final worker in state.workers)
+                            WorkerCard(
+                              name: worker.firstname,
+                              surname: worker.lastname,
+                              email: worker.email,
+                              telephone: worker.phone,
+                              onDelete: () => context
+                                  .read<GalleryBloc>()
+                                  .add(WorkerDeleteRequested(worker: worker)),
+                            )
+                        ],
+                      ))
+                    ],
+                  ),
+                );
+              },
+            ),
+          )),
+    );
   }
 }

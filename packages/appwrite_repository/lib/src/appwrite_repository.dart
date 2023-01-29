@@ -3,12 +3,14 @@ import 'package:appwrite/models.dart' as models;
 
 class AppwriteRepository {
   // Id per accedere a database e collections
-  final String _database_id = "63a5777a35b83decd653";
-  final String _employees_collection_id = "63a5778dbd36d1734ca1";
-  final String _workers_collection_id = "63cc4b176d8d88961b74";
+  final String _database_id = "63d6895b934434b4966a";
+  final String _employees_collection_id = "63d689659673376c728e";
+  final String _workers_collection_id = "63d6896c220160c60b82";
 
   // Client Appwrite
   late final Client client;
+  late final Account account;
+  late final Storage storage;
   late final Databases database;
   late final Realtime realtime;
 
@@ -17,19 +19,21 @@ class AppwriteRepository {
 
   AppwriteRepository() {
     this.client = Client()
-        .setEndpoint('https://127.0.0.1:4322/v1')
-        .setProject('63a45ff8eecc92be3dda')
+        .setEndpoint('http://139.144.74.141/v1')
+        .setProject('63d68840443d59c7b008')
         .setSelfSigned(status: true);
+    this.account = Account(client);
+    this.storage = Storage(client);
     this.database = Databases(this.client);
     this.realtime = Realtime(this.client);
     this.workersSubscription = realtime.subscribe(["documents"]);
   }
 
-  // Servizio di storage di Appwrite
+/*   // Servizio di storage di Appwrite
   Storage get storage => Storage(client);
 
   // Servizio di autenticazione di appwrite
-  Account get account => Account(client);
+  Account get account => Account(client); */
 
   // Riceve le informazioni utente della sessione attiva
   Future<models.Account> get currentAccount async => account.get();
@@ -48,7 +52,7 @@ class AppwriteRepository {
   // Stabilisce se c'è una sessione aperta
   Future<bool> get isSessionActive async {
     try {
-      await account.get();
+      await account.getSession(sessionId: 'current');
       return true;
     } on AppwriteException {
       return false;
@@ -84,6 +88,8 @@ class AppwriteRepository {
   }
 
   Future<models.DocumentList> get workersDocumentList async {
+    isSessionActive.then(
+        (value) => print("workersDocumentList-> isSessionActive: $value"));
     return database.listDocuments(
         databaseId: _database_id,
         collectionId: _workers_collection_id,

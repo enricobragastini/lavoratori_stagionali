@@ -9,4 +9,4 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  appwrite: ^8.1.0
+  appwrite: ^8.2.0

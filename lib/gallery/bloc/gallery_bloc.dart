@@ -25,9 +25,14 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
     Emitter<GalleryState> emit,
   ) async {
     emit(state.copyWith(status: GalleryStatus.loading));
-    await workersRepository.workersList.then((list) async {
-      emit(state.copyWith(status: GalleryStatus.success, workers: list));
-    });
+    try {
+      await workersRepository.workersList.then((list) async {
+        emit(state.copyWith(status: GalleryStatus.success, workers: list));
+      });
+    } on WorkersException catch (e) {
+      emit(state.copyWith(
+          status: GalleryStatus.failure, errorMessage: e.message));
+    }
   }
 
   Future<void> _onWorkersListUpdated(

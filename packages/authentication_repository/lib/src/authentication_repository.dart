@@ -19,23 +19,24 @@ class LogInFailure implements Exception {
 enum AuthenticationStatus { authenticated, unauthenticated }
 
 class AuthenticationRepository {
-  final AppwriteRepository appwriteRepository = AppwriteRepository();
+  late final AppwriteRepository appwriteRepository;
   late Employee loggedInEmployee;
 
   // StreamController
   // Fa uno streaming dello stato dell'autenticazione
   final controller = StreamController<AuthenticationStatus>();
 
-  AuthenticationRepository() {
+  AuthenticationRepository({required this.appwriteRepository}) {
     loggedInEmployee = Employee.empty;
     controller.add(AuthenticationStatus.unauthenticated);
 
-    appwriteRepository.isSessionActive.then((isSessionActive) {
-      // Se all'avvio c'è una sessione attiva
-      if (isSessionActive) {
+    appwriteRepository.isSessionActive.then((active) {
+      if (active) {
+        // Se all'avvio c'è una sessione attiva
         // Recupera le informazioni sull'utente autenticato
         appwriteRepository.currentAccount.then((account) {
           updateCurrentEmployee(account);
+          controller.add(AuthenticationStatus.authenticated);
         });
       }
     });
@@ -46,13 +47,15 @@ class AuthenticationRepository {
     try {
       await appwriteRepository.account
           .createEmailSession(email: email, password: password);
-
+      print("CreateEmailSession: ${await appwriteRepository.isSessionActive}");
       updateCurrentEmployee(await appwriteRepository.currentAccount);
+
+      if (await appwriteRepository.isSessionActive) {
+        controller.add(AuthenticationStatus.authenticated);
+      }
     } on AppwriteException catch (e) {
       loggedInEmployee = Employee.empty;
-
       controller.add(AuthenticationStatus.unauthenticated);
-
       throw LogInFailure(e.message!);
     }
   }
@@ -72,7 +75,10 @@ class AuthenticationRepository {
       birthday: DateTime.parse(userDocument["birthday"]),
       username: account.name,
     );
-    controller.add(AuthenticationStatus.authenticated);
+  }
+
+  Future<bool> ensureLoggedIn() async {
+    return await appwriteRepository.isSessionActive;
   }
 
   // Funzione per il logout
@@ -82,7 +88,7 @@ class AuthenticationRepository {
       appwriteRepository.account.deleteSession(sessionId: "current");
       this.loggedInEmployee = Employee.empty;
       return true;
-    } on AppwriteRepository {
+    } on AppwriteException {
       return false;
     }
   }

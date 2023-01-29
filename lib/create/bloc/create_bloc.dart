@@ -25,7 +25,6 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
 
   Future<void> _onSaveRequest(
       SaveRequested event, Emitter<CreateState> emit) async {
-    print(state);
     bool result = await workersRepository.saveWorker(Worker(
       firstname: state.firstname,
       lastname: state.lastname,

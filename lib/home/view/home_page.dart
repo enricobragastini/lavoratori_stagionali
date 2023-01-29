@@ -22,8 +22,8 @@ class HomePage extends StatelessWidget {
           create: (context) => HomeCubit(),
         ),
         BlocProvider(
-          create: (context) => GalleryBloc(workersRepository: workersRepository)
-            ..add(const WorkersSubscriptionRequested()),
+          create: (context) =>
+              GalleryBloc(workersRepository: workersRepository),
         ),
         BlocProvider(
           create: (context) => CreateBloc(workersRepository: workersRepository),
@@ -41,6 +41,17 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /* context.read<AppBloc>().ensureAuthenticated().then((auth) {
+      if (auth) {
+        context.read<GalleryBloc>().add(const WorkersSubscriptionRequested());
+      }
+    }); */
+
+    context.read<AppBloc>().ensureAuthenticated().then((value) {
+      print("HomeView -> ensureAuthenticated: $value");
+      context.read<GalleryBloc>().add(const WorkersSubscriptionRequested());
+    });
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
           tooltip: "Logout",

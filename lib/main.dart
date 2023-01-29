@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:appwrite_repository/appwrite_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:window_size/window_size.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,13 +14,16 @@ void main() {
 
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     setWindowTitle('Lavoratori Stagionali');
-    setWindowMinSize(const Size(1100, 700));
+    setWindowMinSize(const Size(1100, 900));
   }
 
-  AuthenticationRepository authenticationRepository =
-      AuthenticationRepository();
+  AppwriteRepository appwriteRepository = AppwriteRepository();
 
-  WorkersRepository workersRepository = WorkersRepository();
+  AuthenticationRepository authenticationRepository =
+      AuthenticationRepository(appwriteRepository: appwriteRepository);
+
+  WorkersRepository workersRepository =
+      WorkersRepository(appwriteRepository: appwriteRepository);
 
   runApp(
     BlocProvider(

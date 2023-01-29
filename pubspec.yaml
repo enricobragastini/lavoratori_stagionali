@@ -21,10 +21,12 @@ dependencies:
       url: https://github.com/google/flutter-desktop-embedding.git
       path: plugins/window_size
       ref: a738913c8ce2c9f47515382d40827e794a334274
-  appwrite: ^8.1.0
+  appwrite: ^8.2.0
   flutter_bloc: ^8.1.1
   equatable: ^2.0.5
 
+  appwrite_repository:
+    path: packages/appwrite_repository
   authentication_repository:
     path: packages/authentication_repository
   employees_repository:
@@ -33,6 +35,7 @@ dependencies:
     path: packages/workers_repository
   json_serializable: ^6.5.4
   rxdart: ^0.27.7
+  textfield_tags: ^2.0.2
 
 
 dev_dependencies:
