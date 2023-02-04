@@ -112,67 +112,6 @@ class Box extends StatelessWidget {
   }
 }
 
-class EmptyBox extends StatelessWidget {
-  const EmptyBox({Key? key, required this.onAdd}) : super(key: key);
-
-  final void Function(WorkExperience) onAdd;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: GestureDetector(
-        onTap: () => showDialog(
-          context: context,
-          builder: (context) => ExperienceDialog(),
-        ).then((workExperience) {
-          if (workExperience != null) {
-            onAdd(workExperience);
-          }
-        }),
-        child: MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Icon(Icons.add_circle_outline, size: 60),
-              Text(
-                "Aggiungi Esperienza",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ListBox extends StatelessWidget {
-  const ListBox({Key? key, required this.list}) : super(key: key);
-
-  final List<WorkExperience> list;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: list.length,
-      itemBuilder: (context, index) {
-        return Card(
-          child: ListTile(
-            leading: CircleAvatar(child: Text(index.toString())),
-            title: Text(list[index].title),
-            subtitle: Text(list[index].companyName),
-            trailing: const Icon(Icons.delete),
-            isThreeLine: true,
-          ),
-        );
-      },
-    );
-  }
-}
-
 class ExperienceDialog extends StatelessWidget {
   ExperienceDialog({Key? key}) : super(key: key);
 
@@ -221,7 +160,7 @@ class ExperienceDialog extends StatelessWidget {
                         .parse(startPeriodController.text),
                     end: DateFormat("dd/MM/yyyy")
                         .parse(endPeriodController.text),
-                    tasks: tasksController.text.split(','),
+                    tasks: tasksController.text.split(';'),
                     notes: notesController.text);
                 Navigator.of(context).pop(exp);
               }
@@ -275,7 +214,7 @@ class ExperienceDialog extends StatelessWidget {
                   ),
                   CustomTextFormField(
                     textFormFieldKey: _startPeriodKey,
-                    labelText: "Data di Inizio*",
+                    labelText: "Data di Inizio (dd/mm/yyyy)*",
                     textFormFieldController: startPeriodController,
                     onFocusChangeAction: (focus) {
                       if (!focus) {
@@ -302,7 +241,7 @@ class ExperienceDialog extends StatelessWidget {
                   ),
                   CustomTextFormField(
                     textFormFieldKey: _endPeriodKey,
-                    labelText: "Data di Fine*",
+                    labelText: "Data di Fine(dd/mm/yyyy)*",
                     textFormFieldController: endPeriodController,
                     onFocusChangeAction: (focus) {
                       if (!focus) {
@@ -323,6 +262,11 @@ class ExperienceDialog extends StatelessWidget {
                         DateFormat('dd/MM/yyyy').parse(value);
                       } catch (e) {
                         return 'Inserire una data valida (dd/mm/yyyy)';
+                      }
+                      if (DateFormat('dd/MM/yyyy').parse(value).isBefore(
+                          DateFormat('dd/MM/yyyy')
+                              .parse(startPeriodController.text))) {
+                        return "La Data di Fine non può essere prima della Data di Inizio!";
                       }
                       return null;
                     },
