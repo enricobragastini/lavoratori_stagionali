@@ -6,36 +6,38 @@ class AppwriteRepository {
   final String _database_id = "63d6895b934434b4966a";
   final String _employees_collection_id = "63d689659673376c728e";
   final String _workers_collection_id = "63d6896c220160c60b82";
+  final String _workExperiences_collection_id = "63d6ef5b0ded6e3bfaec";
 
   // Client Appwrite
   late final Client client;
+
+  // Servizi offerti da Appwrite
   late final Account account;
   late final Storage storage;
   late final Databases database;
   late final Realtime realtime;
 
-  // Workers Realtime Subscription
+  // Realtime Subscriptions
   late final RealtimeSubscription workersSubscription;
+  late final RealtimeSubscription accountSubscription;
 
   AppwriteRepository() {
     this.client = Client()
         .setEndpoint('http://139.144.74.141/v1')
         .setProject('63d68840443d59c7b008')
         .setSelfSigned(status: true);
-    this.account = Account(client);
-    this.storage = Storage(client);
+
+    this.account = Account(this.client);
+    this.storage = Storage(this.client);
     this.database = Databases(this.client);
     this.realtime = Realtime(this.client);
+
     this.workersSubscription = realtime.subscribe(["documents"]);
+    // this.accountSubscription = realtime.subscribe(["account"]);
   }
 
-/*   // Servizio di storage di Appwrite
-  Storage get storage => Storage(client);
-
-  // Servizio di autenticazione di appwrite
-  Account get account => Account(client); */
-
-  // Riceve le informazioni utente della sessione attiva
+  // Riceve le informazioni utente della sessione attuale
+  // Se fallisce -> Non c'è una sessione aperta
   Future<models.Account> get currentAccount async => account.get();
 
   // Recupera dal database le informazioni di un Employee dato il suo userId
@@ -52,25 +54,29 @@ class AppwriteRepository {
   // Stabilisce se c'è una sessione aperta
   Future<bool> get isSessionActive async {
     try {
-      await account.getSession(sessionId: 'current');
+      await account.get();
       return true;
     } on AppwriteException {
       return false;
     }
   }
 
-  Future<bool> saveWorker(Map<dynamic, dynamic> rawData) async {
-    try {
-      print(rawData);
+  Future<void> saveWorker(Map<dynamic, dynamic> workerRawData) async {
+    database.createDocument(
+        databaseId: _database_id,
+        collectionId: _workers_collection_id,
+        documentId: "unique()",
+        data: workerRawData);
+  }
+
+  Future<void> saveWorkExperiences(
+      List<Map<dynamic, dynamic>> experiencesRawData) async {
+    for (Map<dynamic, dynamic> experience in experiencesRawData) {
       database.createDocument(
           databaseId: _database_id,
-          collectionId: _workers_collection_id,
+          collectionId: _workExperiences_collection_id,
           documentId: "unique()",
-          data: rawData);
-      return true;
-    } on AppwriteException catch (e) {
-      print(e);
-      return false;
+          data: experience);
     }
   }
 
@@ -88,8 +94,6 @@ class AppwriteRepository {
   }
 
   Future<models.DocumentList> get workersDocumentList async {
-    isSessionActive.then(
-        (value) => print("workersDocumentList-> isSessionActive: $value"));
     return database.listDocuments(
         databaseId: _database_id,
         collectionId: _workers_collection_id,

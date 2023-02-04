@@ -1,8 +1,8 @@
 import 'package:appwrite/models.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:workers_repository/workers_repository.dart';
-import 'package:workers_repository/src/models/Worker.dart';
+import 'package:workers_repository/workers_repository.dart'
+    show WorkersRepository, WorkersException, Worker, WorkExperience;
 import 'package:intl/intl.dart';
 
 part 'create_event.dart';
@@ -19,25 +19,30 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
     on<EmailChanged>(_onEmailChanged);
     on<PhoneChanged>(_onPhoneChanged);
     on<AddressChanged>(_onAddressChanged);
+    on<WorkExperienceAdded>(_onWorkExperienceAdded);
   }
 
   final WorkersRepository workersRepository;
 
   Future<void> _onSaveRequest(
       SaveRequested event, Emitter<CreateState> emit) async {
-    bool result = await workersRepository.saveWorker(Worker(
-      firstname: state.firstname,
-      lastname: state.lastname,
-      birthday: DateFormat("dd/MM/yyyy").parse(state.birthday),
-      birthplace: state.birthplace,
-      nationality: state.nationality,
-      email: state.email,
-      phone: state.phone,
-      address: state.address,
-    ));
-    if (result) {
+    try {
+      emit(state.copyWith(status: CreateStatus.loading));
+      await workersRepository.saveWorker(Worker(
+          firstname: state.firstname,
+          lastname: state.lastname,
+          birthday: DateFormat("dd/MM/yyyy").parse(state.birthday),
+          birthplace: state.birthplace,
+          nationality: state.nationality,
+          email: state.email,
+          phone: state.phone,
+          address: state.address,
+          workExperiences: state.workExperiences));
       print("[INFO] Elemento inserito nel database correttamente!");
       emit(const CreateState());
+    } on WorkersException {
+      print("[INFO] Errore di inserimento nel database correttamente!");
+      emit(state.copyWith(status: CreateStatus.failure));
     }
   }
 
@@ -146,6 +151,19 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
     try {
       emit(
           state.copyWith(status: CreateStatus.success, address: event.address));
+    } catch (e) {
+      emit(state.copyWith(status: CreateStatus.failure));
+    }
+  }
+
+  Future<void> _onWorkExperienceAdded(
+      WorkExperienceAdded event, Emitter<CreateState> emit) async {
+    emit(state.copyWith(status: CreateStatus.loading));
+
+    try {
+      emit(state.copyWith(
+          status: CreateStatus.success,
+          workExperiences: [...state.workExperiences, event.workExperience]));
     } catch (e) {
       emit(state.copyWith(status: CreateStatus.failure));
     }

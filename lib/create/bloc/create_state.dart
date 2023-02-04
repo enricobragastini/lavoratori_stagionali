@@ -13,6 +13,7 @@ class CreateState extends Equatable {
     this.address = "",
     this.phone = "",
     this.email = "",
+    this.workExperiences = const [],
   });
 
   final CreateStatus status;
@@ -25,6 +26,8 @@ class CreateState extends Equatable {
   final String phone;
   final String email;
 
+  final List<WorkExperience> workExperiences;
+
   CreateState copyWith({
     CreateStatus? status,
     String? firstname,
@@ -35,6 +38,7 @@ class CreateState extends Equatable {
     String? address,
     String? phone,
     String? email,
+    List<WorkExperience>? workExperiences,
   }) {
     return CreateState(
         status: status ?? this.status,
@@ -45,7 +49,8 @@ class CreateState extends Equatable {
         nationality: nationality ?? this.nationality,
         address: address ?? this.address,
         phone: phone ?? this.phone,
-        email: email ?? this.email);
+        email: email ?? this.email,
+        workExperiences: workExperiences ?? this.workExperiences);
   }
 
   @override
@@ -59,6 +64,7 @@ class CreateState extends Equatable {
         address,
         phone,
         email,
+        workExperiences,
       ];
 
   @override

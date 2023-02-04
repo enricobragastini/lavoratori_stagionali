@@ -14,7 +14,7 @@ void main() {
 
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     setWindowTitle('Lavoratori Stagionali');
-    setWindowMinSize(const Size(1100, 900));
+    setWindowMinSize(const Size(1100, 700));
   }
 
   AppwriteRepository appwriteRepository = AppwriteRepository();

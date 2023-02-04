@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import './WorkExperience.dart';
+
 class Worker extends Equatable {
   const Worker(
       {this.id,
@@ -10,7 +12,8 @@ class Worker extends Equatable {
       required this.nationality,
       required this.email,
       required this.phone,
-      required this.address});
+      required this.address,
+      required this.workExperiences});
 
   final String? id;
   final String firstname;
@@ -22,28 +25,30 @@ class Worker extends Equatable {
   final String phone;
   final String address;
 
-  Worker copyWith({
-    String? id,
-    String? firstname,
-    String? surname,
-    DateTime? birthday,
-    String? birthplace,
-    String? nationality,
-    String? email,
-    String? phone,
-    String? address,
-  }) {
+  final List<WorkExperience> workExperiences;
+
+  Worker copyWith(
+      {String? id,
+      String? firstname,
+      String? surname,
+      DateTime? birthday,
+      String? birthplace,
+      String? nationality,
+      String? email,
+      String? phone,
+      String? address,
+      List<WorkExperience>? workExperiences}) {
     return Worker(
-      id: id ?? this.id,
-      firstname: firstname ?? this.firstname,
-      lastname: surname ?? this.lastname,
-      birthday: birthday ?? this.birthday,
-      birthplace: birthplace ?? this.birthplace,
-      nationality: nationality ?? this.nationality,
-      email: email ?? this.email,
-      phone: phone ?? this.phone,
-      address: address ?? this.address,
-    );
+        id: id ?? this.id,
+        firstname: firstname ?? this.firstname,
+        lastname: surname ?? this.lastname,
+        birthday: birthday ?? this.birthday,
+        birthplace: birthplace ?? this.birthplace,
+        nationality: nationality ?? this.nationality,
+        email: email ?? this.email,
+        phone: phone ?? this.phone,
+        address: address ?? this.address,
+        workExperiences: workExperiences ?? this.workExperiences);
   }
 
   @override
@@ -57,5 +62,6 @@ class Worker extends Equatable {
         email,
         phone,
         address,
+        workExperiences
       ];
 }

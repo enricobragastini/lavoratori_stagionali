@@ -14,6 +14,7 @@ class AppView extends StatelessWidget {
       title: 'Lavoratori Stagionali',
       theme: ThemeData(
           // Define the default brightness and colors.
+          textTheme: Theme.of(context).textTheme.apply(fontSizeFactor: 1.1),
           brightness: Brightness.light,
           colorScheme: ColorScheme.fromSwatch()
               .copyWith(primary: const Color(0xFF4059AD))),

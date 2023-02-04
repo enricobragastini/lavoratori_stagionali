@@ -82,3 +82,12 @@ class PhoneChanged extends CreateEvent {
   @override
   List<Object> get props => [phone];
 }
+
+class WorkExperienceAdded extends CreateEvent {
+  const WorkExperienceAdded({required this.workExperience});
+
+  final WorkExperience workExperience;
+
+  @override
+  List<Object> get props => [workExperience];
+}
