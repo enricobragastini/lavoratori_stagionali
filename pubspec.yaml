@@ -36,6 +36,8 @@ dependencies:
   json_serializable: ^6.5.4
   rxdart: ^0.27.7
   textfield_tags: ^2.0.2
+  multi_select_flutter: ^4.1.3
+  toggle_switch: ^2.0.1
 
 
 dev_dependencies:

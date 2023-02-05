@@ -7,10 +7,15 @@ import '../../bloc/create_bloc.dart';
 import '../widgets/CustomTextFormField.dart';
 
 class WorkExperiencesBox extends StatelessWidget {
-  const WorkExperiencesBox({Key? key, required this.onAdd, required this.list})
+  const WorkExperiencesBox(
+      {Key? key,
+      required this.onAdd,
+      required this.onDelete,
+      required this.list})
       : super(key: key);
 
   final void Function(WorkExperience) onAdd;
+  final void Function(WorkExperience) onDelete;
   final List<WorkExperience> list;
 
   @override
@@ -56,14 +61,18 @@ class WorkExperiencesBox extends StatelessWidget {
         ),
         Container(
           width: double.infinity,
-          height: 300,
+          height: 400,
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
             border: Border.all(
                 color: Theme.of(context).colorScheme.primary, width: 1.5),
-            color: Colors.white,
+            color: Colors.black12,
           ),
-          child: Box(list: list),
+          child: Box(
+            list: list,
+            onAdd: onAdd,
+            onDelete: onDelete,
+          ),
         ),
       ],
     );
@@ -71,23 +80,48 @@ class WorkExperiencesBox extends StatelessWidget {
 }
 
 class Box extends StatelessWidget {
-  const Box({super.key, required this.list});
+  const Box(
+      {super.key,
+      required this.list,
+      required this.onAdd,
+      required this.onDelete});
 
   final List<WorkExperience> list;
+  final void Function(WorkExperience) onAdd;
+  final void Function(WorkExperience) onDelete;
 
   @override
   Widget build(BuildContext context) {
+    final DateFormat dateFormatter = DateFormat("dd/MM/yyyy");
     return list.isEmpty
-        ? Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text(
-                "Nessuna esperienza aggiunta.",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
-              )
-            ],
+        ? GestureDetector(
+            onTap: () => showDialog(
+              context: context,
+              builder: (context) => ExperienceDialog(),
+            ).then(
+              (workExperience) {
+                if (workExperience != null) {
+                  onAdd(workExperience);
+                }
+              },
+            ),
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.add_circle_outline, size: 60),
+                  Text(
+                    "Aggiungi una esperienza",
+                    textAlign: TextAlign.center,
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+                  )
+                ],
+              ),
+            ),
           )
         : ListView.builder(
             itemCount: list.length,
@@ -96,14 +130,83 @@ class Box extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
                 child: Card(
                   elevation: 4,
-                  child: ListTile(
-                    leading: CircleAvatar(child: Text(index.toString())),
-                    title: Text(
-                      list[index].title,
-                      style: TextStyle(fontSize: 18),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 8.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: CircleAvatar(
+                            child: Text((index + 1).toString()),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Expanded(
+                          flex: 8,
+                          child: GestureDetector(
+                            onTap: () {
+                              // TODO: Aggiungere modifica WorkExperience
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  list[index].title,
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "presso: ${list[index].companyName}",
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal),
+                                ),
+                                Text(
+                                  "Luogo di lavoro: ${list[index].workplace}",
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal),
+                                ),
+                                Text(
+                                  "Dal ${dateFormatter.format(list[index].start)} al ${dateFormatter.format(list[index].end)}",
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal),
+                                ),
+                                Text(
+                                  "Paga Lorda giornaliera: €${(list[index].dailyPay)}",
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal),
+                                ),
+                                Text(
+                                  "Mansioni: ${list[index].tasks.toString().substring(1, list[index].tasks.toString().length - 1)}",
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal),
+                                ),
+                                if (list[index].notes.isNotEmpty)
+                                  Text(
+                                    "Note: ${list[index].notes}",
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                            flex: 1,
+                            child: IconButton(
+                                onPressed: () => onDelete(list[index]),
+                                icon: const Icon(Icons.delete)))
+                      ],
                     ),
-                    subtitle: Text(list[index].companyName),
-                    trailing: const Icon(Icons.delete),
                   ),
                 ),
               );
@@ -121,6 +224,8 @@ class ExperienceDialog extends StatelessWidget {
   final _companyNameKey = GlobalKey<FormFieldState>();
   final _startPeriodKey = GlobalKey<FormFieldState>();
   final _endPeriodKey = GlobalKey<FormFieldState>();
+  final _dailyPayKey = GlobalKey<FormFieldState>();
+  final _workplaceKey = GlobalKey<FormFieldState>();
   final _tasksKey = GlobalKey<FormFieldState>();
   final _notesKey = GlobalKey<FormFieldState>();
 
@@ -132,6 +237,8 @@ class ExperienceDialog extends StatelessWidget {
     TextEditingController startPeriodController =
         TextEditingController(text: "");
     TextEditingController endPeriodController = TextEditingController(text: "");
+    TextEditingController dailyPayController = TextEditingController(text: "");
+    TextEditingController workplaceController = TextEditingController(text: "");
     TextEditingController tasksController = TextEditingController(text: "");
     TextEditingController notesController = TextEditingController(text: "");
 
@@ -160,6 +267,8 @@ class ExperienceDialog extends StatelessWidget {
                         .parse(startPeriodController.text),
                     end: DateFormat("dd/MM/yyyy")
                         .parse(endPeriodController.text),
+                    dailyPay: double.parse(dailyPayController.text),
+                    workplace: workplaceController.text,
                     tasks: tasksController.text.split(';'),
                     notes: notesController.text);
                 Navigator.of(context).pop(exp);
@@ -272,8 +381,45 @@ class ExperienceDialog extends StatelessWidget {
                     },
                   ),
                   CustomTextFormField(
+                    textFormFieldKey: _dailyPayKey,
+                    textFormFieldController: dailyPayController,
+                    labelText: "Paga Lorda Giornaliera (in Euro)",
+                    onFocusChangeAction: (focus) {
+                      if (!focus) {
+                        _dailyPayKey.currentState!.validate();
+                      }
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Questo è un campo obbligatorio.";
+                      }
+                      value = value.replaceAll(',', '.');
+                      const pattern = r'^[0-9]+(?:[.][0-9]+)?$';
+                      if (!RegExp(pattern).hasMatch(value)) {
+                        return "Inserire un valore numerico valido.";
+                      }
+                      return null;
+                    },
+                  ),
+                  CustomTextFormField(
+                    textFormFieldKey: _workplaceKey,
+                    textFormFieldController: workplaceController,
+                    labelText: "Luogo di lavoro",
+                    onFocusChangeAction: (focus) {
+                      if (!focus) {
+                        _workplaceKey.currentState!.validate();
+                      }
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Questo è un campo obbligatorio.";
+                      }
+                      return null;
+                    },
+                  ),
+                  CustomTextFormField(
                     textFormFieldKey: _tasksKey,
-                    labelText: "Incarichi (separati da punto e virgola)*",
+                    labelText: "Mansioni (separate da punto e virgola)*",
                     textFormFieldController: tasksController,
                     onFocusChangeAction: (focus) {
                       if (!focus) {

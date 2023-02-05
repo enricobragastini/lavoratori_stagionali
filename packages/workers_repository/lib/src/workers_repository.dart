@@ -29,6 +29,9 @@ class WorkersRepository {
         "email": worker.email,
         "phone": worker.phone,
         "address": worker.address,
+        "licenses": worker.licenses,
+        "languages": worker.languages,
+        "withOwnCar": worker.withOwnCar,
       });
 
       List<Map<dynamic, dynamic>> rawExperiencesDataList = [];
@@ -39,7 +42,9 @@ class WorkersRepository {
           "end": experience.end.toIso8601String(),
           "companyName": experience.companyName,
           "tasks": experience.tasks,
-          "notes": experience.notes
+          "notes": experience.notes,
+          "workplace": experience.workplace,
+          "dailyPay": experience.dailyPay
         });
         await appwriteRepository.saveWorkExperiences(rawExperiencesDataList);
       }
@@ -66,7 +71,10 @@ class WorkersRepository {
             email: doc.data["email"],
             phone: doc.data["phone"],
             address: doc.data["address"],
-            workExperiences: []));
+            workExperiences: [],
+            languages: [],
+            licenses: [],
+            withOwnCar: false));
       }
     } on AppwriteException catch (e) {
       throw new WorkersException(e.message!);

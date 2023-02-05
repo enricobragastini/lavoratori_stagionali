@@ -6,7 +6,8 @@ import 'package:intl/intl.dart';
 import "package:flutter_bloc/flutter_bloc.dart";
 import 'package:lavoratori_stagionali/create/view/widgets/CustomTextFormField.dart';
 import 'package:lavoratori_stagionali/create/view/widgets/WorkExperiencesBox.dart';
-import 'package:textfield_tags/textfield_tags.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 import "../bloc/create_bloc.dart";
 
@@ -25,10 +26,162 @@ class CreatePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<String> languages = [
+      "Afrikaans",
+      "Albanese",
+      "Amarico",
+      "Arabo",
+      "Armeno",
+      "Assamese",
+      "Aymara",
+      "Azero",
+      "Bambara",
+      "Basco",
+      "Bengalese",
+      "Bhojpuri",
+      "Bielorusso",
+      "Birmano",
+      "Bosniaco",
+      "Bulgaro",
+      "Catalano",
+      "Cebuano",
+      "Ceco",
+      "Chichewa",
+      "Chirghiso",
+      "Ci",
+      "Cinese",
+      "Coreano",
+      "Corso",
+      "Creolo haitiano",
+      "Croato",
+      "Curdo",
+      "Danese",
+      "Dhivehi",
+      "Dogri",
+      "Ebraico",
+      "Esperanto",
+      "Estone",
+      "Ewe",
+      "Filippino",
+      "Finlandese",
+      "Francese",
+      "Frisone",
+      "Gaelico scozzese",
+      "Galiziano",
+      "Gallese",
+      "Georgiano",
+      "Giapponese",
+      "Giavanese",
+      "Greco",
+      "Guaraní",
+      "Gujarati",
+      "Hausa",
+      "Hawaiano",
+      "Hindi",
+      "Hmong",
+      "Igbo",
+      "Ilocano",
+      "Indonesiano",
+      "Inglese",
+      "Irlandese",
+      "Islandese",
+      "Italiano",
+      "Kannada",
+      "Kazako",
+      "Khmer",
+      "Kinyarwanda",
+      "Konkani",
+      "Krio",
+      "Lao",
+      "Latino",
+      "Lettone",
+      "Lingala",
+      "Lituano",
+      "Luganda",
+      "Lussemburghese",
+      "Macedone",
+      "Maithili",
+      "Malayalam",
+      "Malese",
+      "Malgascio",
+      "Maltese",
+      "Maori",
+      "Marathi",
+      "Meiteilon (Manipuri)",
+      "Mizo",
+      "Mongolo",
+      "Nepalese",
+      "Norvegese",
+      "Odia (Oriya)",
+      "Olandese",
+      "Oromo",
+      "Pashto",
+      "Persiano",
+      "Polacco",
+      "Portoghese",
+      "Punjabi",
+      "Quechua",
+      "Rumeno",
+      "Russo",
+      "Samoano",
+      "Sanscrito",
+      "Sepedi",
+      "Serbo",
+      "Sesotho",
+      "Shona",
+      "Sindhi",
+      "Singalese",
+      "Slovacco",
+      "Sloveno",
+      "Somalo",
+      "Spagnolo",
+      "Sundanese",
+      "Svedese",
+      "Swahili",
+      "Tagico",
+      "Tamil",
+      "Tataro",
+      "Tedesco",
+      "Telugu",
+      "Thai",
+      "Tigrino",
+      "Tsonga",
+      "Turco",
+      "Turcomanno",
+      "Ucraino",
+      "Uiguro",
+      "Ungherese",
+      "Urdu",
+      "Uzbeco",
+      "Vietnamita",
+      "Xhosa",
+      "Yiddish",
+      "Yoruba",
+      "Zulu",
+    ];
+
+    final List<String> licenses = [
+      "AM",
+      "A1",
+      "A2",
+      "A",
+      "B1",
+      "B",
+      "BE",
+      "C1",
+      "C1E",
+      "C",
+      "CE",
+      "D1",
+      "D1E",
+      "D",
+      "DE"
+    ];
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Aggiungi un nuovo lavoratore"),
+        title: const Text("AGGIUNGI UN NUOVO LAVORATORE"),
         centerTitle: true,
       ),
       body: BlocBuilder<CreateBloc, CreateState>(
@@ -267,6 +420,132 @@ class CreatePage extends StatelessWidget {
                             },
                           ),
 
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 30.0),
+                            child: Divider(
+                              thickness: 3,
+                            ),
+                          ),
+
+// LINGUE PARLATE
+                          const SizedBox(
+                              width: double.infinity,
+                              child: Text(
+                                "Lingue parlate",
+                                style: TextStyle(
+                                    fontSize: 22, fontWeight: FontWeight.bold),
+                              )),
+
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20.0),
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              constraints: const BoxConstraints(maxWidth: 700),
+                              decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(8)),
+                                  border: Border.all(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      width: 1.5)),
+                              child: MultiSelectDialogField(
+                                initialValue: state.languages,
+                                items: languages
+                                    .map((e) => MultiSelectItem(e, e))
+                                    .toList(),
+                                listType: MultiSelectListType.LIST,
+                                onConfirm: (selected) {
+                                  selected.sort();
+                                  context.read<CreateBloc>().add(
+                                      LanguagesEdited(languages: selected));
+                                },
+                              ),
+                            ),
+                          ),
+
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 30.0),
+                            child: Divider(
+                              thickness: 3,
+                            ),
+                          ),
+
+// PATENTI DI GUIDA
+                          const SizedBox(
+                              width: double.infinity,
+                              child: Text(
+                                "Patenti di guida / Automunito",
+                                style: TextStyle(
+                                    fontSize: 22, fontWeight: FontWeight.bold),
+                              )),
+
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20.0),
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              constraints: const BoxConstraints(maxWidth: 700),
+                              decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(8)),
+                                  border: Border.all(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      width: 1.5)),
+                              child: MultiSelectDialogField(
+                                initialValue: state.licenses,
+                                items: licenses
+                                    .map((e) => MultiSelectItem(e, e))
+                                    .toList(),
+                                listType: MultiSelectListType.LIST,
+                                onConfirm: (selected) {
+                                  selected.sort();
+                                  context
+                                      .read<CreateBloc>()
+                                      .add(LicensesEdited(licenses: selected));
+                                },
+                              ),
+                            ),
+                          ),
+
+// AUTOMUNITO
+                          Container(
+                            constraints: const BoxConstraints(maxWidth: 700),
+                            child: Row(children: [
+                              const Text(
+                                "Automunito: ",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              ToggleSwitch(
+                                minWidth: 120.0,
+                                cornerRadius: 10.0,
+                                activeBgColors: [
+                                  [Colors.green[800]!],
+                                  [Colors.red[800]!]
+                                ],
+                                customTextStyles: const [
+                                  TextStyle(
+                                      fontSize: 18.0, color: Colors.white),
+                                  TextStyle(fontSize: 18.0, color: Colors.white)
+                                ],
+                                activeFgColor: Colors.white,
+                                inactiveBgColor: Colors.grey,
+                                inactiveFgColor: Colors.white,
+                                initialLabelIndex: state.withOwnCar ? 0 : 1,
+                                totalSwitches: 2,
+                                labels: const ['SI', 'NO'],
+                                radiusStyle: false,
+                                onToggle: (index) {
+                                  context.read<CreateBloc>().add(
+                                      WithOwnCarEdited(
+                                          withOwnCarEdited: (index == 0)));
+                                },
+                              ),
+                            ]),
+                          ),
+
 // DIVIDER
                           const Padding(
                             padding: EdgeInsets.symmetric(vertical: 30.0),
@@ -293,21 +572,18 @@ class CreatePage extends StatelessWidget {
                                     WorkExperienceAdded(
                                         workExperience: workExperience));
                               },
+                              onDelete: (workExperience) {
+                                context.read<CreateBloc>().add(
+                                    WorkExperienceDeleted(
+                                        workExperience: workExperience));
+                              },
                             ),
                           ),
 
-// DIVIDER
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 30.0),
-                            child: Divider(
-                              thickness: 3,
-                            ),
-                          ),
-
-                          // PULSANTE di SALVATAGGIO
+// PULSANTE di SALVATAGGIO
                           Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 60, vertical: 20),
+                                horizontal: 60, vertical: 80),
                             child: SizedBox(
                               width: double.infinity,
                               height: 40,

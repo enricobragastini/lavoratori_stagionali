@@ -20,6 +20,10 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
     on<PhoneChanged>(_onPhoneChanged);
     on<AddressChanged>(_onAddressChanged);
     on<WorkExperienceAdded>(_onWorkExperienceAdded);
+    on<WorkExperienceDeleted>(_onWorkExperienceDeleted);
+    on<LanguagesEdited>(_onLanguagesEdited);
+    on<LicensesEdited>(_onLicensesEdited);
+    on<WithOwnCarEdited>(_onWithOwnCarEdited);
   }
 
   final WorkersRepository workersRepository;
@@ -37,7 +41,10 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
           email: state.email,
           phone: state.phone,
           address: state.address,
-          workExperiences: state.workExperiences));
+          workExperiences: state.workExperiences,
+          languages: state.languages,
+          licenses: state.licenses,
+          withOwnCar: state.withOwnCar));
       print("[INFO] Elemento inserito nel database correttamente!");
       emit(const CreateState());
     } on WorkersException {
@@ -164,6 +171,56 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
       emit(state.copyWith(
           status: CreateStatus.success,
           workExperiences: [...state.workExperiences, event.workExperience]));
+    } catch (e) {
+      emit(state.copyWith(status: CreateStatus.failure));
+    }
+  }
+
+  Future<void> _onWorkExperienceDeleted(
+      WorkExperienceDeleted event, Emitter<CreateState> emit) async {
+    emit(state.copyWith(status: CreateStatus.loading));
+
+    try {
+      List<WorkExperience> newList = state.workExperiences;
+      newList.remove(event.workExperience);
+      emit(state.copyWith(
+          status: CreateStatus.success, workExperiences: newList));
+    } catch (e) {
+      emit(state.copyWith(status: CreateStatus.failure));
+    }
+  }
+
+  Future<void> _onLanguagesEdited(
+      LanguagesEdited event, Emitter<CreateState> emit) async {
+    emit(state.copyWith(status: CreateStatus.loading));
+
+    try {
+      emit(state.copyWith(
+          status: CreateStatus.success, languages: event.languages));
+    } catch (e) {
+      emit(state.copyWith(status: CreateStatus.failure));
+    }
+  }
+
+  Future<void> _onLicensesEdited(
+      LicensesEdited event, Emitter<CreateState> emit) async {
+    emit(state.copyWith(status: CreateStatus.loading));
+
+    try {
+      emit(state.copyWith(
+          status: CreateStatus.success, licenses: event.licenses));
+    } catch (e) {
+      emit(state.copyWith(status: CreateStatus.failure));
+    }
+  }
+
+  Future<void> _onWithOwnCarEdited(
+      WithOwnCarEdited event, Emitter<CreateState> emit) async {
+    emit(state.copyWith(status: CreateStatus.loading));
+
+    try {
+      emit(state.copyWith(
+          status: CreateStatus.success, withOwnCar: event.withOwnCarEdited));
     } catch (e) {
       emit(state.copyWith(status: CreateStatus.failure));
     }

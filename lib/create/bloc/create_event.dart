@@ -91,3 +91,39 @@ class WorkExperienceAdded extends CreateEvent {
   @override
   List<Object> get props => [workExperience];
 }
+
+class WorkExperienceDeleted extends CreateEvent {
+  const WorkExperienceDeleted({required this.workExperience});
+
+  final WorkExperience workExperience;
+
+  @override
+  List<Object> get props => [workExperience];
+}
+
+class LanguagesEdited extends CreateEvent {
+  const LanguagesEdited({required this.languages});
+
+  final List<String> languages;
+
+  @override
+  List<Object> get props => [languages];
+}
+
+class LicensesEdited extends CreateEvent {
+  const LicensesEdited({required this.licenses});
+
+  final List<String> licenses;
+
+  @override
+  List<Object> get props => [licenses];
+}
+
+class WithOwnCarEdited extends CreateEvent {
+  const WithOwnCarEdited({required this.withOwnCarEdited});
+
+  final bool withOwnCarEdited;
+
+  @override
+  List<Object> get props => [withOwnCarEdited];
+}

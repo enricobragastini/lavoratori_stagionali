@@ -5,6 +5,8 @@ class WorkExperience extends Equatable {
   final DateTime start;
   final DateTime end;
   final String companyName;
+  final String workplace;
+  final double dailyPay;
   final List<String> tasks;
   final String notes;
 
@@ -13,6 +15,8 @@ class WorkExperience extends Equatable {
     required this.start,
     required this.end,
     required this.companyName,
+    required this.workplace,
+    required this.dailyPay,
     required this.tasks,
     required this.notes,
   });
@@ -22,6 +26,8 @@ class WorkExperience extends Equatable {
     DateTime? start,
     DateTime? end,
     String? companyName,
+    String? workplace,
+    double? dailyPay,
     List<String>? tasks,
     String? notes,
   }) {
@@ -30,6 +36,8 @@ class WorkExperience extends Equatable {
       start: start ?? this.start,
       end: end ?? this.end,
       companyName: companyName ?? this.companyName,
+      workplace: workplace ?? this.workplace,
+      dailyPay: dailyPay ?? this.dailyPay,
       tasks: tasks ?? this.tasks,
       notes: notes ?? this.notes,
     );
@@ -41,6 +49,8 @@ class WorkExperience extends Equatable {
         this.start,
         this.end,
         this.companyName,
+        this.workplace,
+        this.dailyPay,
         this.tasks,
         this.notes
       ];

@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  CustomTextFormField(
-      {super.key,
-      this.textFormFieldKey,
-      this.textFormFieldController,
-      this.onChangedAction,
-      this.onTapAction,
-      this.onFocusChangeAction,
-      this.validator,
-      required this.labelText,
-      containerHeight}) {
+  CustomTextFormField({
+    super.key,
+    this.textFormFieldKey,
+    this.textFormFieldController,
+    this.onChangedAction,
+    this.onTapAction,
+    this.onFocusChangeAction,
+    this.validator,
+    required this.labelText,
+    containerHeight,
+  }) {
     this.containerHeight = containerHeight ?? 85;
   }
 
@@ -35,14 +36,15 @@ class CustomTextFormField extends StatelessWidget {
         child: Focus(
           onFocusChange: onFocusChangeAction,
           child: TextFormField(
-              key: textFormFieldKey,
-              controller: textFormFieldController,
-              onTap: onTapAction,
-              onChanged: onChangedAction,
-              decoration: InputDecoration(
-                labelText: labelText,
-              ),
-              validator: validator),
+            key: textFormFieldKey,
+            controller: textFormFieldController,
+            onTap: onTapAction,
+            onChanged: onChangedAction,
+            decoration: InputDecoration(
+              labelText: labelText,
+            ),
+            validator: validator,
+          ),
         ),
       ),
     );

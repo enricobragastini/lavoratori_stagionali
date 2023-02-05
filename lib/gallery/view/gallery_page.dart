@@ -25,6 +25,10 @@ class GalleryPage extends StatelessWidget {
       },
       child: Scaffold(
           backgroundColor: Colors.white,
+          appBar: AppBar(
+            title: const Text("ELENCO LAVORATORI"),
+            centerTitle: true,
+          ),
           body: Center(
             child: BlocBuilder<GalleryBloc, GalleryState>(
               builder: (context, state) {
@@ -37,14 +41,8 @@ class GalleryPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 20.0, top: 10),
-                        child: Text(
-                          "ELENCO LAVORATORI",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.bold),
-                        ),
+                      const SizedBox(
+                        height: 30,
                       ),
                       Expanded(
                           child: ListView(
