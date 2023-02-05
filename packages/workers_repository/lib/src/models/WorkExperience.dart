@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class WorkExperience extends Equatable {
+  final String? id;
   final String title;
   final DateTime start;
   final DateTime end;
@@ -11,6 +12,7 @@ class WorkExperience extends Equatable {
   final String notes;
 
   WorkExperience({
+    this.id,
     required this.title,
     required this.start,
     required this.end,
@@ -22,6 +24,7 @@ class WorkExperience extends Equatable {
   });
 
   WorkExperience copyWith({
+    String? id,
     String? title,
     DateTime? start,
     DateTime? end,
@@ -32,6 +35,7 @@ class WorkExperience extends Equatable {
     String? notes,
   }) {
     return WorkExperience(
+      id: id ?? this.id,
       title: title ?? this.title,
       start: start ?? this.start,
       end: end ?? this.end,
@@ -45,6 +49,7 @@ class WorkExperience extends Equatable {
 
   @override
   List<Object?> get props => [
+        this.id,
         this.title,
         this.start,
         this.end,

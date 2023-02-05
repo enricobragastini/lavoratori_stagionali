@@ -1,21 +1,16 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:age_calculator/age_calculator.dart';
+
+import 'package:workers_repository/workers_repository.dart';
 
 class WorkerCard extends StatelessWidget {
-  const WorkerCard(
-      {Key? key,
-      required this.name,
-      required this.surname,
-      required this.email,
-      required this.telephone,
-      required this.onDelete})
+  const WorkerCard({Key? key, required this.worker, required this.onDelete})
       : super(key: key);
 
-  final String name;
-  final String surname;
-  final String email;
-  final String telephone;
+  final Worker worker;
 
   final void Function() onDelete;
 
@@ -23,10 +18,10 @@ class WorkerCard extends StatelessWidget {
   Widget build(BuildContext context) {
     List<String> initials = [];
 
-    for (String s in name.split(" ")) {
+    for (String s in worker.firstname.split(" ")) {
       initials.add(s[0]);
     }
-    for (String s in surname.split(" ")) {
+    for (String s in worker.lastname.split(" ")) {
       initials.add(s[0]);
     }
 
@@ -57,12 +52,17 @@ class WorkerCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "$name $surname",
+                      "${worker.firstname} ${worker.lastname}",
                       style: const TextStyle(
                           fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    _TinyTextWithIcon(text: email, icon: Icons.email),
-                    _TinyTextWithIcon(text: telephone, icon: Icons.phone)
+                    _TinyTextWithIcon(text: worker.email, icon: Icons.email),
+                    _TinyTextWithIcon(text: worker.phone, icon: Icons.phone),
+                    _TinyTextWithIcon(
+                      text:
+                          "Nato/a il ${DateFormat('dd/MM/yyyy').format(worker.birthday)} (${AgeCalculator.age(worker.birthday).years} anni) a ${worker.birthplace}",
+                      icon: Icons.cake,
+                    ),
                   ],
                 ),
               ),

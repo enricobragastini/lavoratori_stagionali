@@ -49,10 +49,7 @@ class GalleryPage extends StatelessWidget {
                         children: [
                           for (final worker in state.workers)
                             WorkerCard(
-                              name: worker.firstname,
-                              surname: worker.lastname,
-                              email: worker.email,
-                              telephone: worker.phone,
+                              worker: worker,
                               onDelete: () => context
                                   .read<GalleryBloc>()
                                   .add(WorkerDeleteRequested(worker: worker)),

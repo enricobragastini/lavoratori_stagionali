@@ -61,12 +61,13 @@ class AppwriteRepository {
     }
   }
 
-  Future<void> saveWorker(Map<dynamic, dynamic> workerRawData) async {
-    database.createDocument(
-        databaseId: _database_id,
-        collectionId: _workers_collection_id,
-        documentId: "unique()",
-        data: workerRawData);
+  Future<String> saveWorker(Map<dynamic, dynamic> workerRawData) async {
+    return (await database.createDocument(
+            databaseId: _database_id,
+            collectionId: _workers_collection_id,
+            documentId: "unique()",
+            data: workerRawData))
+        .$id;
   }
 
   Future<void> saveWorkExperiences(
@@ -80,23 +81,31 @@ class AppwriteRepository {
     }
   }
 
-  Future<bool> deleteWorker(String documentId) async {
-    try {
-      database.deleteDocument(
-          databaseId: _database_id,
-          collectionId: _workers_collection_id,
-          documentId: documentId);
-      return true;
-    } on AppwriteRepository catch (e) {
-      print(e);
-      return false;
-    }
+  Future<void> deleteWorker(String documentId) async {
+    database.deleteDocument(
+        databaseId: _database_id,
+        collectionId: _workers_collection_id,
+        documentId: documentId);
+  }
+
+  Future<void> deleteWorkExperience(String documentId) async {
+    database.deleteDocument(
+        databaseId: _database_id,
+        collectionId: _workExperiences_collection_id,
+        documentId: documentId);
   }
 
   Future<models.DocumentList> get workersDocumentList async {
     return database.listDocuments(
         databaseId: _database_id,
         collectionId: _workers_collection_id,
+        queries: []);
+  }
+
+  Future<models.DocumentList> get workExperiencesDocumentList async {
+    return database.listDocuments(
+        databaseId: _database_id,
+        collectionId: _workExperiences_collection_id,
         queries: []);
   }
 
