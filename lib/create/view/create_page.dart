@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import "package:flutter_bloc/flutter_bloc.dart";
 import 'package:lavoratori_stagionali/create/view/widgets/CustomTextFormField.dart';
+import 'package:lavoratori_stagionali/create/view/widgets/EmergencyContactsBox.dart';
+import 'package:lavoratori_stagionali/create/view/widgets/LocationsBox.dart';
+import 'package:lavoratori_stagionali/create/view/widgets/PeriodsBox.dart';
 import 'package:lavoratori_stagionali/create/view/widgets/WorkExperiencesBox.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:toggle_switch/toggle_switch.dart';
@@ -236,7 +239,8 @@ class CreatePage extends StatelessWidget {
                               if (!focus) {
                                 _firstnameKey.currentState!.validate();
                                 context.read<CreateBloc>().add(FirstNameChanged(
-                                    firstname: firstnameController.text));
+                                    firstname:
+                                        firstnameController.text.trim()));
                               }
                             },
                             validator: (value) {
@@ -254,7 +258,7 @@ class CreatePage extends StatelessWidget {
                               if (!focus) {
                                 _lastnameKey.currentState!.validate();
                                 context.read<CreateBloc>().add(LastNameChanged(
-                                    lastname: lastnameController.text));
+                                    lastname: lastnameController.text.trim()));
                               }
                             },
                             textFormFieldKey: _lastnameKey,
@@ -274,8 +278,8 @@ class CreatePage extends StatelessWidget {
                             onFocusChangeAction: (focus) {
                               if (!focus) {
                                 _phoneKey.currentState!.validate();
-                                context.read<CreateBloc>().add(
-                                    PhoneChanged(phone: phoneController.text));
+                                context.read<CreateBloc>().add(PhoneChanged(
+                                    phone: phoneController.text.trim()));
                               }
                             },
                             textFormFieldKey: _phoneKey,
@@ -300,8 +304,8 @@ class CreatePage extends StatelessWidget {
                             onFocusChangeAction: (focus) {
                               if (!focus) {
                                 _emailKey.currentState!.validate();
-                                context.read<CreateBloc>().add(
-                                    EmailChanged(email: emailController.text));
+                                context.read<CreateBloc>().add(EmailChanged(
+                                    email: emailController.text.trim()));
                               }
                             },
                             textFormFieldKey: _emailKey,
@@ -328,7 +332,7 @@ class CreatePage extends StatelessWidget {
                               if (!focus) {
                                 _birthdayKey.currentState!.validate();
                                 context.read<CreateBloc>().add(BirthDayChanged(
-                                    birthday: birthdayController.text));
+                                    birthday: birthdayController.text.trim()));
                               }
                             },
                             textFormFieldKey: _birthdayKey,
@@ -360,7 +364,8 @@ class CreatePage extends StatelessWidget {
                                 _birthplaceKey.currentState!.validate();
                                 context.read<CreateBloc>().add(
                                     BirthPlaceChanged(
-                                        birthplace: birthplaceController.text));
+                                        birthplace:
+                                            birthplaceController.text.trim()));
                               }
                             }),
                             textFormFieldKey: _birthplaceKey,
@@ -384,7 +389,7 @@ class CreatePage extends StatelessWidget {
                                 context.read<CreateBloc>().add(
                                     NationalityChanged(
                                         nationality:
-                                            nationalityController.text));
+                                            nationalityController.text.trim()));
                               }
                             },
                             textFormFieldKey: _nationalityKey,
@@ -406,7 +411,7 @@ class CreatePage extends StatelessWidget {
                               if (!focus) {
                                 _addressKey.currentState!.validate();
                                 context.read<CreateBloc>().add(AddressChanged(
-                                    address: addressController.text));
+                                    address: addressController.text.trim()));
                               }
                             },
                             textFormFieldKey: _addressKey,
@@ -546,7 +551,6 @@ class CreatePage extends StatelessWidget {
                             ]),
                           ),
 
-// DIVIDER
                           const Padding(
                             padding: EdgeInsets.symmetric(vertical: 30.0),
                             child: Divider(
@@ -558,7 +562,7 @@ class CreatePage extends StatelessWidget {
                           const SizedBox(
                               width: double.infinity,
                               child: Text(
-                                "Esperienze lavorative",
+                                "Esperienze lavorative passate",
                                 style: TextStyle(
                                     fontSize: 22, fontWeight: FontWeight.bold),
                               )),
@@ -577,6 +581,85 @@ class CreatePage extends StatelessWidget {
                                     WorkExperienceDeleted(
                                         workExperience: workExperience));
                               },
+                            ),
+                          ),
+
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 30.0),
+                            child: Divider(
+                              thickness: 3,
+                            ),
+                          ),
+
+// PERIODI e COMUNI
+                          const SizedBox(
+                              width: double.infinity,
+                              child: Text(
+                                "Disponibilità: Quando e Dove",
+                                style: TextStyle(
+                                    fontSize: 22, fontWeight: FontWeight.bold),
+                              )),
+
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Container(
+                              constraints: const BoxConstraints(maxWidth: 700),
+                              child: LocationsBox(
+                                list: state.locations,
+                                onAdd: (location) => context
+                                    .read<CreateBloc>()
+                                    .add(LocationAdded(location: location)),
+                                onDelete: (location) => context
+                                    .read<CreateBloc>()
+                                    .add(LocationDeleted(location: location)),
+                              ),
+                            ),
+                          ),
+
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Container(
+                              constraints: const BoxConstraints(maxWidth: 700),
+                              child: PeriodsBox(
+                                list: state.periods,
+                                onAdd: (period) => context
+                                    .read<CreateBloc>()
+                                    .add(PeriodAdded(period: period)),
+                                onDelete: (period) => context
+                                    .read<CreateBloc>()
+                                    .add(PeriodDeleted(period: period)),
+                              ),
+                            ),
+                          ),
+
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 30.0),
+                            child: Divider(
+                              thickness: 3,
+                            ),
+                          ),
+
+// CONTATTI DI EMERGENZA
+                          const SizedBox(
+                              width: double.infinity,
+                              child: Text(
+                                "Contatti di Emergenza",
+                                style: TextStyle(
+                                    fontSize: 22, fontWeight: FontWeight.bold),
+                              )),
+
+                          Container(
+                            constraints: const BoxConstraints(maxWidth: 700),
+                            child: EmergencyContactsBox(
+                              list: state.emergencyContacts,
+                              onAdd: (emergencyContact) => context
+                                  .read<CreateBloc>()
+                                  .add(EmergencyContactAdded(
+                                      emergencyContact: emergencyContact)),
+                              onDelete: (emergencyContact) => context
+                                  .read<CreateBloc>()
+                                  .add(EmergencyContactDeleted(
+                                      emergencyContact: emergencyContact)),
                             ),
                           ),
 

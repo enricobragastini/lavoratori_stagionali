@@ -14,8 +14,11 @@ class CreateState extends Equatable {
     this.phone = "",
     this.email = "",
     this.workExperiences = const [],
+    this.emergencyContacts = const [],
     this.languages = const [],
     this.licenses = const [],
+    this.locations = const [],
+    this.periods = const [],
     this.withOwnCar = false,
   });
 
@@ -30,8 +33,11 @@ class CreateState extends Equatable {
   final String email;
 
   final List<WorkExperience> workExperiences;
+  final List<EmergencyContact> emergencyContacts;
   final List<String> languages;
   final List<String> licenses;
+  final List<String> locations;
+  final List<Period> periods;
   final bool withOwnCar;
 
   CreateState copyWith({
@@ -45,8 +51,11 @@ class CreateState extends Equatable {
     String? phone,
     String? email,
     List<WorkExperience>? workExperiences,
+    List<EmergencyContact>? emergencyContacts,
     List<String>? languages,
     List<String>? licenses,
+    List<String>? locations,
+    List<Period>? periods,
     bool? withOwnCar,
   }) {
     return CreateState(
@@ -60,8 +69,11 @@ class CreateState extends Equatable {
         phone: phone ?? this.phone,
         email: email ?? this.email,
         workExperiences: workExperiences ?? this.workExperiences,
+        emergencyContacts: emergencyContacts ?? this.emergencyContacts,
         languages: languages ?? this.languages,
         licenses: licenses ?? this.licenses,
+        locations: locations ?? this.locations,
+        periods: periods ?? this.periods,
         withOwnCar: withOwnCar ?? this.withOwnCar);
   }
 
@@ -79,5 +91,8 @@ class CreateState extends Equatable {
         workExperiences,
         languages,
         licenses,
+        locations,
+        periods,
+        withOwnCar
       ];
 }

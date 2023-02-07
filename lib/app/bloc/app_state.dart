@@ -1,6 +1,6 @@
 part of 'app_bloc.dart';
 
-enum AppStatus { authenticated, unauthenticated, unknown }
+enum AppStatus { loading, authenticated, unauthenticated, unknown }
 
 class AppState extends Equatable {
   const AppState._({
@@ -9,6 +9,8 @@ class AppState extends Equatable {
   });
 
   const AppState.unknown() : this._();
+
+  const AppState.loading() : this._(status: AuthenticationStatus.loading);
 
   const AppState.authenticated(Employee employee)
       : this._(status: AuthenticationStatus.authenticated, employee: employee);

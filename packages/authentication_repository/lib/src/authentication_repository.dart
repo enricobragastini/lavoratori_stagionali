@@ -16,7 +16,7 @@ class LogInFailure implements Exception {
 }
 
 // Possibili stati di autenticazione
-enum AuthenticationStatus { authenticated, unauthenticated }
+enum AuthenticationStatus { loading, authenticated, unauthenticated }
 
 class AuthenticationRepository {
   late final AppwriteRepository appwriteRepository;
@@ -28,8 +28,8 @@ class AuthenticationRepository {
 
   AuthenticationRepository({required this.appwriteRepository}) {
     loggedInEmployee = Employee.empty;
-    controller.add(AuthenticationStatus.unauthenticated);
 
+    controller.add(AuthenticationStatus.loading);
     appwriteRepository.isSessionActive.then((active) {
       if (active) {
         // Se all'avvio c'è una sessione attiva
@@ -38,6 +38,8 @@ class AuthenticationRepository {
           updateCurrentEmployee(account);
           controller.add(AuthenticationStatus.authenticated);
         });
+      } else {
+        controller.add(AuthenticationStatus.unauthenticated);
       }
     });
   }

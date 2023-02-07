@@ -12,6 +12,8 @@ dependencies:
   intl: ^0.18.0
   equatable: ^2.0.5
   appwrite: ^8.1.0
+  person_model:
+    path: ../person_model
   appwrite_repository:
     path: ../appwrite_repository
   rxdart: ^0.27.7

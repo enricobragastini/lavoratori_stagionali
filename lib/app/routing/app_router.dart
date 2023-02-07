@@ -36,10 +36,12 @@ GoRouter goRouter(BuildContext context) {
     redirect: ((context, state) {
       final status = BlocProvider.of<AppBloc>(context).state.status;
       switch (status) {
-        case AuthenticationStatus.authenticated:
-          return '/home-page';
+        case AuthenticationStatus.loading:
+          return '/login';
         case AuthenticationStatus.unauthenticated:
           return '/login';
+        case AuthenticationStatus.authenticated:
+          return '/home-page';
       }
     }),
   );

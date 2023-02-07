@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-import 'package:workers_repository/workers_repository.dart';
+import 'package:workers_repository/workers_repository.dart'
+    show EmergencyContact;
 
-import '../../bloc/create_bloc.dart';
 import '../widgets/CustomTextFormField.dart';
 
-class WorkExperiencesBox extends StatelessWidget {
-  const WorkExperiencesBox(
+class EmergencyContactsBox extends StatelessWidget {
+  const EmergencyContactsBox(
       {Key? key,
       required this.onAdd,
       required this.onDelete,
       required this.list})
       : super(key: key);
 
-  final void Function(WorkExperience) onAdd;
-  final void Function(WorkExperience) onDelete;
-  final List<WorkExperience> list;
+  final void Function(EmergencyContact) onAdd;
+  final void Function(EmergencyContact) onDelete;
+  final List<EmergencyContact> list;
 
   @override
   Widget build(BuildContext context) {
@@ -27,14 +25,14 @@ class WorkExperiencesBox extends StatelessWidget {
             onPressed: () => showDialog(
                   context: context,
                   builder: (context) => ExperienceDialog(),
-                ).then((workExperience) {
-                  if (workExperience != null) {
-                    onAdd(workExperience);
+                ).then((emergencyContact) {
+                  if (emergencyContact != null) {
+                    onAdd(emergencyContact);
                   }
                 }),
             style: TextButton.styleFrom(
                 foregroundColor: Colors.white,
-                backgroundColor: Theme.of(context).colorScheme.primary),
+                backgroundColor: const Color.fromARGB(255, 190, 0, 0)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               child: Row(
@@ -48,7 +46,7 @@ class WorkExperiencesBox extends StatelessWidget {
                   ),
                   Center(
                     child: Text(
-                      "Aggiungi Esperienza",
+                      "Aggiungi Contatto di Emergenza",
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 18),
                     ),
@@ -65,7 +63,7 @@ class WorkExperiencesBox extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(8)),
             border: Border.all(
-                color: Theme.of(context).colorScheme.primary, width: 1.5),
+                color: const Color.fromARGB(255, 190, 0, 0), width: 1.5),
             color: Colors.black12,
           ),
           child: Box(
@@ -86,22 +84,21 @@ class Box extends StatelessWidget {
       required this.onAdd,
       required this.onDelete});
 
-  final List<WorkExperience> list;
-  final void Function(WorkExperience) onAdd;
-  final void Function(WorkExperience) onDelete;
+  final List<EmergencyContact> list;
+  final void Function(EmergencyContact) onAdd;
+  final void Function(EmergencyContact) onDelete;
 
   @override
   Widget build(BuildContext context) {
-    final DateFormat dateFormatter = DateFormat("dd/MM/yyyy");
     return list.isEmpty
         ? GestureDetector(
             onTap: () => showDialog(
               context: context,
               builder: (context) => ExperienceDialog(),
             ).then(
-              (workExperience) {
-                if (workExperience != null) {
-                  onAdd(workExperience);
+              (emergencyContact) {
+                if (emergencyContact != null) {
+                  onAdd(emergencyContact);
                 }
               },
             ),
@@ -114,7 +111,7 @@ class Box extends StatelessWidget {
                 children: const [
                   Icon(Icons.add_circle_outline, size: 60),
                   Text(
-                    "Aggiungi una esperienza",
+                    "Aggiungi un contatto di emergenza",
                     textAlign: TextAlign.center,
                     style:
                         TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
@@ -138,8 +135,9 @@ class Box extends StatelessWidget {
                         Expanded(
                           flex: 1,
                           child: CircleAvatar(
-                            backgroundColor: Colors.green,
                             foregroundColor: Colors.white,
+                            backgroundColor:
+                                const Color.fromARGB(255, 190, 0, 0),
                             child: Text((index + 1).toString()),
                           ),
                         ),
@@ -149,55 +147,43 @@ class Box extends StatelessWidget {
                         Expanded(
                           flex: 8,
                           child: GestureDetector(
-                            onTap: () {
-                              // TODO: Aggiungere modifica WorkExperience
-                            },
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  list[index].title,
+                                  "${list[index].firstname} ${list[index].lastname}",
                                   style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                Text(
-                                  "presso: ${list[index].companyName}",
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.normal),
+                                Row(
+                                  children: [
+                                    const Icon(Icons.email),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: Text(
+                                        list[index].email,
+                                        style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.normal),
+                                      ),
+                                    )
+                                  ],
                                 ),
-                                Text(
-                                  "Luogo di lavoro: ${list[index].workplace}",
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.normal),
+                                Row(
+                                  children: [
+                                    const Icon(Icons.phone),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: Text(
+                                        list[index].phone,
+                                        style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.normal),
+                                      ),
+                                    )
+                                  ],
                                 ),
-                                Text(
-                                  "Dal ${dateFormatter.format(list[index].start)} al ${dateFormatter.format(list[index].end)}",
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.normal),
-                                ),
-                                Text(
-                                  "Paga Lorda giornaliera: €${(list[index].dailyPay)}",
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.normal),
-                                ),
-                                Text(
-                                  "Mansioni: ${list[index].tasks.toString().substring(1, list[index].tasks.toString().length - 1)}",
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.normal),
-                                ),
-                                if (list[index].notes.isNotEmpty)
-                                  Text(
-                                    "Note: ${list[index].notes}",
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.normal),
-                                  ),
                               ],
                             ),
                           ),
@@ -233,20 +219,14 @@ class ExperienceDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController titleController = TextEditingController(text: "");
-    TextEditingController companyNameController =
-        TextEditingController(text: "");
-    TextEditingController startPeriodController =
-        TextEditingController(text: "");
-    TextEditingController endPeriodController = TextEditingController(text: "");
-    TextEditingController dailyPayController = TextEditingController(text: "");
-    TextEditingController workplaceController = TextEditingController(text: "");
-    TextEditingController tasksController = TextEditingController(text: "");
-    TextEditingController notesController = TextEditingController(text: "");
+    TextEditingController firstnameController = TextEditingController(text: "");
+    TextEditingController lastnameController = TextEditingController(text: "");
+    TextEditingController emailController = TextEditingController(text: "");
+    TextEditingController phoneController = TextEditingController(text: "");
 
     return AlertDialog(
       title: const Text(
-        "Aggiungi una nuova Esperienza Lavorativa",
+        "Aggiungi un Contatto di Emergenza",
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 20),
       ),
@@ -262,18 +242,12 @@ class ExperienceDialog extends StatelessWidget {
         TextButton(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
-                WorkExperience exp = WorkExperience(
-                    title: titleController.text.trim(),
-                    companyName: companyNameController.text.trim(),
-                    start: DateFormat("dd/MM/yyyy")
-                        .parse(startPeriodController.text.trim()),
-                    end: DateFormat("dd/MM/yyyy")
-                        .parse(endPeriodController.text.trim()),
-                    dailyPay: double.parse(dailyPayController.text.trim()),
-                    workplace: workplaceController.text.trim(),
-                    tasks: tasksController.text.split(';')
-                      ..forEach((element) => element.trim()),
-                    notes: notesController.text.trim());
+                EmergencyContact exp = EmergencyContact(
+                  firstname: firstnameController.text.trim(),
+                  lastname: lastnameController.text.trim(),
+                  phone: phoneController.text.trim(),
+                  email: emailController.text.trim(),
+                );
                 Navigator.of(context).pop(exp);
               }
             },
@@ -294,8 +268,8 @@ class ExperienceDialog extends StatelessWidget {
                 children: [
                   CustomTextFormField(
                     textFormFieldKey: _titleKey,
-                    labelText: "Titolo / Qualifica*",
-                    textFormFieldController: titleController,
+                    labelText: "Nome*",
+                    textFormFieldController: firstnameController,
                     onFocusChangeAction: (focus) {
                       if (!focus) {
                         _titleKey.currentState!.validate();
@@ -310,8 +284,8 @@ class ExperienceDialog extends StatelessWidget {
                   ),
                   CustomTextFormField(
                     textFormFieldKey: _companyNameKey,
-                    labelText: "Nome Azienda*",
-                    textFormFieldController: companyNameController,
+                    labelText: "Cognome*",
+                    textFormFieldController: lastnameController,
                     onFocusChangeAction: (focus) {
                       if (!focus) {
                         _companyNameKey.currentState!.validate();
@@ -326,8 +300,8 @@ class ExperienceDialog extends StatelessWidget {
                   ),
                   CustomTextFormField(
                     textFormFieldKey: _startPeriodKey,
-                    labelText: "Data di Inizio (dd/mm/yyyy)*",
-                    textFormFieldController: startPeriodController,
+                    labelText: "Email*",
+                    textFormFieldController: emailController,
                     onFocusChangeAction: (focus) {
                       if (!focus) {
                         _startPeriodKey.currentState!.validate();
@@ -338,23 +312,18 @@ class ExperienceDialog extends StatelessWidget {
                         return "Questo è un campo obbligatorio";
                       }
                       String pattern =
-                          "^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\\/)\\d{4}\$";
+                          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
                       RegExp regExp = RegExp(pattern);
                       if (!regExp.hasMatch(value)) {
-                        return 'Inserire una data valida (dd/mm/yyyy)';
-                      }
-                      try {
-                        DateFormat('dd/MM/yyyy').parse(value);
-                      } catch (e) {
-                        return 'Inserire una data valida (dd/mm/yyyy)';
+                        return 'Inserire una email valida';
                       }
                       return null;
                     },
                   ),
                   CustomTextFormField(
                     textFormFieldKey: _endPeriodKey,
-                    labelText: "Data di Fine(dd/mm/yyyy)*",
-                    textFormFieldController: endPeriodController,
+                    labelText: "Telefono*",
+                    textFormFieldController: phoneController,
                     onFocusChangeAction: (focus) {
                       if (!focus) {
                         _endPeriodKey.currentState!.validate();
@@ -364,83 +333,14 @@ class ExperienceDialog extends StatelessWidget {
                       if (value == null || value.isEmpty) {
                         return "Questo è un campo obbligatorio";
                       }
-                      String pattern =
-                          "^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\\/)\\d{4}\$";
+                      String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
                       RegExp regExp = RegExp(pattern);
                       if (!regExp.hasMatch(value)) {
-                        return 'Inserire una data valida (dd/mm/yyyy)';
-                      }
-                      try {
-                        DateFormat('dd/MM/yyyy').parse(value);
-                      } catch (e) {
-                        return 'Inserire una data valida (dd/mm/yyyy)';
-                      }
-                      if (DateFormat('dd/MM/yyyy').parse(value).isBefore(
-                          DateFormat('dd/MM/yyyy')
-                              .parse(startPeriodController.text))) {
-                        return "La Data di Fine non può essere prima della Data di Inizio!";
+                        return 'Inserire un numero di telefono valido';
                       }
                       return null;
                     },
                   ),
-                  CustomTextFormField(
-                    textFormFieldKey: _dailyPayKey,
-                    textFormFieldController: dailyPayController,
-                    labelText: "Paga Lorda Giornaliera (in Euro)",
-                    onFocusChangeAction: (focus) {
-                      if (!focus) {
-                        _dailyPayKey.currentState!.validate();
-                      }
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Questo è un campo obbligatorio.";
-                      }
-                      value = value.replaceAll(',', '.');
-                      const pattern = r'^[0-9]+(?:[.][0-9]+)?$';
-                      if (!RegExp(pattern).hasMatch(value)) {
-                        return "Inserire un valore numerico valido.";
-                      }
-                      return null;
-                    },
-                  ),
-                  CustomTextFormField(
-                    textFormFieldKey: _workplaceKey,
-                    textFormFieldController: workplaceController,
-                    labelText: "Luogo di lavoro",
-                    onFocusChangeAction: (focus) {
-                      if (!focus) {
-                        _workplaceKey.currentState!.validate();
-                      }
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Questo è un campo obbligatorio.";
-                      }
-                      return null;
-                    },
-                  ),
-                  CustomTextFormField(
-                    textFormFieldKey: _tasksKey,
-                    labelText: "Mansioni (separate da punto e virgola)*",
-                    textFormFieldController: tasksController,
-                    onFocusChangeAction: (focus) {
-                      if (!focus) {
-                        _tasksKey.currentState!.validate();
-                      }
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Questo è un campo obbligatorio.";
-                      }
-                      return null;
-                    },
-                  ),
-                  CustomTextFormField(
-                    textFormFieldKey: _notesKey,
-                    labelText: "Note",
-                    textFormFieldController: notesController,
-                  )
                 ],
               )),
         ),

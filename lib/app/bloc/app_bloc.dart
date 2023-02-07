@@ -32,6 +32,9 @@ class AppBloc extends Bloc<AppEvent, AppState> with ChangeNotifier {
   Future<void> _authenticationStatusChanged(
       AppAuthenticationStatusChanged event, Emitter<AppState> emit) async {
     switch (event.status) {
+      case AuthenticationStatus.loading:
+        return emit(const AppState.loading());
+
       case AuthenticationStatus.unauthenticated:
         return emit(const AppState.unauthenticated());
 

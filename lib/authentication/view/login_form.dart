@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lavoratori_stagionali/app/app.dart';
 
 import '../cubit/auth_cubit.dart';
 
@@ -8,19 +9,42 @@ class LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthCubit, AuthState>(
-      listener: (context, state) {
-        if (state.status == FormStatus.submissionFailure) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(
-              content: Text(state.errorMessage!),
-              // backgroundColor: Theme.of(context).colorScheme.primary,
-              behavior: SnackBarBehavior.floating,
-              duration: const Duration(milliseconds: 5000),
-            ));
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<AppBloc, AppState>(
+          listener: (context, state) {
+            if (state.status == AppStatus.loading) {
+              showDialog(
+                  context: context,
+                  barrierDismissible: true,
+                  builder: (BuildContext context) {
+                    return Container(
+                      color: Colors.transparent,
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
+                  });
+            }
+          },
+        ),
+        BlocListener<AuthCubit, AuthState>(
+          listener: (context, state) {
+            if (state.status == FormStatus.submissionFailure) {
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(SnackBar(
+                  content: Text(state.errorMessage!),
+                  // backgroundColor: Theme.of(context).colorScheme.primary,
+                  behavior: SnackBarBehavior.floating,
+                  duration: const Duration(milliseconds: 5000),
+                ));
+            }
+          },
+        )
+      ],
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

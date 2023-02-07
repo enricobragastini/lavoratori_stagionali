@@ -2,7 +2,13 @@ import 'package:appwrite/models.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:workers_repository/workers_repository.dart'
-    show WorkersRepository, WorkersException, Worker, WorkExperience;
+    show
+        WorkersRepository,
+        WorkersException,
+        Worker,
+        WorkExperience,
+        Period,
+        EmergencyContact;
 import 'package:intl/intl.dart';
 
 part 'create_event.dart';
@@ -24,6 +30,12 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
     on<LanguagesEdited>(_onLanguagesEdited);
     on<LicensesEdited>(_onLicensesEdited);
     on<WithOwnCarEdited>(_onWithOwnCarEdited);
+    on<EmergencyContactAdded>(_onEmergencyContactAdded);
+    on<EmergencyContactDeleted>(_onEmergencyContactDeleted);
+    on<LocationAdded>(_onLocationAdded);
+    on<LocationDeleted>(_onLocationDeleted);
+    on<PeriodAdded>(_onPeriodAdded);
+    on<PeriodDeleted>(_onPeriodDeleted);
   }
 
   final WorkersRepository workersRepository;
@@ -42,8 +54,11 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
           phone: state.phone,
           address: state.address,
           workExperiences: state.workExperiences,
+          emergencyContacts: state.emergencyContacts,
           languages: state.languages,
           licenses: state.licenses,
+          locations: state.locations,
+          periods: state.periods,
           withOwnCar: state.withOwnCar));
       print("[INFO] Elemento inserito nel database correttamente!");
       emit(const CreateState());
@@ -221,6 +236,86 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
     try {
       emit(state.copyWith(
           status: CreateStatus.success, withOwnCar: event.withOwnCarEdited));
+    } catch (e) {
+      emit(state.copyWith(status: CreateStatus.failure));
+    }
+  }
+
+  Future<void> _onEmergencyContactAdded(
+      EmergencyContactAdded event, Emitter<CreateState> emit) async {
+    emit(state.copyWith(status: CreateStatus.loading));
+
+    try {
+      emit(state.copyWith(status: CreateStatus.success, emergencyContacts: [
+        ...state.emergencyContacts,
+        event.emergencyContact
+      ]));
+    } catch (e) {
+      emit(state.copyWith(status: CreateStatus.failure));
+    }
+  }
+
+  Future<void> _onEmergencyContactDeleted(
+      EmergencyContactDeleted event, Emitter<CreateState> emit) async {
+    emit(state.copyWith(status: CreateStatus.loading));
+
+    try {
+      List<EmergencyContact> newList = state.emergencyContacts;
+      newList.remove(event.emergencyContact);
+      emit(state.copyWith(
+          status: CreateStatus.success, emergencyContacts: newList));
+    } catch (e) {
+      emit(state.copyWith(status: CreateStatus.failure));
+    }
+  }
+
+  Future<void> _onLocationAdded(
+      LocationAdded event, Emitter<CreateState> emit) async {
+    emit(state.copyWith(status: CreateStatus.loading));
+
+    try {
+      emit(state.copyWith(
+          status: CreateStatus.success,
+          locations: [...state.locations, event.location]));
+    } catch (e) {
+      emit(state.copyWith(status: CreateStatus.failure));
+    }
+  }
+
+  Future<void> _onLocationDeleted(
+      LocationDeleted event, Emitter<CreateState> emit) async {
+    emit(state.copyWith(status: CreateStatus.loading));
+
+    try {
+      List<String> newList = state.locations;
+      newList.remove(event.location);
+      emit(state.copyWith(status: CreateStatus.success, locations: newList));
+    } catch (e) {
+      emit(state.copyWith(status: CreateStatus.failure));
+    }
+  }
+
+  Future<void> _onPeriodAdded(
+      PeriodAdded event, Emitter<CreateState> emit) async {
+    emit(state.copyWith(status: CreateStatus.loading));
+
+    try {
+      emit(state.copyWith(
+          status: CreateStatus.success,
+          periods: [...state.periods, event.period]));
+    } catch (e) {
+      emit(state.copyWith(status: CreateStatus.failure));
+    }
+  }
+
+  Future<void> _onPeriodDeleted(
+      PeriodDeleted event, Emitter<CreateState> emit) async {
+    emit(state.copyWith(status: CreateStatus.loading));
+
+    try {
+      List<Period> newList = state.periods;
+      newList.remove(event.period);
+      emit(state.copyWith(status: CreateStatus.success, periods: newList));
     } catch (e) {
       emit(state.copyWith(status: CreateStatus.failure));
     }

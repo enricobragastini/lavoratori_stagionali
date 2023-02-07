@@ -1,10 +1,9 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 import "package:appwrite_repository/appwrite_repository.dart";
+import "package:workers_repository/src/models/EmergencyContact.dart";
 import "./models/Worker.dart";
 import "./models/WorkExperience.dart";
-
-import 'package:intl/intl.dart';
 
 class WorkersException implements Exception {
   const WorkersException(
@@ -51,6 +50,18 @@ class WorkersRepository {
         });
         await appwriteRepository.saveWorkExperiences(rawExperiencesDataList);
       }
+
+      List<Map<dynamic, dynamic>> emergencyContactsRawData = [];
+      for (EmergencyContact contact in worker.emergencyContacts) {
+        emergencyContactsRawData.add({
+          "firstname": contact.firstname,
+          "lastname": contact.lastname,
+          "email": contact.email,
+          "phone": contact.phone,
+        });
+        await appwriteRepository
+            .saveEmergencyContacts(emergencyContactsRawData);
+      }
     } on Exception {
       throw WorkersException();
     }
@@ -78,6 +89,9 @@ class WorkersRepository {
             phone: doc.data["phone"],
             address: doc.data["address"],
             workExperiences: [],
+            emergencyContacts: [],
+            locations: [],
+            periods: [],
             languages: (doc.data["languages"] as List)
                 .map((item) => item as String)
                 .toList(),

@@ -127,3 +127,57 @@ class WithOwnCarEdited extends CreateEvent {
   @override
   List<Object> get props => [withOwnCarEdited];
 }
+
+class EmergencyContactAdded extends CreateEvent {
+  const EmergencyContactAdded({required this.emergencyContact});
+
+  final EmergencyContact emergencyContact;
+
+  @override
+  List<Object> get props => [emergencyContact];
+}
+
+class EmergencyContactDeleted extends CreateEvent {
+  const EmergencyContactDeleted({required this.emergencyContact});
+
+  final EmergencyContact emergencyContact;
+
+  @override
+  List<Object> get props => [emergencyContact];
+}
+
+class LocationAdded extends CreateEvent {
+  const LocationAdded({required this.location});
+
+  final String location;
+
+  @override
+  List<Object> get props => [location];
+}
+
+class LocationDeleted extends CreateEvent {
+  const LocationDeleted({required this.location});
+
+  final String location;
+
+  @override
+  List<Object> get props => [location];
+}
+
+class PeriodAdded extends CreateEvent {
+  const PeriodAdded({required this.period});
+
+  final Period period;
+
+  @override
+  List<Object> get props => [period];
+}
+
+class PeriodDeleted extends CreateEvent {
+  const PeriodDeleted({required this.period});
+
+  final Period period;
+
+  @override
+  List<Object> get props => [period];
+}

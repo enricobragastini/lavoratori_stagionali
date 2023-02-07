@@ -10,7 +10,22 @@ class GalleryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<GalleryBloc, GalleryState>(
       listener: (context, state) {
-        if (state.status == GalleryStatus.failure) {
+        if (state.status == GalleryStatus.loading) {
+          showDialog(
+              context: context,
+              barrierDismissible: true,
+              builder: (BuildContext context) {
+                return Container(
+                  color: Colors.transparent,
+                  child: const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  ),
+                );
+              });
+        } else if (state.status == GalleryStatus.failure) {
+          Navigator.of(context).pop();
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(SnackBar(
@@ -21,6 +36,8 @@ class GalleryPage extends StatelessWidget {
               behavior: SnackBarBehavior.floating,
               duration: const Duration(milliseconds: 5000),
             ));
+        } else {
+          Navigator.of(context).pop();
         }
       },
       child: Scaffold(

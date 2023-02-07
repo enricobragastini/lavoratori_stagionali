@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
 
@@ -7,6 +9,7 @@ class AppwriteRepository {
   final String _employees_collection_id = "63d689659673376c728e";
   final String _workers_collection_id = "63d6896c220160c60b82";
   final String _workExperiences_collection_id = "63d6ef5b0ded6e3bfaec";
+  final String _emergencyContacts_collection_id = "63e23d327b3f2b585fe3";
 
   // Client Appwrite
   late final Client client;
@@ -78,6 +81,17 @@ class AppwriteRepository {
           collectionId: _workExperiences_collection_id,
           documentId: "unique()",
           data: experience);
+    }
+  }
+
+  Future<void> saveEmergencyContacts(
+      List<Map<dynamic, dynamic>> emergencyContactsRawData) async {
+    for (Map<dynamic, dynamic> contact in emergencyContactsRawData) {
+      database.createDocument(
+          databaseId: _database_id,
+          collectionId: _emergencyContacts_collection_id,
+          documentId: "unique()",
+          data: contact);
     }
   }
 

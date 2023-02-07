@@ -19,10 +19,14 @@ class WorkerCard extends StatelessWidget {
     List<String> initials = [];
 
     for (String s in worker.firstname.split(" ")) {
-      initials.add(s[0]);
+      if (s.isNotEmpty) {
+        initials.add(s[0]);
+      }
     }
     for (String s in worker.lastname.split(" ")) {
-      initials.add(s[0]);
+      if (s.isNotEmpty) {
+        initials.add(s[0]);
+      }
     }
 
     return Container(
@@ -63,6 +67,18 @@ class WorkerCard extends StatelessWidget {
                           "Nato/a il ${DateFormat('dd/MM/yyyy').format(worker.birthday)} (${AgeCalculator.age(worker.birthday).years} anni) a ${worker.birthplace}",
                       icon: Icons.cake,
                     ),
+                    _TinyTextWithIcon(
+                        text:
+                            "Lingue parlate: ${worker.languages.toString().replaceAll('[', '').replaceAll(']', '')}",
+                        icon: Icons.language),
+                    _TinyTextWithIcon(
+                        text:
+                            "Patente di guida: ${worker.licenses.toString().replaceAll('[', '').replaceAll(']', '')}",
+                        icon: Icons.drive_eta),
+                    _TinyTextWithIcon(
+                        text:
+                            "${worker.workExperiences.length} Esperienze lavorative",
+                        icon: Icons.work),
                   ],
                 ),
               ),

@@ -14,7 +14,7 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
     on<WorkerDeleteRequested>(_onWorkersDeleteRequested);
 
     // Ascolta lo stream dal database in attesa di modifiche al database
-    workersRepository.workersStream.listen((event) {
+    workersRepository.workersStream.listen((event) async {
       add(const WorkersListUpdated());
     });
   }
