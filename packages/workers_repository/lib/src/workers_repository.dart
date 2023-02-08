@@ -1,9 +1,11 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 import "package:appwrite_repository/appwrite_repository.dart";
-import "package:workers_repository/src/models/EmergencyContact.dart";
+
 import "./models/Worker.dart";
 import "./models/WorkExperience.dart";
+import "./models/EmergencyContact.dart";
+import "./models/Period.dart";
 
 class WorkersException implements Exception {
   const WorkersException(
@@ -33,6 +35,7 @@ class WorkersRepository {
         "licenses": worker.licenses,
         "languages": worker.languages,
         "withOwnCar": worker.withOwnCar,
+        "locations": worker.locations,
       });
 
       List<Map<dynamic, dynamic>> rawExperiencesDataList = [];
@@ -48,8 +51,18 @@ class WorkersRepository {
           "dailyPay": experience.dailyPay,
           "workerID": workerID,
         });
-        await appwriteRepository.saveWorkExperiences(rawExperiencesDataList);
       }
+      await appwriteRepository.saveWorkExperiences(rawExperiencesDataList);
+
+      List<Map<dynamic, dynamic>> periodsRawData = [];
+      for (Period period in worker.periods) {
+        periodsRawData.add({
+          "start": period.start.toIso8601String(),
+          "end": period.end.toIso8601String(),
+          "workerID": workerID,
+        });
+      }
+      await appwriteRepository.savePeriod(periodsRawData);
 
       List<Map<dynamic, dynamic>> emergencyContactsRawData = [];
       for (EmergencyContact contact in worker.emergencyContacts) {
@@ -59,11 +72,10 @@ class WorkersRepository {
           "email": contact.email,
           "phone": contact.phone,
         });
-        await appwriteRepository
-            .saveEmergencyContacts(emergencyContactsRawData);
       }
-    } on Exception {
-      throw WorkersException();
+      await appwriteRepository.saveEmergencyContacts(emergencyContactsRawData);
+    } on AppwriteException catch (e) {
+      throw WorkersException(e.message!);
     }
   }
 
@@ -76,6 +88,9 @@ class WorkersRepository {
 
       DocumentList workExperiencesDocumentList =
           await appwriteRepository.workExperiencesDocumentList;
+
+      DocumentList periodsDocumentList =
+          await appwriteRepository.periodsDocumentList;
 
       for (Document doc in workersDocumentList.documents) {
         workersList.add(Worker(
@@ -90,7 +105,9 @@ class WorkersRepository {
             address: doc.data["address"],
             workExperiences: [],
             emergencyContacts: [],
-            locations: [],
+            locations: (doc.data["locations"] as List)
+                .map((item) => item as String)
+                .toList(),
             periods: [],
             languages: (doc.data["languages"] as List)
                 .map((item) => item as String)
@@ -121,6 +138,15 @@ class WorkersRepository {
                       ? (doc.data["dailyPay"] as int).toDouble()
                       : (doc.data["dailyPay"] as double),
                 )));
+      }
+
+      for (Document doc in periodsDocumentList.documents) {
+        workersList
+            .where((worker) => worker.id == doc.data["workerID"])
+            .forEach((worker) => worker.periods.add(Period(
+                id: doc.$id,
+                start: DateTime.parse(doc.data["start"]),
+                end: DateTime.parse(doc.data["end"]))));
       }
     } on AppwriteException catch (e) {
       throw new WorkersException(e.message!);

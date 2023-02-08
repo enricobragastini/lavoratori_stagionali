@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 
 import 'package:workers_repository/workers_repository.dart'
     show Worker, WorkersRepository, WorkersException;
+import 'package:filter/filter.dart';
 
 part 'gallery_event.dart';
 part 'gallery_state.dart';
@@ -12,6 +13,7 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
     on<WorkersSubscriptionRequested>(_onWorkersSubscriptionRequested);
     on<WorkersListUpdated>(_onWorkersListUpdated);
     on<WorkerDeleteRequested>(_onWorkersDeleteRequested);
+    on<KeywordsUpdated>(_onKeywordsUpdated);
 
     // Ascolta lo stream dal database in attesa di modifiche al database
     workersRepository.workersStream.listen((event) async {
@@ -57,5 +59,18 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
         emit(state.copyWith(status: GalleryStatus.failure));
       }
     });
+  }
+
+  Future<void> _onKeywordsUpdated(
+      KeywordsUpdated event, Emitter<GalleryState> emit) async {
+    emit(state.copyWith(status: GalleryStatus.loading));
+
+    try {
+      emit(state.copyWith(
+          status: GalleryStatus.success,
+          filter: state.filter.copyWith(keywords: event.keywords)));
+    } catch (e) {
+      emit(state.copyWith(status: GalleryStatus.failure));
+    }
   }
 }

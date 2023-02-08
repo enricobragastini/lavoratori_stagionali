@@ -181,3 +181,12 @@ class PeriodDeleted extends CreateEvent {
   @override
   List<Object> get props => [period];
 }
+
+class WorkerEditRequested extends CreateEvent {
+  const WorkerEditRequested({required this.worker});
+
+  final Worker worker;
+
+  @override
+  List<Object> get props => [worker];
+}

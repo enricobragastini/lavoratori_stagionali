@@ -35,6 +35,8 @@ dependencies:
     path: packages/employees_repository
   workers_repository:
     path: packages/workers_repository
+  filter:
+    path: packages/filter
   json_serializable: ^6.5.4
   rxdart: ^0.27.7
   textfield_tags: ^2.0.2

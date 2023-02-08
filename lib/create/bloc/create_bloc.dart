@@ -36,6 +36,7 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
     on<LocationDeleted>(_onLocationDeleted);
     on<PeriodAdded>(_onPeriodAdded);
     on<PeriodDeleted>(_onPeriodDeleted);
+    on<WorkerEditRequested>(onWorkerEditRequested);
   }
 
   final WorkersRepository workersRepository;
@@ -316,6 +317,34 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
       List<Period> newList = state.periods;
       newList.remove(event.period);
       emit(state.copyWith(status: CreateStatus.success, periods: newList));
+    } catch (e) {
+      emit(state.copyWith(status: CreateStatus.failure));
+    }
+  }
+
+  Future<void> onWorkerEditRequested(
+      WorkerEditRequested event, Emitter<CreateState> emit) async {
+    emit(state.copyWith(status: CreateStatus.loading));
+
+    try {
+      emit(state.copyWith(
+        status: CreateStatus.success,
+        firstname: event.worker.firstname,
+        lastname: event.worker.lastname,
+        birthday: DateFormat("dd/MM/yyyy").format(event.worker.birthday),
+        birthplace: event.worker.birthplace,
+        nationality: event.worker.nationality,
+        address: event.worker.address,
+        phone: event.worker.phone,
+        email: event.worker.email,
+        workExperiences: event.worker.workExperiences,
+        emergencyContacts: event.worker.emergencyContacts,
+        languages: event.worker.languages,
+        licenses: event.worker.licenses,
+        locations: event.worker.locations,
+        periods: event.worker.periods,
+        withOwnCar: event.worker.withOwnCar,
+      ));
     } catch (e) {
       emit(state.copyWith(status: CreateStatus.failure));
     }

@@ -41,12 +41,6 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /* context.read<AppBloc>().ensureAuthenticated().then((auth) {
-      if (auth) {
-        context.read<GalleryBloc>().add(const WorkersSubscriptionRequested());
-      }
-    }); */
-
     context.read<AppBloc>().ensureAuthenticated().then((value) {
       print("HomeView -> ensureAuthenticated: $value");
       context.read<GalleryBloc>().add(const WorkersSubscriptionRequested());
@@ -69,7 +63,8 @@ class HomeView extends StatelessWidget {
         children: [const GalleryPage(), CreatePage()],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _tabIndex,
+        currentIndex:
+            context.select((HomeCubit cubit) => cubit.state.selectedTab).index,
         onTap: (index) {
           _tabIndex = index;
           context.read<HomeCubit>().setTab(HomeTab.values[index]);
