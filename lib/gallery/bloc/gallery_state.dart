@@ -71,7 +71,14 @@ class GalleryState extends Equatable {
                     .tasks
                     .toSet()
                     .intersection(filter.tasks.toSet())
-                    .isNotEmpty)))
+                    .isNotEmpty)) &&
+            (filter.periods.isEmpty
+                ? true
+                : worker.periods.any(
+                    (wp) =>
+                        filter.periods.where((fp) => fp.includes(wp)).length ==
+                        filter.periods.length,
+                  )))
         .toList();
   }
 

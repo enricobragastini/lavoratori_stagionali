@@ -45,6 +45,7 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
       SaveRequested event, Emitter<CreateState> emit) async {
     try {
       emit(state.copyWith(status: CreateStatus.loading));
+
       await workersRepository.saveWorker(Worker(
           firstname: state.firstname,
           lastname: state.lastname,
@@ -62,6 +63,7 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
           periods: state.periods,
           withOwnCar: state.withOwnCar));
       print("[INFO] Elemento inserito nel database correttamente!");
+
       emit(const CreateState());
     } on WorkersException {
       print("[INFO] Errore di inserimento nel database correttamente!");
@@ -70,9 +72,7 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
   }
 
   Future<void> _onFirstNameChanged(
-    FirstNameChanged event,
-    Emitter<CreateState> emit,
-  ) async {
+      FirstNameChanged event, Emitter<CreateState> emit) async {
     emit(state.copyWith(status: CreateStatus.loading));
 
     try {

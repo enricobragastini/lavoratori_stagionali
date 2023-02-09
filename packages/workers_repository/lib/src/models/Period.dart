@@ -16,6 +16,11 @@ class Period extends Equatable {
         id: id ?? this.id, start: start ?? this.start, end: end ?? this.end);
   }
 
+  bool includes(Period other) {
+    return ((this.start.isAfter(other.start) || this.start == other.start) &&
+        (this.end.isBefore(other.end) || this.end == other.end));
+  }
+
   @override
   List<Object?> get props => [id, start, end];
 }

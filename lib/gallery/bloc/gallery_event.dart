@@ -84,3 +84,21 @@ class TaskToggled extends GalleryEvent {
   @override
   List<Object> get props => [task];
 }
+
+class PeriodAdded extends GalleryEvent {
+  const PeriodAdded({required this.period});
+
+  final Period period;
+
+  @override
+  List<Object> get props => [period];
+}
+
+class PeriodDeleted extends GalleryEvent {
+  const PeriodDeleted({required this.period});
+
+  final Period period;
+
+  @override
+  List<Object> get props => [period];
+}

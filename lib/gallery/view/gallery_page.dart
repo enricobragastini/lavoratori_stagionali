@@ -70,7 +70,11 @@ class GalleryPage extends StatelessWidget {
                       child: Container(
                         // height: 200,
                         width: double.infinity,
-                        margin: const EdgeInsets.symmetric(horizontal: 200),
+                        margin: EdgeInsets.symmetric(
+                            horizontal:
+                                (MediaQuery.of(context).size.width < 1600)
+                                    ? 100
+                                    : 200),
                         child: Column(
                           children: [
                             const SizedBox(
@@ -83,7 +87,7 @@ class GalleryPage extends StatelessWidget {
                             ),
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
+                                  const EdgeInsets.symmetric(vertical: 20.0),
                               child: SearchBar(
                                   hintText: "Cerca",
                                   suffixIcon: IconButton(
@@ -131,6 +135,13 @@ class GalleryPage extends StatelessWidget {
                                     onTaskToggled: (task) => context
                                         .read<GalleryBloc>()
                                         .add(TaskToggled(task: task)),
+                                    allPeriods: state.filter.periods,
+                                    onAddPeriod: (period) => context
+                                        .read<GalleryBloc>()
+                                        .add(PeriodAdded(period: period)),
+                                    onDeletePeriod: (period) => context
+                                        .read<GalleryBloc>()
+                                        .add(PeriodDeleted(period: period)),
                                   ),
                                 ),
                               )
@@ -151,21 +162,23 @@ class GalleryPage extends StatelessWidget {
                               constraints: const BoxConstraints(maxWidth: 1800),
                               width: double.infinity,
                               height: double.infinity,
-                              child: Wrap(
-                                alignment: WrapAlignment.center,
-                                children: [
-                                  for (final worker in state.filteredWorkers)
-                                    WorkerCard(
-                                      worker: worker,
-                                      onTap: () => context
-                                          .read<HomeCubit>()
-                                          .editWorker(worker),
-                                      onDelete: () => context
-                                          .read<GalleryBloc>()
-                                          .add(WorkerDeleteRequested(
-                                              worker: worker)),
-                                    )
-                                ],
+                              child: SingleChildScrollView(
+                                child: Wrap(
+                                  alignment: WrapAlignment.center,
+                                  children: [
+                                    for (final worker in state.filteredWorkers)
+                                      WorkerCard(
+                                        worker: worker,
+                                        onTap: () => context
+                                            .read<HomeCubit>()
+                                            .editWorker(worker),
+                                        onDelete: () => context
+                                            .read<GalleryBloc>()
+                                            .add(WorkerDeleteRequested(
+                                                worker: worker)),
+                                      )
+                                  ],
+                                ),
                               ),
                             );
                           } else if (state.filteredWorkers.isEmpty) {

@@ -8,6 +8,8 @@ environment:
 
 dependencies:
   equatable: ^2.0.3
+  workers_repository:
+    path: ../workers_repository
   
 
 dev_dependencies:

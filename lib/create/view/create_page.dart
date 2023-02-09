@@ -1,6 +1,3 @@
-import 'dart:ffi';
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import "package:flutter_bloc/flutter_bloc.dart";
@@ -30,7 +27,7 @@ class CreatePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> languages = [
+    final List<String> languages = [
       "Afrikaans",
       "Albanese",
       "Amarico",
@@ -249,6 +246,7 @@ class CreatePage extends StatelessWidget {
                                 if (!focus) {
                                   _firstnameKey.currentState!.validate();
                                   context.read<CreateBloc>().add(
+                                      // Genera evento
                                       FirstNameChanged(
                                           firstname:
                                               firstnameController.text.trim()));

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:workers_repository/workers_repository.dart'
-    show Worker, WorkersRepository, WorkersException;
+    show Worker, WorkersRepository, WorkersException, Period;
 import 'package:filter/filter.dart';
 
 part 'gallery_event.dart';
@@ -21,6 +21,8 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
     on<LicenceToggled>(_onLicenceToggled);
     on<LocationToggled>(_onLocationToggled);
     on<TaskToggled>(_onTaskToggled);
+    on<PeriodAdded>(_onPeriodAdded);
+    on<PeriodDeleted>(_onPeriodDeleted);
 
     // Ascolta lo stream dal database in attesa di modifiche al database
     workersRepository.workersStream.listen((event) async {
@@ -221,6 +223,35 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
             selectedTasks: newList,
             filter: state.filter.copyWith(tasks: newList)));
       }
+    } catch (e) {
+      emit(state.copyWith(status: GalleryStatus.failure));
+    }
+  }
+
+  Future<void> _onPeriodAdded(
+      PeriodAdded event, Emitter<GalleryState> emit) async {
+    emit(state.copyWith(status: GalleryStatus.loading));
+
+    try {
+      emit(state.copyWith(
+          status: GalleryStatus.success,
+          filter: state.filter
+              .copyWith(periods: [...state.filter.periods, event.period])));
+    } catch (e) {
+      emit(state.copyWith(status: GalleryStatus.failure));
+    }
+  }
+
+  Future<void> _onPeriodDeleted(
+      PeriodDeleted event, Emitter<GalleryState> emit) async {
+    emit(state.copyWith(status: GalleryStatus.loading));
+
+    try {
+      List<Period> newList = state.filter.periods;
+      newList.remove(event.period);
+      emit(state.copyWith(
+          status: GalleryStatus.success,
+          filter: state.filter.copyWith(periods: newList)));
     } catch (e) {
       emit(state.copyWith(status: GalleryStatus.failure));
     }

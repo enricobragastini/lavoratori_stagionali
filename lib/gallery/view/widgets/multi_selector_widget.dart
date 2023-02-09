@@ -20,34 +20,45 @@ class MultiSelectorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      child: Wrap(
-        spacing: 20,
-        runSpacing: 20,
+      child: Row(
         children: [
           SizedBox(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 13),
-              child: Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                ),
+            width: 80,
+            child: Text(
+              title,
+              textAlign: TextAlign.end,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          for (final element in list)
-            SizedBox(
-              child: InputChip(
-                label: Text(element),
-                selected: selected.contains(element),
-                onPressed: selected.contains(element)
-                    ? () => onDelete(element)
-                    : () => onAdd(element),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 13),
+          const SizedBox(
+            width: 10,
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Wrap(
+                spacing: 20,
+                runSpacing: 20,
+                children: [
+                  for (final element in list)
+                    SizedBox(
+                      child: InputChip(
+                        label: Text(element),
+                        selected: selected.contains(element),
+                        onPressed: selected.contains(element)
+                            ? () => onDelete(element)
+                            : () => onAdd(element),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 13),
+                      ),
+                    ),
+                ],
               ),
             ),
+          ),
         ],
       ),
     );
