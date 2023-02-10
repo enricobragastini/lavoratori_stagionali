@@ -167,6 +167,11 @@ class GalleryPage extends StatelessWidget {
                                       onDeletePeriod: (period) => context
                                           .read<GalleryBloc>()
                                           .add(PeriodDeleted(period: period)),
+                                      searchMode: state.searchMode,
+                                      searchModeToggled: (searchMode) => context
+                                          .read<GalleryBloc>()
+                                          .add(SearchModeToggled(
+                                              searchMode: searchMode)),
                                     ),
                                   ),
                                 ),

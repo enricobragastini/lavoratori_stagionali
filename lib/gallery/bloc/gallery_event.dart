@@ -111,3 +111,12 @@ class PeriodDeleted extends GalleryEvent {
   @override
   List<Object> get props => [period];
 }
+
+class SearchModeToggled extends GalleryEvent {
+  const SearchModeToggled({required this.searchMode});
+
+  final SearchMode searchMode;
+
+  @override
+  List<Object> get props => [searchMode];
+}

@@ -2,21 +2,26 @@ part of 'gallery_bloc.dart';
 
 enum GalleryStatus { initial, loading, success, failure }
 
+// ignore: constant_identifier_names
+enum SearchMode { AND, OR }
+
 class GalleryState extends Equatable {
-  const GalleryState(
-      {this.status = GalleryStatus.initial,
-      this.workers = const [],
-      this.filter = Filter.empty,
-      this.showFilters = false,
-      this.allLanguages = const [],
-      this.selectedLanguages = const [],
-      this.allLicences = const [],
-      this.selectedLicences = const [],
-      this.allLocations = const [],
-      this.selectedLocations = const [],
-      this.allTasks = const [],
-      this.selectedTasks = const [],
-      this.errorMessage});
+  const GalleryState({
+    this.status = GalleryStatus.initial,
+    this.workers = const [],
+    this.filter = Filter.empty,
+    this.showFilters = false,
+    this.allLanguages = const [],
+    this.selectedLanguages = const [],
+    this.allLicences = const [],
+    this.selectedLicences = const [],
+    this.allLocations = const [],
+    this.selectedLocations = const [],
+    this.allTasks = const [],
+    this.selectedTasks = const [],
+    this.errorMessage,
+    this.searchMode = SearchMode.AND,
+  });
 
   final GalleryStatus status;
   final List<Worker> workers;
@@ -37,51 +42,100 @@ class GalleryState extends Equatable {
   final List<String> allTasks;
   final List<String> selectedTasks;
 
+  final SearchMode searchMode;
+
   List<Worker> get filteredWorkers {
     // Restituisce la lista dei lavoratori filtrati
     if (filter == Filter.empty) {
       return workers;
     }
-    return workers
-        .where((worker) =>
-            (filter.keywords.isEmpty
-                ? true
-                : "${worker.firstname} ${worker.lastname}"
-                    .contains(filter.keywords)) &&
-            (filter.languages.isEmpty
-                ? true
-                : worker.languages
-                    .toSet()
-                    .intersection(filter.languages.toSet())
-                    .isNotEmpty) &&
-            (filter.locations.isEmpty
-                ? true
-                : worker.locations
-                    .toSet()
-                    .intersection(filter.locations.toSet())
-                    .isNotEmpty) &&
-            (filter.licences.isEmpty
-                ? true
-                : worker.licenses
-                    .toSet()
-                    .intersection(filter.licences.toSet())
-                    .isNotEmpty) &&
-            ((filter.withOwnCar == false) ? true : worker.withOwnCar == true) &&
-            (filter.tasks.isEmpty
-                ? true
-                : worker.workExperiences.any((workexperience) => workexperience
-                    .tasks
-                    .toSet()
-                    .intersection(filter.tasks.toSet())
-                    .isNotEmpty)) &&
-            (filter.periods.isEmpty
-                ? true
-                : worker.periods.any(
-                    (wp) =>
-                        filter.periods.where((fp) => fp.includes(wp)).length ==
-                        filter.periods.length,
-                  )))
-        .toList();
+
+    // Ricerca in OR
+    if (searchMode == SearchMode.OR) {
+      return workers
+          .where((worker) =>
+              (filter.keywords.isEmpty
+                  ? true
+                  : "${worker.firstname} ${worker.lastname}"
+                      .contains(filter.keywords)) &&
+              (filter.languages.isEmpty
+                  ? true
+                  : worker.languages
+                      .any((wl) => filter.languages.contains(wl))) &&
+              (filter.locations.isEmpty
+                  ? true
+                  : worker.locations
+                      .any((wl) => filter.locations.contains(wl))) &&
+              (filter.licences.isEmpty
+                  ? true
+                  : worker.licenses
+                      .any((wl) => filter.licences.contains(wl))) &&
+              ((filter.withOwnCar == false) ? true : worker.withOwnCar) &&
+              (filter.tasks.isEmpty
+                  ? true
+                  : worker.workExperiences.any((workexperience) =>
+                      workexperience.tasks
+                          .toSet()
+                          .intersection(filter.tasks.toSet())
+                          .isNotEmpty)) &&
+              (filter.periods.isEmpty
+                  ? true
+                  : worker.periods.any(
+                      (wp) => filter.periods
+                          .where((fp) => fp.includes(wp))
+                          .isNotEmpty,
+                    )))
+          .toList();
+    } else {
+      // Ricerca in AND
+      return workers
+          .where((worker) =>
+              (filter.keywords.isEmpty
+                  ? true
+                  : "${worker.firstname} ${worker.lastname}"
+                      .contains(filter.keywords)) &&
+              (filter.languages.isEmpty
+                  ? true
+                  : worker.languages
+                          .toSet()
+                          .intersection(filter.languages.toSet())
+                          .length ==
+                      filter.languages.toSet().length) &&
+              (filter.locations.isEmpty
+                  ? true
+                  : worker.locations
+                          .toSet()
+                          .intersection(filter.locations.toSet())
+                          .length ==
+                      filter.locations.toSet().length) &&
+              (filter.licences.isEmpty
+                  ? true
+                  : worker.licenses
+                          .toSet()
+                          .intersection(filter.licences.toSet())
+                          .length ==
+                      filter.licences.toSet().length) &&
+              ((filter.withOwnCar == false)
+                  ? true
+                  : worker.withOwnCar == true) &&
+              (filter.tasks.isEmpty
+                  ? true
+                  : worker.allTasks
+                          .toSet()
+                          .intersection(filter.tasks.toSet())
+                          .length ==
+                      filter.tasks.toSet().length) &&
+              (filter.periods.isEmpty
+                  ? true
+                  : worker.periods.any(
+                      (wp) =>
+                          filter.periods
+                              .where((fp) => fp.includes(wp))
+                              .length ==
+                          filter.periods.length,
+                    )))
+          .toList();
+    }
   }
 
   @override
@@ -100,6 +154,7 @@ class GalleryState extends Equatable {
       List<String>? selectedLocations,
       List<String>? allTasks,
       List<String>? selectedTasks,
+      SearchMode? searchMode,
       Filter? filter}) {
     return GalleryState(
         status: status ?? this.status,
@@ -114,6 +169,7 @@ class GalleryState extends Equatable {
         allTasks: allTasks ?? this.allTasks,
         selectedTasks: selectedTasks ?? this.selectedTasks,
         workers: workers ?? this.workers,
-        errorMessage: errorMessage);
+        searchMode: searchMode ?? this.searchMode,
+        errorMessage: errorMessage ?? this.errorMessage);
   }
 }

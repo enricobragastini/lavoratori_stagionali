@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:lavoratori_stagionali/gallery/bloc/gallery_bloc.dart';
 import 'package:lavoratori_stagionali/gallery/view/widgets/multi_selector_widget.dart';
 import 'package:lavoratori_stagionali/gallery/view/widgets/period_selector_widget.dart';
 import 'package:workers_repository/workers_repository.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 class FiltersBox extends StatelessWidget {
   const FiltersBox({
@@ -23,6 +25,8 @@ class FiltersBox extends StatelessWidget {
     required this.onDeletePeriod,
     required this.withOwnCar,
     required this.withOwnCarToggled,
+    required this.searchMode,
+    required this.searchModeToggled,
   });
 
   final List<String> allLanguages;
@@ -47,6 +51,9 @@ class FiltersBox extends StatelessWidget {
 
   final bool withOwnCar;
   final void Function(bool) withOwnCarToggled;
+
+  final SearchMode searchMode;
+  final void Function(SearchMode) searchModeToggled;
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +134,42 @@ class FiltersBox extends StatelessWidget {
           tooltip: "Aggiungi Periodo",
           onAdd: onAddPeriod,
           onDelete: onDeletePeriod,
-        )
+        ),
+        const Divider(
+          height: dividerHeight,
+        ),
+        Row(
+          children: [
+            const Text(
+              "Modalità di ricerca: ",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+            ToggleSwitch(
+              minWidth: 120.0,
+              cornerRadius: 10.0,
+              customTextStyles: const [
+                TextStyle(fontSize: 18.0, color: Colors.white),
+                TextStyle(fontSize: 18.0, color: Colors.white)
+              ],
+              activeBgColors: [
+                [Theme.of(context).colorScheme.primary],
+                [Theme.of(context).colorScheme.primary]
+              ],
+              activeFgColor: Colors.white,
+              inactiveBgColor: Colors.grey,
+              inactiveFgColor: Colors.white,
+              initialLabelIndex: (searchMode == SearchMode.AND ? 0 : 1),
+              totalSwitches: 2,
+              labels: const ['AND', 'OR'],
+              radiusStyle: false,
+              onToggle: (index) => searchModeToggled(
+                  (index == 0) ? SearchMode.AND : SearchMode.OR),
+            ),
+          ],
+        ),
       ],
     );
   }

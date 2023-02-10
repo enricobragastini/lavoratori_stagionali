@@ -79,6 +79,14 @@ class Worker extends Person {
         withOwnCar: withOwnCar ?? this.withOwnCar);
   }
 
+  List<String> get allTasks {
+    List<String> allTasks = [];
+    for (var wp in workExperiences) {
+      allTasks.addAll(wp.tasks);
+    }
+    return allTasks;
+  }
+
   @override
   List<Object?> get props => [
         id,

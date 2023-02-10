@@ -23,6 +23,7 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
     on<PeriodAdded>(_onPeriodAdded);
     on<PeriodDeleted>(_onPeriodDeleted);
     on<WithOwnCarToggled>(_onWithOwnCarToggled);
+    on<SearchModeToggled>(_onSearchModeToggled);
 
     // Ascolta lo stream dal database in attesa di modifiche al database
     workersRepository.workersStream.listen((notification) async {
@@ -265,6 +266,18 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
       emit(state.copyWith(
           status: GalleryStatus.success,
           filter: state.filter.copyWith(withOwnCar: event.value)));
+    } catch (e) {
+      emit(state.copyWith(status: GalleryStatus.failure));
+    }
+  }
+
+  Future<void> _onSearchModeToggled(
+      SearchModeToggled event, Emitter<GalleryState> emit) async {
+    emit(state.copyWith(status: GalleryStatus.loading));
+
+    try {
+      emit(state.copyWith(
+          status: GalleryStatus.success, searchMode: event.searchMode));
     } catch (e) {
       emit(state.copyWith(status: GalleryStatus.failure));
     }
