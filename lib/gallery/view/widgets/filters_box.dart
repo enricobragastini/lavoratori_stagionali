@@ -21,6 +21,8 @@ class FiltersBox extends StatelessWidget {
     required this.allPeriods,
     required this.onAddPeriod,
     required this.onDeletePeriod,
+    required this.withOwnCar,
+    required this.withOwnCarToggled,
   });
 
   final List<String> allLanguages;
@@ -42,6 +44,9 @@ class FiltersBox extends StatelessWidget {
   final List<Period> allPeriods;
   final void Function(Period) onAddPeriod;
   final void Function(Period) onDeletePeriod;
+
+  final bool withOwnCar;
+  final void Function(bool) withOwnCarToggled;
 
   @override
   Widget build(BuildContext context) {
@@ -71,12 +76,33 @@ class FiltersBox extends StatelessWidget {
           onDelete: onLanguageToggled,
         ),
         const Divider(height: dividerHeight),
-        MultiSelectorWidget(
-          title: "Patenti:",
-          list: allLicences,
-          selected: selectedLicences,
-          onAdd: onLicenceToggled,
-          onDelete: onLicenceToggled,
+        Row(
+          children: [
+            Expanded(
+              flex: 8,
+              child: MultiSelectorWidget(
+                title: "Patenti:",
+                list: allLicences,
+                selected: selectedLicences,
+                onAdd: onLicenceToggled,
+                onDelete: onLicenceToggled,
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Row(
+                children: [
+                  const Text(
+                    "Solo automuniti: ",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Checkbox(
+                      value: withOwnCar,
+                      onChanged: (value) => withOwnCarToggled(value!)),
+                ],
+              ),
+            )
+          ],
         ),
         const Divider(height: dividerHeight),
         MultiSelectorWidget(

@@ -7,6 +7,7 @@ import 'package:lavoratori_stagionali/create/view/widgets/LocationsBox.dart';
 import 'package:lavoratori_stagionali/create/view/widgets/PeriodsBox.dart';
 import 'package:lavoratori_stagionali/create/view/widgets/WorkExperiencesBox.dart';
 import 'package:lavoratori_stagionali/home/cubit/home_cubit.dart';
+import 'package:lavoratori_stagionali/app/bloc/app_bloc.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
@@ -192,6 +193,25 @@ class CreatePage extends StatelessWidget {
         appBar: AppBar(
           title: const Text("AGGIUNGI UN NUOVO LAVORATORE"),
           centerTitle: true,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "${context.read<AppBloc>().state.employee.firstname} ${context.read<AppBloc>().state.employee.lastname}",
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                  Text(
+                    context.read<AppBloc>().state.employee.email,
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
+            )
+          ],
         ),
         body: BlocBuilder<CreateBloc, CreateState>(
           builder: (context, state) {

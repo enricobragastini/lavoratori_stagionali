@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
 
 import 'package:workers_repository/workers_repository.dart' show Period;
 
@@ -10,6 +11,7 @@ class Filter extends Equatable {
     required this.licences,
     required this.tasks,
     required this.periods,
+    required this.withOwnCar,
   });
 
   final String keywords;
@@ -21,13 +23,16 @@ class Filter extends Equatable {
 
   final List<Period> periods;
 
+  final bool withOwnCar;
+
   Filter copyWith(
       {String? keywords,
       List<String>? languages,
       List<String>? locations,
       List<String>? licences,
       List<String>? tasks,
-      List<Period>? periods}) {
+      List<Period>? periods,
+      bool? withOwnCar}) {
     return Filter(
       keywords: keywords ?? this.keywords,
       languages: languages ?? this.languages,
@@ -35,6 +40,7 @@ class Filter extends Equatable {
       licences: licences ?? this.licences,
       tasks: tasks ?? this.tasks,
       periods: periods ?? this.periods,
+      withOwnCar: withOwnCar ?? this.withOwnCar,
     );
   }
 
@@ -45,9 +51,10 @@ class Filter extends Equatable {
     licences: [],
     tasks: [],
     periods: [],
+    withOwnCar: false,
   );
 
   @override
   List<Object?> get props =>
-      [keywords, languages, locations, licences, tasks, periods];
+      [keywords, languages, locations, licences, tasks, periods, withOwnCar];
 }

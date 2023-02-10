@@ -1,4 +1,3 @@
-import 'package:appwrite/models.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -23,9 +22,10 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
     on<TaskToggled>(_onTaskToggled);
     on<PeriodAdded>(_onPeriodAdded);
     on<PeriodDeleted>(_onPeriodDeleted);
+    on<WithOwnCarToggled>(_onWithOwnCarToggled);
 
     // Ascolta lo stream dal database in attesa di modifiche al database
-    workersRepository.workersStream.listen((event) async {
+    workersRepository.workersStream.listen((notification) async {
       add(const WorkersListUpdated());
       add(const FiltersUpdated());
     });
@@ -252,6 +252,19 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
       emit(state.copyWith(
           status: GalleryStatus.success,
           filter: state.filter.copyWith(periods: newList)));
+    } catch (e) {
+      emit(state.copyWith(status: GalleryStatus.failure));
+    }
+  }
+
+  Future<void> _onWithOwnCarToggled(
+      WithOwnCarToggled event, Emitter<GalleryState> emit) async {
+    emit(state.copyWith(status: GalleryStatus.loading));
+
+    try {
+      emit(state.copyWith(
+          status: GalleryStatus.success,
+          filter: state.filter.copyWith(withOwnCar: event.value)));
     } catch (e) {
       emit(state.copyWith(status: GalleryStatus.failure));
     }

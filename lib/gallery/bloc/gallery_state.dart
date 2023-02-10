@@ -38,6 +38,7 @@ class GalleryState extends Equatable {
   final List<String> selectedTasks;
 
   List<Worker> get filteredWorkers {
+    // Restituisce la lista dei lavoratori filtrati
     if (filter == Filter.empty) {
       return workers;
     }
@@ -65,6 +66,7 @@ class GalleryState extends Equatable {
                     .toSet()
                     .intersection(filter.licences.toSet())
                     .isNotEmpty) &&
+            ((filter.withOwnCar == false) ? true : worker.withOwnCar == true) &&
             (filter.tasks.isEmpty
                 ? true
                 : worker.workExperiences.any((workexperience) => workexperience
