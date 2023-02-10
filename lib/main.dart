@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:appwrite_repository/appwrite_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:window_size/window_size.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,6 +17,7 @@ void main() {
       setWindowTitle('Lavoratori Stagionali');
       setWindowMinSize(const Size(1100, 900));
     }
+    // ignore: empty_catches
   } catch (e) {}
 
   AppwriteRepository appwriteRepository = AppwriteRepository();

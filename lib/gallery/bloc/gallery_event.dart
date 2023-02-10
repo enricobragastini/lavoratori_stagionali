@@ -67,6 +67,15 @@ class LicenceToggled extends GalleryEvent {
   List<Object> get props => [licence];
 }
 
+class WithOwnCarToggled extends GalleryEvent {
+  const WithOwnCarToggled({required this.value});
+
+  final bool value;
+
+  @override
+  List<Object> get props => [value];
+}
+
 class LocationToggled extends GalleryEvent {
   const LocationToggled({required this.location});
 
@@ -101,4 +110,13 @@ class PeriodDeleted extends GalleryEvent {
 
   @override
   List<Object> get props => [period];
+}
+
+class SearchModeToggled extends GalleryEvent {
+  const SearchModeToggled({required this.searchMode});
+
+  final SearchMode searchMode;
+
+  @override
+  List<Object> get props => [searchMode];
 }
