@@ -60,44 +60,81 @@ class PeriodSelectorWidget extends StatelessWidget {
                             horizontal: 15, vertical: 13),
                       ),
                     ),
-                  Center(
-                    child: Ink(
-                      decoration: ShapeDecoration(
-                          color: Theme.of(context).colorScheme.primary,
-                          shape: const CircleBorder()),
-                      child: IconButton(
-                        icon: const Icon(Icons.add),
-                        iconSize: 17,
-                        color: Colors.white,
-                        tooltip: tooltip,
-                        onPressed: () async {
-                          final DateTimeRange? result =
-                              await showDateRangePicker(
-                            context: context,
-                            initialEntryMode: DatePickerEntryMode.calendarOnly,
-                            firstDate: DateTime.now(),
-                            lastDate: DateTime(2030, 12, 31),
-                            currentDate: DateTime.now(),
-                            helpText: 'SELEZIONA PERIODO',
-                            fieldStartHintText: 'Data di inizio',
-                            fieldEndLabelText: 'Data di inizio',
-                            fieldEndHintText: 'Data di fine',
-                            fieldStartLabelText: 'Data di fine',
-                            saveText: 'Fatto',
-                            builder: (context, child) => Padding(
-                                padding: const EdgeInsets.all(100.0),
-                                child: child),
-                          );
+                  Tooltip(
+                    message: "Aggiungi periodo",
+                    child: RawMaterialButton(
+                      elevation: 1,
+                      fillColor: Theme.of(context).colorScheme.primary,
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      constraints:
+                          const BoxConstraints.expand(width: 42, height: 42),
+                      shape: const CircleBorder(),
+                      onPressed: () async {
+                        final DateTimeRange? result = await showDateRangePicker(
+                          context: context,
+                          initialEntryMode: DatePickerEntryMode.calendarOnly,
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime(2030, 12, 31),
+                          currentDate: DateTime.now(),
+                          helpText: 'SELEZIONA PERIODO',
+                          fieldStartHintText: 'Data di inizio',
+                          fieldEndLabelText: 'Data di inizio',
+                          fieldEndHintText: 'Data di fine',
+                          fieldStartLabelText: 'Data di fine',
+                          saveText: 'Fatto',
+                          builder: (context, child) => Padding(
+                              padding: const EdgeInsets.all(100.0),
+                              child: child),
+                        );
 
-                          if (result != null) {
-                            onAdd(Period(start: result.start, end: result.end));
-                          }
-                        },
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 13),
+                        if (result != null) {
+                          onAdd(Period(start: result.start, end: result.end));
+                        }
+                      },
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.white,
                       ),
                     ),
-                  )
+                  ),
+                  // Center(
+                  //   child: Ink(
+                  //     decoration: ShapeDecoration(
+                  //         color: Theme.of(context).colorScheme.primary,
+                  //         shape: const CircleBorder()),
+                  //     child: IconButton(
+                  //       icon: const Icon(Icons.add),
+                  //       iconSize: 17,
+                  //       color: Colors.white,
+                  //       tooltip: tooltip,
+                  //       onPressed: () async {
+                  //         final DateTimeRange? result =
+                  //             await showDateRangePicker(
+                  //           context: context,
+                  //           initialEntryMode: DatePickerEntryMode.calendarOnly,
+                  //           firstDate: DateTime.now(),
+                  //           lastDate: DateTime(2030, 12, 31),
+                  //           currentDate: DateTime.now(),
+                  //           helpText: 'SELEZIONA PERIODO',
+                  //           fieldStartHintText: 'Data di inizio',
+                  //           fieldEndLabelText: 'Data di inizio',
+                  //           fieldEndHintText: 'Data di fine',
+                  //           fieldStartLabelText: 'Data di fine',
+                  //           saveText: 'Fatto',
+                  //           builder: (context, child) => Padding(
+                  //               padding: const EdgeInsets.all(100.0),
+                  //               child: child),
+                  //         );
+
+                  //         if (result != null) {
+                  //           onAdd(Period(start: result.start, end: result.end));
+                  //         }
+                  //       },
+                  //       padding: const EdgeInsets.symmetric(
+                  //           horizontal: 15, vertical: 13),
+                  //     ),
+                  //   ),
+                  // )
                 ],
               ),
             ),
