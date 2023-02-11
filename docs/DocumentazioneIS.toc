@@ -1,0 +1,14 @@
+\babel@toc {italian}{}\relax 
+\babel@toc {italian}{}\relax 
+\contentsline {chapter}{Specifiche dei casi d'uso}{ii}{chapter*.2}%
+\contentsline {section}{\numberline {0.1}Note generali}{ii}{section.0.1}%
+\contentsline {section}{\numberline {0.2}Casi d'uso}{iii}{section.0.2}%
+\contentsline {subsection}{\numberline {0.2.1}Inserimento nuovo lavoratore}{iii}{subsection.0.2.1}%
+\contentsline {subsection}{\numberline {0.2.2}Effettuare ricerche}{iv}{subsection.0.2.2}%
+\contentsline {subsection}{\numberline {0.2.3}Cancellazione lavoratore}{iv}{subsection.0.2.3}%
+\contentsline {section}{\numberline {0.3}Diagrammi di attività}{v}{section.0.3}%
+\contentsline {subsection}{\numberline {0.3.1}Autenticazione}{v}{subsection.0.3.1}%
+\contentsline {subsection}{\numberline {0.3.2}Gestione delle anagrafiche}{vi}{subsection.0.3.2}%
+\contentsline {section}{\numberline {0.4}Note sul processo di sviluppo}{vii}{section.0.4}%
+\contentsline {section}{\numberline {0.5}Design Pattern BLoC}{viii}{section.0.5}%
+\contentsline {section}{\numberline {0.6}Architettura}{ix}{section.0.6}%

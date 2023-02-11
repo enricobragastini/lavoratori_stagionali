@@ -6,15 +6,17 @@
 \usepackage[dvipsnames]{xcolor}
 \usepackage{geometry}
 \usepackage{float}
-\geometry{
-a4paper,
-margin=1in,
+% \geometry{
+% a4paper,
+% margin=1in,
 %total={6in,8in},
 %left=20mm,
 %top=0mm,
-}
+% }
+
 
 \begin{document}
+\pagenumbering{arabic}
 
 \frontmatter
 
@@ -154,6 +156,76 @@ I dipendenti dell’agenzia per poter poter utilizzare il software è necessario
 \end{figure}
 
 Nota: i seguenti diagrammi catturano una singola attività di un utente rispetto al sistema. Non è stata rappresentata nel diagramma la possibilità di ripetere più volte la stessa operazione, in sequenza, senza chiudere il software. Questo per semplici ragioni di chiarezza e leggerezza; si considerano quindi le singole attività d’interazione
+
+\newpage
+
+\section{Note sul processo di sviluppo}
+Il processo di sviluppo è stato basato su un approccio Agile e Incrementale, con l'obiettivo di mantenere una solida base di lavoro. 
+L'implementazione delle funzionalità non ha seguito un piano rigido, ma è stato scelto, ad ogni incremento, cosa fosse prioritario integrare
+ai fini di ridurre le tempistiche di sviluppo. Dopo ogni modifica significativa, è stata eseguita una rapida attività di test. La fase di analisi 
+dei requisiti è stata completata prima dello sviluppo, che ha comportato la creazione di Use-Cases, diagrammi di attività e progettazione architetturale.
+
+
+\newpage
+
+\section{Design Pattern BLoC}
+Il design pattern scelto è \textit{\texttt{BLoC}}, un design pattern creato da Google con lo scopo di separare la Business Logic dal Presentation Layer 
+e permettere allo sviluppatore di riutilizzare il codice in modo efficiente. Per semplificare il tutto, viene messa a disposizione una libreria 
+per Dart chiamata \textit{\texttt{flutter\_bloc}} che aiuta lo sviluppatore nell'implementazione del design pattern.
+
+Nell'architettura Bloc, la Business Logic è centralizzata all'interno della classe blocco, mentre la visualizzazione è gestita da widget che ascoltano 
+gli stati del blocco e reagiscono di conseguenza. Questo semplifica la separazione della logica di business dall'interfaccia utente e consente quindi 
+di testare la logica di business in modo più efficiente. 
+
+Questo pattern è particolarmente utile per le app di medie e grandi dimensioni, dove la gestione della Business Logic risulta complessa. 
+
+BLoc Design Pattern si basa sul concetto di Programmazione Reattiva. La programmazione reattiva è un paradigma di programmazione che si concentra 
+sulla gestione degli eventi e delle modifiche ai dati in tempo reale. Invece di eseguire il codice in modo sequenziale, la programmazione reattiva 
+utilizza flussi di dati e eventi che possono essere trasmessi tra i diversi componenti dell'applicazione in modo asincrono. 
+
+Il concetto di base è quello dello Stream. Uno stream è una sequenza di dati che possono essere trasmessi e/o ricevuti in modo asincrono,
+anche da più componenti dell'applicazione.
+
+Questo comporta che:
+\begin{itemize}
+	\item quando succede qualcosa in qualsiasi componente (un evento, una variabile modificata \ldots) viene inviata una notifica a uno Stream
+	\item chi si trova in ascolto su quello Stream, verrà avvisato e potrà quindi intraprendere le azioni appropriate, qualunque sia la sua posizione all'interno dell'applicazione
+\end{itemize}
+
+Ogni componente (\textit{widget}) della User Interface ad ogni evento che lo riguarda dovrà semplicemente inviare una notifica dell'evento su uno Stream dedicato. 
+Non dovrà preoccuparsi di chi userà quel dato, come o quando.
+
+\newpage
+\section{Architettura}
+La libreria BLoC consente di separare l'applicazione in tre livelli:
+
+\begin{description}
+	\item [$\bullet$ Presentation Layer] (interfaccia utente) \hfill \\
+	La responsabilità del Presentation Layer è quella di generare l'interfaccia utente tenendo conto dello stato di uno o più Bloc. 
+	Inoltre deve gestire l'input dell'utente e i vari eventi del ciclo di vita dell'applicazione.
+	\item [$\bullet$ Business Logic Layer] (bloc) \hfill \\
+	La responsabilità del Business Logic Layer è rispondere agli eventi ricevuti dal Presentation con la generazione di nuovi stati. 
+	Questo strato può appoggiarsi a uno o più Repository per recuperare i dati necessari alla creazione del nuovo stato.
+	\item [$\bullet$ Data Layer] \hfill \\
+	La responsabilità del Data Layer è quella di recuperare/manipolare i dati da una o più fonti.
+	\begin{description}
+		\item [$\cdot$ Repository] \hfill \\ 
+		È un wrapper attorno a uno o più Data Provider. Si occupa di fornire dei dati ben formattati e facilmente utilizzabili al Bloc
+		\item [$\cdot$ Data Provider] \hfill \\
+		Recupera i “dati grezzi” direttamente dalla sorgente (il database).
+	\end{description}
+\end{description}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width = 12 cm]{images/bloc_architecture.png}
+	\label{fig:Architettura BLoC}
+\end{figure}
+
+
+
+
+
 
 \end{document}
 
