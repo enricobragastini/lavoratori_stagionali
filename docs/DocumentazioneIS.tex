@@ -92,8 +92,14 @@ I dipendenti dell’agenzia per poter effettuare l’inserimento e la gestione d
 	}%
 }
 
-\newpage
-\subsection{Effettuare ricerche}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width = 10 cm]{images/aggiunta}
+	% \caption{}
+	\label{fig:Inserimento lavoratore}
+\end{figure}
+
+\newpage\subsection{Effettuare ricerche}
 I dipendenti dell’agenzia per poter effettuare delle ricerche complesse è necessario che siano autenticati al sistema. \\
 La ricerca può avvenire mediante una barra di testo tramite l’inserimento di nome e cognome.
 \'E inoltre possibile filtrare ulteriormente i risultati in base a: lingue parlate, mansioni effettuate, periodo e comuni di disponibilità,
@@ -113,6 +119,14 @@ patenti di guida e disponibilità di auto propria. Tutti questi filtri possono i
 	}%
 }
 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width = 10 cm]{images/ricerca}
+	% \caption{}
+	\label{fig:Ricerca lavoratore}
+\end{figure}
+
+\newpage
 \subsection{Cancellazione lavoratore}
 I dipendenti dell’agenzia per poter cancellare un lavoratore è necessario che siano autenticati al sistema. \\
 La cancellazione avviene tramite un pulsante dedicato per ogni lavoratore. \\
@@ -221,6 +235,39 @@ La libreria BLoC consente di separare l'applicazione in tre livelli:
 	\includegraphics[width = 12 cm]{images/bloc_architecture.png}
 	\label{fig:Architettura BLoC}
 \end{figure}
+
+\newpage
+\newgeometry{
+	bottom = 0mm,
+}
+\section{Backend}
+La realizzazione del Backend è stata affidata a Appwrite, un backend-as-a-service open source e self-hosted che semplifica lo sviluppo
+di app con una suite di SDK e API. Appwrite fornisce vari servizi tra cui autenticazione e database.
+
+\subsection{Autenticazione}
+Appwrite offre delle API dedicate per gestire l’autenticazione dell’app. Tramite la SDK è possibile accedere a delle funzioni per 
+registrare e autenticare gli utenti e gestirne la sessione.
+
+\subsection{Database}
+Appwrite offre un database basato su documenti di facile utilizzo. Dietro le quinte si tratta di un database NoSQL basato su MariaDB. 
+Il database si compone di:
+
+\begin{description}
+	\item[$\bullet$ Collection:]un gruppo di documenti. Ogni collezione ha degli attributi che definiscono la struttura del documento e le sue 
+	autorizzazioni per la lettura e la scrittura.
+	\item[$\bullet$ Document:]un oggetto JSON strutturato di chiavi e valori, appartenente a una Collection.
+\end{description}
+
+Le \textbf{Collection}, i \textbf{Document}, gli \textbf{Attributi} e i \textbf{Permessi} possono essere facilmente gestiti dalla console di Appwrite. \\
+La SDK di Appwrite mette a disposizione dei metodi per caricare, aggiornare, eliminare i \textbf{Documents} delle rispettive \textbf{Collections}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width = 15 cm]{images/appwrite.png}
+	\label{fig:interfaccia Appwrite}
+\end{figure}
+
+
 
 
 
