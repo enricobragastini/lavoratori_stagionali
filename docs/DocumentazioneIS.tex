@@ -99,7 +99,7 @@ I dipendenti dell’agenzia per poter effettuare l’inserimento e la gestione d
 	\label{fig:Inserimento lavoratore}
 \end{figure}
 
-\newpage\subsection{Effettuare ricerche}
+\subsection{Effettuare ricerche}
 I dipendenti dell’agenzia per poter effettuare delle ricerche complesse è necessario che siano autenticati al sistema. \\
 La ricerca può avvenire mediante una barra di testo tramite l’inserimento di nome e cognome.
 \'E inoltre possibile filtrare ulteriormente i risultati in base a: lingue parlate, mansioni effettuate, periodo e comuni di disponibilità,
@@ -147,6 +147,13 @@ La cancellazione avviene tramite un pulsante dedicato per ogni lavoratore. \\
 	}%
 }
 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width = 10 cm]{images/rimozione}
+	% \caption{}
+	\label{fig:Ricerca lavoratore}
+\end{figure}
+
 \newpage
 \section{Diagrammi di attività}
 \subsection{Autenticazione}
@@ -171,8 +178,9 @@ I dipendenti dell’agenzia per poter poter utilizzare il software è necessario
 
 Nota: i seguenti diagrammi catturano una singola attività di un utente rispetto al sistema. Non è stata rappresentata nel diagramma la possibilità di ripetere più volte la stessa operazione, in sequenza, senza chiudere il software. Questo per semplici ragioni di chiarezza e leggerezza; si considerano quindi le singole attività d’interazione
 
-\newpage
+\section{Diagrammi delle classi}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\newpage
 \section{Note sul processo di sviluppo}
 Il processo di sviluppo è stato basato su un approccio Agile e Incrementale, con l'obiettivo di mantenere una solida base di lavoro. 
 L'implementazione delle funzionalità non ha seguito un piano rigido, ma è stato scelto, ad ogni incremento, cosa fosse prioritario integrare
@@ -181,7 +189,6 @@ dei requisiti è stata completata prima dello sviluppo, che ha comportato la cre
 
 
 \newpage
-
 \section{Design Pattern BLoC}
 Il design pattern scelto è \textit{\texttt{BLoC}}, un design pattern creato da Google con lo scopo di separare la Business Logic dal Presentation Layer 
 e permettere allo sviluppatore di riutilizzare il codice in modo efficiente. Per semplificare il tutto, viene messa a disposizione una libreria 
