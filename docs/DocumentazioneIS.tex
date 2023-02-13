@@ -60,8 +60,10 @@ auto/patente di guida. Il sistema deve permettere di effettuare ricerche comples
 specifica di differenti condizioni di ricerca (sia in AND che in OR).
 
 \newpage
-\section{Casi d'uso}
-Per i dipendenti dell'agenzia vengono memorizzate delle informazioni tra le quali, le credenziali di accesso per accedere al sistema. Una volta fatto l'accesso il dipendente può inserire i dati dei lavoratori stagionali, modificarne le anagrafiche ed effettuare ricerche in base a dei profili (filtrare la ricerca). 
+\subsection{Casi d'uso}
+Per i dipendenti dell'agenzia vengono memorizzate delle informazioni tra le quali, le credenziali di accesso 
+per accedere al sistema. Una volta fatto l'accesso il dipendente può inserire i dati dei lavoratori stagionali,
+modificarne le anagrafiche ed effettuare ricerche secondo varie specifiche (filtrare la ricerca). 
 
 \begin{figure}[h!]
 	\centering
@@ -73,7 +75,8 @@ Per i dipendenti dell'agenzia vengono memorizzate delle informazioni tra le qual
 \newpage
 
 \subsection{Inserimento nuovo lavoratore}
-I dipendenti dell'agenzia per poter effettuare l'inserimento e la gestione delle anagrafiche dei lavoratori è necessario che siano autenticati al sistema. \\
+I dipendenti dell'agenzia per poter effettuare l'inserimento e la gestione delle anagrafiche dei lavoratori 
+è necessario che siano autenticati al sistema. \\
 
 %\newgeometry{
 %	a4paper,
@@ -92,11 +95,12 @@ I dipendenti dell'agenzia per poter effettuare l'inserimento e la gestione delle
 		\begin{enumerate}
 			\item Il dipendente accede al sistema
 			\item Il dipendente è introdotto all'interfaccia di base
-			\item Il dipendente compila il form con i dati anagrafici e il contatto di emergenza o modifica un form di un lavoratore esistente 
+			\item Il dipendente compila il form con i dati anagrafici, le esperienze lavorative, le lingue parlate, le patenti possedute, la disponibilità
+			di auto propria, i contatti di emergenza.
 			\item Il dipendente inserisce il nuovo lavoratore o salva le modifiche del lavoratore modificato
 		\end{enumerate} \\
 	\hline
-	\textbf{Postcondizioni:} &  Il lavoratore viene aggiunto dal database \\
+	\textbf{Postcondizioni:} &  Il lavoratore viene aggiunto al database \\
 	\hline
   \end{tabular}
 
@@ -125,7 +129,8 @@ I dipendenti dell'agenzia per poter effettuare l'inserimento e la gestione delle
 \newpage
 
 \subsection{Effettuare ricerche}
-I dipendenti dell'agenzia per poter effettuare delle ricerche complesse è necessario che siano autenticati al sistema. \\
+I dipendenti dell'agenzia per poter effettuare delle ricerche complesse è necessario che siano autenticati 
+al sistema. \\
 La ricerca può avvenire mediante una barra di testo tramite l'inserimento di nome e cognome.
 \'E inoltre possibile filtrare ulteriormente i risultati in base a: lingue parlate, mansioni effettuate, periodo e comuni di disponibilità,
 patenti di guida e disponibilità di auto propria. Tutti questi filtri possono inoltre essere applicati in modalità “AND” oppure “OR”. \\
@@ -144,7 +149,7 @@ patenti di guida e disponibilità di auto propria. Tutti questi filtri possono i
 			\item Il dipendente filtra la lista dei lavoratori
 		\end{enumerate} \\
 	\hline
-	\textbf{Postcondizioni:} &  Il lavoratore viene aggiunto dal database \\
+	\textbf{Postcondizioni:} & La lista filtrata dei lavoratori è mostrata al dipendente. \\
 	\hline
   \end{tabular}
 
@@ -190,7 +195,7 @@ La cancellazione avviene tramite un pulsante dedicato per ogni lavoratore. \\
 			\item Il dipendente elimina il lavoratore tramite apposito pulsante
 		\end{itemize} \\
 	\hline
-	\textbf{Postcondizioni:} &  Il lavoratore viene aggiunto dal database \\
+	\textbf{Postcondizioni:} &  Il lavoratore viene eliminato dal database. \\
 	\hline
   \end{tabular}
 
@@ -378,8 +383,8 @@ con oggetti mock e verificare che il relativo output sia quello aspettato.
 
 \subsection{User Testing}
 Alla fine dello sviluppo, il software è stato sottoposto a un test da parte di alcuni dipendenti dell'agenzia.
-Non è stato fornito alcun tipo di spiegazione sul funzionamento del software per non influire i risultati.
-Inoltre, sono stati identificati degli aggiustamenti per migliorare il sistema.
+Non è stato fornito loro alcun tipo di spiegazione sul funzionamento del software per evitare di influire i risultati.
+Sono stati così identificati degli aggiustamenti per migliorare il sistema.
 
 
 
