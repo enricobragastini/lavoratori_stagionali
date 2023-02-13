@@ -1,4 +1,4 @@
-\documentclass[a4paper, oneside, 12pt]{book}
+\documentclass[a4paper, oneside, 12pt]{article}
 \usepackage[italian]{babel}
 \usepackage[T1]{fontenc}
 \usepackage{hyperref}
@@ -14,28 +14,31 @@
 %top=0mm,
 % }
 
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
+
 
 \begin{document}
-\pagenumbering{arabic}
 
-\frontmatter
 
 \title{Progetto ingegneria del software \\ "Lavoratori stagionali"}
 \author{Enrico Bragastini \\ Davide Bianchini \\ Andrea Mafficini}
 % \date{}
 \maketitle
 
+\newpage
+
 \tableofcontents
 
-\chapter{Specifiche dei casi d'uso}
+\newpage
 
-\section{Note generali}
-% \subsection{Note generali} 
+\section{Specifiche dei casi d'uso}
+
+\subsection{Note generali}
 Si vuole progettare un sistema informatico di una agenzia che fornisce servizi di supporto alla ricerca
 di lavoro stagionale. I lavoratori interessati possono iscriversi al servizio, rivolgendosi agli sportelli
-dell’agenzia. Il sistema deve permettere la gestione delle anagrafiche e la ricerca di lavoratori
-stagionali, nei settori dell’agricoltura e del turismo.
-I responsabili del servizio, dipendenti dell’agenzia, inseriscono i dati dei lavoratori. Per ogni
+dell'agenzia. Il sistema deve permettere la gestione delle anagrafiche e la ricerca di lavoratori
+stagionali, nei settori dell'agricoltura e del turismo.
+I responsabili del servizio, dipendenti dell'agenzia, inseriscono i dati dei lavoratori. Per ogni
 lavoratore vengono memorizzati i dati anagrafici (nome, cognome, luogo e data di nascita,
 nazionalità), indirizzo, recapito telefonico personale (se presente), email, le eventuali
 specializzazioni/esperienze precedenti (bagnino, barman, istruttore di nuoto, viticultore,
@@ -43,13 +46,13 @@ floricultore), lingue parlate, il tipo di patente di guida e se automunito. Sono
 periodi e le zone (comuni), per i quali il lavoratore è disponibile. Di ogni lavoratore si memorizzano
 anche le informazioni di almeno una persona da avvisare in caso di urgenza: nome, cognome,
 telefono, indirizzo email.
-I dipendenti dell’agenzia devono autenticarsi per poter accedere al sistema e inserire i dati dei
-lavoratori. Il sistema permette ai dipendenti dell’agenzia di aggiornare le anagrafiche con tutti i
+I dipendenti dell'agenzia devono autenticarsi per poter accedere al sistema e inserire i dati dei
+lavoratori. Il sistema permette ai dipendenti dell'agenzia di aggiornare le anagrafiche con tutti i
 lavori che i lavoratori stagionali hanno svolto negli ultimi 5 anni. Per ogni lavoro svolto vanno
-registrati: periodo, nome dell’azienda, mansioni svolte, luogo di lavoro, retribuzione lorda
-giornaliera. Per i dipendenti dell’agenzia si memorizzano i dati anagrafici, l’indirizzo email, il telefono
+registrati: periodo, nome dell'azienda, mansioni svolte, luogo di lavoro, retribuzione lorda
+giornaliera. Per i dipendenti dell'agenzia si memorizzano i dati anagrafici, l'indirizzo email, il telefono
 e le credenziali di accesso (login e password).
-Una volta registrate le informazioni sui lavoratori, il personale dell’agenzia può effettuare ricerche
+Una volta registrate le informazioni sui lavoratori, il personale dell'agenzia può effettuare ricerche
 rispetto a possibili profili richiesti.
 In particolare, il sistema deve permettere ai dipendenti di effettuare ricerche per lavoratore, per
 lingue parlate, periodo di disponibilità, mansioni indicate, luogo di residenza, disponibilità di
@@ -58,17 +61,19 @@ specifica di differenti condizioni di ricerca (sia in AND che in OR).
 
 \newpage
 \section{Casi d'uso}
-Per i dipendenti dell’agenzia vengono memorizzate delle informazioni tra le quali delle credenziali di accesso per accedere al sistema. Una volta fatto l’accesso il dipendente può inserire i dati dei lavoratori stagionali, modificarne le anagrafiche ed effettuare ricerche in base a dei profili (filtrare la ricerca). 
+Per i dipendenti dell'agenzia vengono memorizzate delle informazioni tra le quali delle credenziali di accesso per accedere al sistema. Una volta fatto l'accesso il dipendente può inserire i dati dei lavoratori stagionali, modificarne le anagrafiche ed effettuare ricerche in base a dei profili (filtrare la ricerca). 
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width = 10 cm]{images/casiduso}
+	\includegraphics[width = 12 cm]{images/casiduso}
 	% \caption{}
 	\label{fig:casi d'uso}
 \end{figure}
 
+\newpage
+
 \subsection{Inserimento nuovo lavoratore}
-I dipendenti dell’agenzia per poter effettuare l’inserimento e la gestione delle anagrafiche dei lavoratori è necessario che siano autenticati al sistema. \\
+I dipendenti dell'agenzia per poter effettuare l'inserimento e la gestione delle anagrafiche dei lavoratori è necessario che siano autenticati al sistema. \\
 
 %\newgeometry{
 %	a4paper,
@@ -77,79 +82,138 @@ I dipendenti dell’agenzia per poter effettuare l’inserimento e la gestione d
 	% top=10mm,
 %}
 
-\fbox{%
-	\parbox{\textwidth}{%
-		\textbf{Attori:} Dipendente dell’agenzia \\
-		\textbf{Precondizioni:} Il dipendente deve essere autenticato. \\ 
-		\textbf{Passi:}
+\begin{tabular}{ | l | p{11cm} | } 
+	\hline
+	\textbf{Attori:} & Dipendente dell'agenzia  \\ 
+	\hline
+	\textbf{Precondizioni:} & Il dipendente deve essere autenticato. \\
+	\hline
+	\textbf{Passi:} &
 		\begin{enumerate}
 			\item Il dipendente accede al sistema
-			\item Il dipendente è introdotto all’interfaccia di base
+			\item Il dipendente è introdotto all'interfaccia di base
 			\item Il dipendente compila il form con i dati anagrafici e il contatto di emergenza o modifica un form di un lavoratore esistente 
 			\item Il dipendente inserisce il nuovo lavoratore o salva le modifiche del lavoratore modificato
-		\end{enumerate}
-		\textbf{Postcondizioni:}  Il lavoratore viene aggiunto dal database
-	}%
-}
+		\end{enumerate} \\
+	\hline
+	\textbf{Postcondizioni:} &  Il lavoratore viene aggiunto dal database \\
+	\hline
+  \end{tabular}
+
+% \fbox{%
+% 	\parbox{\textwidth}{%
+% 		\textbf{Attori:} Dipendente dell'agenzia \\
+% 		\textbf{Precondizioni:} Il dipendente deve essere autenticato. \\ 
+% 		\textbf{Passi:}
+% 		\begin{enumerate}
+% 			\item Il dipendente accede al sistema
+% 			\item Il dipendente è introdotto all'interfaccia di base
+% 			\item Il dipendente compila il form con i dati anagrafici e il contatto di emergenza o modifica un form di un lavoratore esistente 
+% 			\item Il dipendente inserisce il nuovo lavoratore o salva le modifiche del lavoratore modificato
+% 		\end{enumerate}
+% 		\textbf{Postcondizioni:}  Il lavoratore viene aggiunto dal database
+% 	}%
+% }
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width = 10 cm]{images/aggiunta}
+	\includegraphics[width = 8 cm]{images/aggiunta}
 	% \caption{}
 	\label{fig:Inserimento lavoratore}
 \end{figure}
 
+\newpage
+
 \subsection{Effettuare ricerche}
-I dipendenti dell’agenzia per poter effettuare delle ricerche complesse è necessario che siano autenticati al sistema. \\
-La ricerca può avvenire mediante una barra di testo tramite l’inserimento di nome e cognome.
+I dipendenti dell'agenzia per poter effettuare delle ricerche complesse è necessario che siano autenticati al sistema. \\
+La ricerca può avvenire mediante una barra di testo tramite l'inserimento di nome e cognome.
 \'E inoltre possibile filtrare ulteriormente i risultati in base a: lingue parlate, mansioni effettuate, periodo e comuni di disponibilità,
 patenti di guida e disponibilità di auto propria. Tutti questi filtri possono inoltre essere applicati in modalità “AND” oppure “OR”. \\
 
-\fbox{%
-	\parbox{\textwidth}{%
-		\textbf{Attori:} Dipendente dell’agenzia \\
-		\textbf{Precondizioni:} Il dipendente deve essere autenticato. \\ 
-		\textbf{Passi:}
+\begin{tabular}{ | l | p{11cm} | } 
+	\hline
+	\textbf{Attori:} & Dipendente dell'agenzia  \\ 
+	\hline
+	\textbf{Precondizioni:} & Il dipendente deve essere autenticato. \\
+	\hline
+	\textbf{Passi:} &
 		\begin{enumerate}
 			\item Il dipendente accede al sistema
-			\item Il dipendente è introdotto all’interfaccia di base
+			\item Il dipendente è introdotto all'interfaccia di base
 			\item Il dipendente visualizza la lista dei lavoratori
 			\item Il dipendente filtra la lista dei lavoratori
-		\end{enumerate}
-	}%
-}
+		\end{enumerate} \\
+	\hline
+	\textbf{Postcondizioni:} &  Il lavoratore viene aggiunto dal database \\
+	\hline
+  \end{tabular}
+
+
+% \fbox{%
+% 	\parbox{\textwidth}{%
+% 		\textbf{Attori:} Dipendente dell'agenzia \\
+% 		\textbf{Precondizioni:} Il dipendente deve essere autenticato. \\ 
+% 		\textbf{Passi:}
+% 		\begin{enumerate}
+% 			\item Il dipendente accede al sistema
+% 			\item Il dipendente è introdotto all'interfaccia di base
+% 			\item Il dipendente visualizza la lista dei lavoratori
+% 			\item Il dipendente filtra la lista dei lavoratori
+% 		\end{enumerate}
+% 	}%
+% }
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width = 10 cm]{images/ricerca}
+	\includegraphics[width = 8 cm]{images/ricerca}
 	% \caption{}
 	\label{fig:Ricerca lavoratore}
 \end{figure}
 
 \newpage
 \subsection{Cancellazione lavoratore}
-I dipendenti dell’agenzia per poter cancellare un lavoratore è necessario che siano autenticati al sistema. \\
+I dipendenti dell'agenzia per poter cancellare un lavoratore è necessario che siano autenticati al sistema. \\
 La cancellazione avviene tramite un pulsante dedicato per ogni lavoratore. \\
 
-\fbox{%
-	\parbox{\textwidth}{%
-		\textbf{Attori:} Dipendente dell’agenzia \\
-		\textbf{Precondizioni:} Il dipendente deve essere autenticato. \\ 
-		\textbf{Passi:}
-		\begin{enumerate}
+\begin{tabular}{ | l | p{11cm} | } 
+	\hline
+	\textbf{Attori:} & Dipendente dell'agenzia  \\ 
+	\hline
+	\textbf{Precondizioni:} & Il dipendente deve essere autenticato. \\
+	\hline
+	\textbf{Passi:} &
+		\begin{itemize}
 			\item Il dipendente accede al sistema
-			\item Il dipendente è introdotto all’interfaccia di base
+			\item Il dipendente è introdotto all'interfaccia di base
 			\item Il dipendente visualizza la lista dei lavoratori
 			\item Il dipendente trova il lavoratore da eliminare
 			\item Il dipendente elimina il lavoratore tramite apposito pulsante
-		\end{enumerate}
-		\textbf{Postcondizioni:}  Il lavoratore viene eliminato dal database
-	}%
-}
+		\end{itemize} \\
+	\hline
+	\textbf{Postcondizioni:} &  Il lavoratore viene aggiunto dal database \\
+	\hline
+  \end{tabular}
+
+
+% \fbox{%
+% 	\parbox{\textwidth}{%
+% 		\textbf{Attori:} Dipendente dell'agenzia \\
+% 		\textbf{Precondizioni:} Il dipendente deve essere autenticato. \\ 
+% 		\textbf{Passi:}
+% 		\begin{enumerate}
+% 			\item Il dipendente accede al sistema
+% 			\item Il dipendente è introdotto all'interfaccia di base
+% 			\item Il dipendente visualizza la lista dei lavoratori
+% 			\item Il dipendente trova il lavoratore da eliminare
+% 			\item Il dipendente elimina il lavoratore tramite apposito pulsante
+% 		\end{enumerate}
+% 		\textbf{Postcondizioni:}  Il lavoratore viene eliminato dal database
+% 	}%
+% }
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width = 10 cm]{images/rimozione}
+	\includegraphics[width = 8 cm]{images/rimozione}
 	% \caption{}
 	\label{fig:Ricerca lavoratore}
 \end{figure}
@@ -157,7 +221,7 @@ La cancellazione avviene tramite un pulsante dedicato per ogni lavoratore. \\
 \newpage
 \section{Diagrammi di attività}
 \subsection{Autenticazione}
-I dipendenti dell’agenzia per poter poter utilizzare il software è necessario che siano autenticati al sistema.
+I dipendenti dell'agenzia per poter poter utilizzare il software è necessario che siano autenticati al sistema.
 
 \begin{figure}[H]
 	\centering
@@ -176,9 +240,25 @@ I dipendenti dell’agenzia per poter poter utilizzare il software è necessario
 	\label{fig:attività dipendenti}
 \end{figure}
 
-Nota: i seguenti diagrammi catturano una singola attività di un utente rispetto al sistema. Non è stata rappresentata nel diagramma la possibilità di ripetere più volte la stessa operazione, in sequenza, senza chiudere il software. Questo per semplici ragioni di chiarezza e leggerezza; si considerano quindi le singole attività d’interazione
+Nota: i seguenti diagrammi catturano una singola attività di un utente rispetto al sistema. Non è stata rappresentata nel diagramma la possibilità di ripetere più volte la stessa operazione, in sequenza, senza chiudere il software. Questo per semplici ragioni di chiarezza e leggerezza; si considerano quindi le singole attività d'interazione
 
-\section{Diagrammi delle classi}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Diagrammi delle classi}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width = 10 cm]{images/uml_1.png}
+	% \caption{}
+	\label{fig:attività dipendenti}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width = 10 cm]{images/uml_2.png}
+	% \caption{}
+	\label{fig:attività dipendenti}
+\end{figure}
+
+
 
 \newpage
 \section{Note sul processo di sviluppo}
@@ -244,15 +324,13 @@ La libreria BLoC consente di separare l'applicazione in tre livelli:
 \end{figure}
 
 \newpage
-\newgeometry{
-	bottom = 0mm,
-}
+
 \section{Backend}
 La realizzazione del Backend è stata affidata a Appwrite, un backend-as-a-service open source e self-hosted che semplifica lo sviluppo
 di app con una suite di SDK e API. Appwrite fornisce vari servizi tra cui autenticazione e database.
 
 \subsection{Autenticazione}
-Appwrite offre delle API dedicate per gestire l’autenticazione dell’app. Tramite la SDK è possibile accedere a delle funzioni per 
+Appwrite offre delle API dedicate per gestire l'autenticazione dell'app. Tramite la SDK è possibile accedere a delle funzioni per 
 registrare e autenticare gli utenti e gestirne la sessione.
 
 \subsection{Database}
@@ -270,12 +348,37 @@ La SDK di Appwrite mette a disposizione dei metodi per caricare, aggiornare, eli
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width = 15 cm]{images/appwrite.png}
+	\includegraphics[width = 10 cm]{images/appwrite.png}
 	\label{fig:interfaccia Appwrite}
 \end{figure}
 
+\section{Fase di test}
+
+\subsection{Development Testing}
+Durante lo sviluppo sono stati provati diversi input di dati, sia corretti che errati, per
+verificare il comportamento del software a tali input.
+Alcuni test svolti:
+\begin{itemize}
+	\item \textit{Verifica dell'autenticazione}: con dati errati di login viene mostrato un messaggio di errore, altrimenti viene mostrata l'homepage
+	\item \textit{Database vuoto}: se il database è vuoto viene segnalato all'utente
+	\item \textit{Verifica di input errati o vuoti}: l'utente viene invitato a inserire dati corretti
+	\item \textit{Inserimento di un lavoratore}
+	\item \textit{Modifica di un lavoratore}
+	\item \textit{Eliminazione di un lavoratore}
+\end{itemize}
+
+\subsection{Unit Testing}
+
+Per accelerare i processi di test durante lo sviluppo, le diverse funzionalità dell'applicazione 
+sono state testate senza l'utilizzo dell'interfaccia grafica. Flutter mette a disposizione un sistema 
+di Unit Testing del software mediante script scritti in Dart che consentono di eseguire i vari moduli del progetto
+con oggetti mock e verificare che il relativo output sia quello aspettato.
 
 
+\subsection{User Testing}
+Alla fine dello sviluppo, il software è stato sottoposto a un test da parte di alcuni dipendenti dell'agenzia.
+Non è stato fornito alcun tipo di spiegazione sul funzionamento del software per non influire i risultati.
+Inoltre, sono stati identificati degli aggiustamenti per migliorare il sistema.
 
 
 
