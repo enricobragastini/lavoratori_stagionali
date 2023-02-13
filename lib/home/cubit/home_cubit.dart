@@ -7,7 +7,8 @@ part 'home_state.dart';
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(const HomeState());
 
-  void setTab(HomeTab tab) => emit(HomeState(selectedTab: tab));
+  void setTab(HomeTab tab) =>
+      emit(HomeState(selectedTab: tab, workerToEdit: null));
 
   void editWorker(Worker worker) =>
       emit(HomeState(selectedTab: HomeTab.page2, workerToEdit: worker));

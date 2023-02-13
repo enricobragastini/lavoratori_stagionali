@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import "package:flutter_bloc/flutter_bloc.dart";
+import 'package:lavoratori_stagionali/create/view/form_assets.dart';
 import 'package:lavoratori_stagionali/create/view/widgets/CustomTextFormField.dart';
 import 'package:lavoratori_stagionali/create/view/widgets/EmergencyContactsBox.dart';
 import 'package:lavoratori_stagionali/create/view/widgets/LocationsBox.dart';
@@ -31,159 +32,8 @@ class CreatePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> languages = [
-      "Afrikaans",
-      "Albanese",
-      "Amarico",
-      "Arabo",
-      "Armeno",
-      "Assamese",
-      "Aymara",
-      "Azero",
-      "Bambara",
-      "Basco",
-      "Bengalese",
-      "Bhojpuri",
-      "Bielorusso",
-      "Birmano",
-      "Bosniaco",
-      "Bulgaro",
-      "Catalano",
-      "Cebuano",
-      "Ceco",
-      "Chichewa",
-      "Chirghiso",
-      "Ci",
-      "Cinese",
-      "Coreano",
-      "Corso",
-      "Creolo haitiano",
-      "Croato",
-      "Curdo",
-      "Danese",
-      "Dhivehi",
-      "Dogri",
-      "Ebraico",
-      "Esperanto",
-      "Estone",
-      "Ewe",
-      "Filippino",
-      "Finlandese",
-      "Francese",
-      "Frisone",
-      "Gaelico scozzese",
-      "Galiziano",
-      "Gallese",
-      "Georgiano",
-      "Giapponese",
-      "Giavanese",
-      "Greco",
-      "Guaraní",
-      "Gujarati",
-      "Hausa",
-      "Hawaiano",
-      "Hindi",
-      "Hmong",
-      "Igbo",
-      "Ilocano",
-      "Indonesiano",
-      "Inglese",
-      "Irlandese",
-      "Islandese",
-      "Italiano",
-      "Kannada",
-      "Kazako",
-      "Khmer",
-      "Kinyarwanda",
-      "Konkani",
-      "Krio",
-      "Lao",
-      "Latino",
-      "Lettone",
-      "Lingala",
-      "Lituano",
-      "Luganda",
-      "Lussemburghese",
-      "Macedone",
-      "Maithili",
-      "Malayalam",
-      "Malese",
-      "Malgascio",
-      "Maltese",
-      "Maori",
-      "Marathi",
-      "Meiteilon (Manipuri)",
-      "Mizo",
-      "Mongolo",
-      "Nepalese",
-      "Norvegese",
-      "Odia (Oriya)",
-      "Olandese",
-      "Oromo",
-      "Pashto",
-      "Persiano",
-      "Polacco",
-      "Portoghese",
-      "Punjabi",
-      "Quechua",
-      "Rumeno",
-      "Russo",
-      "Samoano",
-      "Sanscrito",
-      "Sepedi",
-      "Serbo",
-      "Sesotho",
-      "Shona",
-      "Sindhi",
-      "Singalese",
-      "Slovacco",
-      "Sloveno",
-      "Somalo",
-      "Spagnolo",
-      "Sundanese",
-      "Svedese",
-      "Swahili",
-      "Tagico",
-      "Tamil",
-      "Tataro",
-      "Tedesco",
-      "Telugu",
-      "Thai",
-      "Tigrino",
-      "Tsonga",
-      "Turco",
-      "Turcomanno",
-      "Ucraino",
-      "Uiguro",
-      "Ungherese",
-      "Urdu",
-      "Uzbeco",
-      "Vietnamita",
-      "Xhosa",
-      "Yiddish",
-      "Yoruba",
-      "Zulu",
-    ];
-
-    final List<String> licenses = [
-      "AM",
-      "A1",
-      "A2",
-      "A",
-      "B1",
-      "B",
-      "BE",
-      "C1",
-      "C1E",
-      "C",
-      "CE",
-      "D1",
-      "D1E",
-      "D",
-      "DE"
-    ];
-
     if (toEdit != null) {
+      print(toEdit!.emergencyContacts);
       context.read<CreateBloc>().add(WorkerEditRequested(worker: toEdit!));
     }
 
@@ -192,6 +42,10 @@ class CreatePage extends StatelessWidget {
         if (previous.status == CreateStatus.loading &&
             current.status != CreateStatus.loading) {
           Navigator.of(context).pop();
+        }
+        if (previous.status != CreateStatus.initial &&
+            current.status == CreateStatus.initial) {
+          context.read<HomeCubit>().setTab(HomeTab.page1);
         }
         return previous.status != current.status;
       },
@@ -210,6 +64,16 @@ class CreatePage extends StatelessWidget {
                   ),
                 );
               });
+        } else if (state.status == CreateStatus.failure) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(const SnackBar(
+              content: Text("C'è stato un errore!"),
+              showCloseIcon: true,
+              closeIconColor: Colors.white,
+              behavior: SnackBarBehavior.floating,
+              duration: Duration(milliseconds: 5000),
+            ));
         }
       },
       child: Scaffold(
@@ -517,7 +381,7 @@ class CreatePage extends StatelessWidget {
                                         width: 1.5)),
                                 child: MultiSelectDialogField(
                                   initialValue: state.languages,
-                                  items: languages
+                                  items: FormAssets.languages
                                       .map((e) => MultiSelectItem(e, e))
                                       .toList(),
                                   listType: MultiSelectListType.LIST,
@@ -564,7 +428,7 @@ class CreatePage extends StatelessWidget {
                                         width: 1.5)),
                                 child: MultiSelectDialogField(
                                   initialValue: state.licenses,
-                                  items: licenses
+                                  items: FormAssets.licenses
                                       .map((e) => MultiSelectItem(e, e))
                                       .toList(),
                                   listType: MultiSelectListType.LIST,
@@ -751,8 +615,9 @@ class CreatePage extends StatelessWidget {
                                             .add(const SaveRequested());
                                       }
                                     },
-                                    child: Text(
-                                        toEdit != null ? "AGGIORNA" : "SALVA")),
+                                    child: Text(toEdit != null
+                                        ? "APPLICA MODIFICHE"
+                                        : "SALVA")),
                               ),
                             ),
                           ],

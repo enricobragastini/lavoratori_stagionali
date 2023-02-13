@@ -95,7 +95,7 @@ class AppwriteAPI {
         .$id;
   }
 
-  Future<String> saveEmergencyContacts(
+  Future<String> saveEmergencyContact(
       String? id, Map<String, dynamic> emergencyContactRawData) async {
     return (await upsert(
             databaseId: _database_id,
@@ -116,6 +116,20 @@ class AppwriteAPI {
     database.deleteDocument(
         databaseId: _database_id,
         collectionId: _workExperiences_collection_id,
+        documentId: documentId);
+  }
+
+  Future<void> deletePeriod(String documentId) async {
+    database.deleteDocument(
+        databaseId: _database_id,
+        collectionId: _periods_collection_id,
+        documentId: documentId);
+  }
+
+  Future<void> deleteEmergencyContact(String documentId) async {
+    database.deleteDocument(
+        databaseId: _database_id,
+        collectionId: _emergencyContacts_collection_id,
         documentId: documentId);
   }
 

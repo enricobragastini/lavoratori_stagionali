@@ -36,7 +36,7 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
     on<LocationDeleted>(_onLocationDeleted);
     on<PeriodAdded>(_onPeriodAdded);
     on<PeriodDeleted>(_onPeriodDeleted);
-    on<WorkerEditRequested>(onWorkerEditRequested);
+    on<WorkerEditRequested>(_onWorkerEditRequested);
   }
 
   final WorkersRepository workersRepository;
@@ -45,6 +45,14 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
       SaveRequested event, Emitter<CreateState> emit) async {
     try {
       emit(state.copyWith(status: CreateStatus.loading));
+
+      print(state.oldWorker!.workExperiences);
+      print(state.oldWorker!.periods);
+      print(state.oldWorker!.emergencyContacts);
+      if (state.oldWorker != null && state.oldWorker!.id == state.workerId) {
+        print("Trying to RESET");
+        await workersRepository.resetWorker(state.oldWorker!);
+      }
 
       await workersRepository.saveWorker(Worker(
           id: state.workerId,
@@ -323,7 +331,7 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
     }
   }
 
-  Future<void> onWorkerEditRequested(
+  Future<void> _onWorkerEditRequested(
       WorkerEditRequested event, Emitter<CreateState> emit) async {
     emit(state.copyWith(status: CreateStatus.loading));
 
@@ -346,6 +354,10 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
         locations: event.worker.locations,
         periods: event.worker.periods,
         withOwnCar: event.worker.withOwnCar,
+        oldWorker: event.worker.copyWith(
+            workExperiences: [...event.worker.workExperiences],
+            emergencyContacts: [...event.worker.emergencyContacts],
+            periods: [...event.worker.periods]),
       ));
     } catch (e) {
       emit(state.copyWith(status: CreateStatus.failure));

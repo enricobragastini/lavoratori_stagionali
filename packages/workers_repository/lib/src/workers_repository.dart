@@ -61,11 +61,12 @@ class WorkersRepository {
       }
 
       for (EmergencyContact contact in worker.emergencyContacts) {
-        appwriteAPI.saveEmergencyContacts(contact.id, {
+        appwriteAPI.saveEmergencyContact(contact.id, {
           "firstname": contact.firstname,
           "lastname": contact.lastname,
           "email": contact.email,
           "phone": contact.phone,
+          "workerID": workerID
         });
       }
     } on AppwriteException catch (e) {
@@ -165,12 +166,46 @@ class WorkersRepository {
   Future<bool> deleteWorker(Worker worker) async {
     try {
       await appwriteAPI.deleteWorker(worker.id!);
-      for (WorkExperience exp in worker.workExperiences) {
-        appwriteAPI.deleteWorkExperience(exp.id!);
+      for (final exp in worker.workExperiences) {
+        await appwriteAPI.deleteWorkExperience(exp.id!);
+      }
+      for (final period in worker.periods) {
+        await appwriteAPI.deletePeriod(period.id!);
+      }
+      for (final contact in worker.emergencyContacts) {
+        await appwriteAPI.deleteEmergencyContact(contact.id!);
       }
       return true;
     } on AppwriteException {
       throw WorkersException();
     }
+  }
+
+  Future<bool> resetWorker(Worker worker) async {
+    try {
+      for (final exp in worker.workExperiences) {
+        print("Elimino WE");
+        await appwriteAPI.deleteWorkExperience(exp.id!);
+      }
+    } catch (e) {
+      return false;
+    }
+    try {
+      for (final period in worker.periods) {
+        print("Elimino periodo");
+        await appwriteAPI.deletePeriod(period.id!);
+      }
+    } catch (e) {
+      return false;
+    }
+    try {
+      for (final contact in worker.emergencyContacts) {
+        print("Elimino EC");
+        await appwriteAPI.deleteEmergencyContact(contact.id!);
+      }
+    } catch (e) {
+      return false;
+    }
+    return true;
   }
 }

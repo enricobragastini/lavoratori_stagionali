@@ -85,7 +85,11 @@ class GalleryState extends Equatable {
                           .where((fp) => fp.includes(wp))
                           .isNotEmpty,
                     )))
-          .toList();
+          .toList()
+        ..sort(
+          (a, b) => "${a.firstname} ${a.lastname}"
+              .compareTo("${b.firstname} ${b.lastname}"),
+        );
     } else {
       // Ricerca in AND
       return workers
@@ -134,7 +138,12 @@ class GalleryState extends Equatable {
                               .length ==
                           filter.periods.length,
                     )))
-          .toList();
+          .toList()
+        ..sort(
+          (a, b) => "${a.firstname} ${a.lastname}"
+              .compareTo("${b.firstname} ${b.lastname}"),
+        );
+      ;
     }
   }
 

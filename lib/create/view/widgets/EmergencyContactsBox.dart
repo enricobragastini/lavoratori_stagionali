@@ -208,14 +208,10 @@ class ExperienceDialog extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
 
-  final _titleKey = GlobalKey<FormFieldState>();
-  final _companyNameKey = GlobalKey<FormFieldState>();
-  final _startPeriodKey = GlobalKey<FormFieldState>();
-  final _endPeriodKey = GlobalKey<FormFieldState>();
-  final _dailyPayKey = GlobalKey<FormFieldState>();
-  final _workplaceKey = GlobalKey<FormFieldState>();
-  final _tasksKey = GlobalKey<FormFieldState>();
-  final _notesKey = GlobalKey<FormFieldState>();
+  final _firstNameKey = GlobalKey<FormFieldState>();
+  final _lastNameKey = GlobalKey<FormFieldState>();
+  final _emailKey = GlobalKey<FormFieldState>();
+  final _phoneKey = GlobalKey<FormFieldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -267,12 +263,12 @@ class ExperienceDialog extends StatelessWidget {
                 runAlignment: WrapAlignment.center,
                 children: [
                   CustomTextFormField(
-                    textFormFieldKey: _titleKey,
+                    textFormFieldKey: _firstNameKey,
                     labelText: "Nome*",
                     textFormFieldController: firstnameController,
                     onFocusChangeAction: (focus) {
                       if (!focus) {
-                        _titleKey.currentState!.validate();
+                        _firstNameKey.currentState!.validate();
                       }
                     },
                     validator: (value) {
@@ -283,12 +279,12 @@ class ExperienceDialog extends StatelessWidget {
                     },
                   ),
                   CustomTextFormField(
-                    textFormFieldKey: _companyNameKey,
+                    textFormFieldKey: _lastNameKey,
                     labelText: "Cognome*",
                     textFormFieldController: lastnameController,
                     onFocusChangeAction: (focus) {
                       if (!focus) {
-                        _companyNameKey.currentState!.validate();
+                        _lastNameKey.currentState!.validate();
                       }
                     },
                     validator: (value) {
@@ -299,12 +295,12 @@ class ExperienceDialog extends StatelessWidget {
                     },
                   ),
                   CustomTextFormField(
-                    textFormFieldKey: _startPeriodKey,
+                    textFormFieldKey: _emailKey,
                     labelText: "Email*",
                     textFormFieldController: emailController,
                     onFocusChangeAction: (focus) {
                       if (!focus) {
-                        _startPeriodKey.currentState!.validate();
+                        _emailKey.currentState!.validate();
                       }
                     },
                     validator: (value) {
@@ -321,12 +317,12 @@ class ExperienceDialog extends StatelessWidget {
                     },
                   ),
                   CustomTextFormField(
-                    textFormFieldKey: _endPeriodKey,
+                    textFormFieldKey: _phoneKey,
                     labelText: "Telefono*",
                     textFormFieldController: phoneController,
                     onFocusChangeAction: (focus) {
                       if (!focus) {
-                        _endPeriodKey.currentState!.validate();
+                        _phoneKey.currentState!.validate();
                       }
                     },
                     validator: (value) {

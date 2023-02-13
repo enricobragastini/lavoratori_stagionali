@@ -21,6 +21,7 @@ class CreateState extends Equatable {
     this.locations = const [],
     this.periods = const [],
     this.withOwnCar = false,
+    this.oldWorker,
   });
 
   final CreateStatus status;
@@ -42,6 +43,8 @@ class CreateState extends Equatable {
   final List<Period> periods;
   final bool withOwnCar;
 
+  final Worker? oldWorker;
+
   CreateState copyWith({
     CreateStatus? status,
     String? workerId,
@@ -60,6 +63,7 @@ class CreateState extends Equatable {
     List<String>? locations,
     List<Period>? periods,
     bool? withOwnCar,
+    Worker? oldWorker,
   }) {
     return CreateState(
         status: status ?? this.status,
@@ -78,7 +82,8 @@ class CreateState extends Equatable {
         licenses: licenses ?? this.licenses,
         locations: locations ?? this.locations,
         periods: periods ?? this.periods,
-        withOwnCar: withOwnCar ?? this.withOwnCar);
+        withOwnCar: withOwnCar ?? this.withOwnCar,
+        oldWorker: oldWorker ?? this.oldWorker);
   }
 
   @override
