@@ -10,11 +10,12 @@ import 'package:lavoratori_stagionali/home/cubit/home_cubit.dart';
 import 'package:lavoratori_stagionali/app/bloc/app_bloc.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+import 'package:workers_repository/workers_repository.dart' show Worker;
 
 import "../bloc/create_bloc.dart";
 
 class CreatePage extends StatelessWidget {
-  CreatePage({Key? key}) : super(key: key);
+  CreatePage({Key? key, this.toEdit}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
   final _firstnameKey = GlobalKey<FormFieldState>();
@@ -25,6 +26,8 @@ class CreatePage extends StatelessWidget {
   final _addressKey = GlobalKey<FormFieldState>();
   final _phoneKey = GlobalKey<FormFieldState>();
   final _emailKey = GlobalKey<FormFieldState>();
+
+  final Worker? toEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -180,12 +183,33 @@ class CreatePage extends StatelessWidget {
       "DE"
     ];
 
-    return BlocListener<HomeCubit, HomeState>(
+    if (toEdit != null) {
+      context.read<CreateBloc>().add(WorkerEditRequested(worker: toEdit!));
+    }
+
+    return BlocListener<CreateBloc, CreateState>(
+      listenWhen: (previous, current) {
+        if (previous.status == CreateStatus.loading &&
+            current.status != CreateStatus.loading) {
+          Navigator.of(context).pop();
+        }
+        return previous.status != current.status;
+      },
       listener: (context, state) {
-        if (state.workerToEdit != null) {
-          context
-              .read<CreateBloc>()
-              .add(WorkerEditRequested(worker: state.workerToEdit!));
+        if (state.status == CreateStatus.loading) {
+          showDialog(
+              context: context,
+              barrierDismissible: true,
+              builder: (BuildContext context) {
+                return Container(
+                  color: Colors.transparent,
+                  child: const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  ),
+                );
+              });
         }
       },
       child: Scaffold(
@@ -727,7 +751,8 @@ class CreatePage extends StatelessWidget {
                                             .add(const SaveRequested());
                                       }
                                     },
-                                    child: const Text("SALVA")),
+                                    child: Text(
+                                        toEdit != null ? "AGGIORNA" : "SALVA")),
                               ),
                             ),
                           ],

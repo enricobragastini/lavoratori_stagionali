@@ -47,6 +47,7 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
       emit(state.copyWith(status: CreateStatus.loading));
 
       await workersRepository.saveWorker(Worker(
+          id: state.workerId,
           firstname: state.firstname,
           lastname: state.lastname,
           birthday: DateFormat("dd/MM/yyyy").parse(state.birthday),
@@ -65,8 +66,8 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
       print("[INFO] Elemento inserito nel database correttamente!");
 
       emit(const CreateState());
-    } on WorkersException {
-      print("[INFO] Errore di inserimento nel database correttamente!");
+    } on WorkersException catch (e) {
+      print("[ERRORE] ${e.message}");
       emit(state.copyWith(status: CreateStatus.failure));
     }
   }
@@ -329,6 +330,7 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
     try {
       emit(state.copyWith(
         status: CreateStatus.success,
+        workerId: event.worker.id,
         firstname: event.worker.firstname,
         lastname: event.worker.lastname,
         birthday: DateFormat("dd/MM/yyyy").format(event.worker.birthday),

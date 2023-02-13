@@ -5,6 +5,7 @@ enum CreateStatus { initial, loading, success, failure }
 class CreateState extends Equatable {
   const CreateState({
     this.status = CreateStatus.initial,
+    this.workerId,
     this.firstname = "",
     this.lastname = "",
     this.birthday = "",
@@ -23,6 +24,7 @@ class CreateState extends Equatable {
   });
 
   final CreateStatus status;
+  final String? workerId;
   final String firstname;
   final String lastname;
   final String birthday;
@@ -42,6 +44,7 @@ class CreateState extends Equatable {
 
   CreateState copyWith({
     CreateStatus? status,
+    String? workerId,
     String? firstname,
     String? lastname,
     String? birthday,
@@ -60,6 +63,7 @@ class CreateState extends Equatable {
   }) {
     return CreateState(
         status: status ?? this.status,
+        workerId: workerId ?? this.workerId,
         firstname: firstname ?? this.firstname,
         lastname: lastname ?? this.lastname,
         birthday: birthday ?? this.birthday,

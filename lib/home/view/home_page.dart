@@ -90,7 +90,13 @@ class HomeView extends StatelessWidget {
           index: context
               .select((HomeCubit cubit) => cubit.state.selectedTab)
               .index,
-          children: [const GalleryPage(), CreatePage()],
+          children: [
+            const GalleryPage(),
+            CreatePage(
+              toEdit:
+                  context.select((HomeCubit cubit) => cubit.state.workerToEdit),
+            )
+          ],
         ),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: context

@@ -23,7 +23,7 @@ class WorkersRepository {
 
   Future<void> saveWorker(Worker worker) async {
     try {
-      String workerID = await appwriteAPI.saveWorker({
+      String workerID = await appwriteAPI.saveWorker(worker.id, {
         "firstname": worker.firstname,
         "lastname": worker.lastname,
         "birthday": worker.birthday.toIso8601String(),
@@ -38,9 +38,8 @@ class WorkersRepository {
         "locations": worker.locations,
       });
 
-      List<Map<dynamic, dynamic>> rawExperiencesDataList = [];
       for (WorkExperience experience in worker.workExperiences) {
-        rawExperiencesDataList.add({
+        appwriteAPI.saveWorkExperience(experience.id, {
           "title": experience.title,
           "start": experience.start.toIso8601String(),
           "end": experience.end.toIso8601String(),
@@ -52,28 +51,23 @@ class WorkersRepository {
           "workerID": workerID,
         });
       }
-      await appwriteAPI.saveWorkExperiences(rawExperiencesDataList);
 
-      List<Map<dynamic, dynamic>> periodsRawData = [];
       for (Period period in worker.periods) {
-        periodsRawData.add({
+        appwriteAPI.savePeriod(period.id, {
           "start": period.start.toIso8601String(),
           "end": period.end.toIso8601String(),
           "workerID": workerID,
         });
       }
-      await appwriteAPI.savePeriod(periodsRawData);
 
-      List<Map<dynamic, dynamic>> emergencyContactsRawData = [];
       for (EmergencyContact contact in worker.emergencyContacts) {
-        emergencyContactsRawData.add({
+        appwriteAPI.saveEmergencyContacts(contact.id, {
           "firstname": contact.firstname,
           "lastname": contact.lastname,
           "email": contact.email,
           "phone": contact.phone,
         });
       }
-      await appwriteAPI.saveEmergencyContacts(emergencyContactsRawData);
     } on AppwriteException catch (e) {
       throw WorkersException(e.message!);
     }
@@ -89,6 +83,9 @@ class WorkersRepository {
           await appwriteAPI.workExperiencesDocumentList;
 
       DocumentList periodsDocumentList = await appwriteAPI.periodsDocumentList;
+
+      DocumentList emergencyContactsDocumentList =
+          await appwriteAPI.emergencyContactsDocumentList;
 
       for (Document doc in workersDocumentList.documents) {
         workersList.add(Worker(
@@ -145,6 +142,18 @@ class WorkersRepository {
                 id: doc.$id,
                 start: DateTime.parse(doc.data["start"]),
                 end: DateTime.parse(doc.data["end"]))));
+      }
+
+      for (Document doc in emergencyContactsDocumentList.documents) {
+        workersList
+            .where((worker) => worker.id == doc.data["workerID"])
+            .forEach((worker) => worker.emergencyContacts.add(EmergencyContact(
+                  id: doc.$id,
+                  firstname: doc.data["firstname"],
+                  lastname: doc.data["lastname"],
+                  email: doc.data["email"],
+                  phone: doc.data["phone"],
+                )));
       }
     } on AppwriteException catch (e) {
       throw new WorkersException(e.message!);

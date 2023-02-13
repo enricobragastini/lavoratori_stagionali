@@ -65,45 +65,44 @@ class AppwriteAPI {
     }
   }
 
-  Future<String> saveWorker(Map<dynamic, dynamic> workerRawData) async {
-    return (await database.createDocument(
+  Future<String> saveWorker(
+      String? id, Map<String, dynamic> workerRawData) async {
+    return (await upsert(
             databaseId: _database_id,
             collectionId: _workers_collection_id,
-            documentId: "unique()",
+            documentId: id == null ? "unique()" : id,
             data: workerRawData))
         .$id;
   }
 
-  Future<void> saveWorkExperiences(
-      List<Map<dynamic, dynamic>> experiencesRawData) async {
-    for (Map<dynamic, dynamic> experience in experiencesRawData) {
-      database.createDocument(
-          databaseId: _database_id,
-          collectionId: _workExperiences_collection_id,
-          documentId: "unique()",
-          data: experience);
-    }
+  Future<String> saveWorkExperience(
+      String? id, Map<String, dynamic> experienceRawData) async {
+    return (await upsert(
+            databaseId: _database_id,
+            collectionId: _workExperiences_collection_id,
+            documentId: id == null ? "unique()" : id,
+            data: experienceRawData))
+        .$id;
   }
 
-  Future<void> savePeriod(List<Map<dynamic, dynamic>> periodsRawData) async {
-    for (Map<dynamic, dynamic> period in periodsRawData) {
-      database.createDocument(
-          databaseId: _database_id,
-          collectionId: _periods_collection_id,
-          documentId: "unique()",
-          data: period);
-    }
+  Future<String> savePeriod(
+      String? id, Map<String, dynamic> periodRawData) async {
+    return (await upsert(
+            databaseId: _database_id,
+            collectionId: _periods_collection_id,
+            documentId: id == null ? "unique()" : id,
+            data: periodRawData))
+        .$id;
   }
 
-  Future<void> saveEmergencyContacts(
-      List<Map<dynamic, dynamic>> emergencyContactsRawData) async {
-    for (Map<dynamic, dynamic> contact in emergencyContactsRawData) {
-      database.createDocument(
-          databaseId: _database_id,
-          collectionId: _emergencyContacts_collection_id,
-          documentId: "unique()",
-          data: contact);
-    }
+  Future<String> saveEmergencyContacts(
+      String? id, Map<String, dynamic> emergencyContactRawData) async {
+    return (await upsert(
+            databaseId: _database_id,
+            collectionId: _emergencyContacts_collection_id,
+            documentId: id == null ? "unique()" : id,
+            data: emergencyContactRawData))
+        .$id;
   }
 
   Future<void> deleteWorker(String documentId) async {
@@ -141,5 +140,36 @@ class AppwriteAPI {
         queries: []);
   }
 
+  Future<models.DocumentList> get emergencyContactsDocumentList async {
+    return database.listDocuments(
+        databaseId: _database_id,
+        collectionId: _emergencyContacts_collection_id,
+        queries: []);
+  }
+
   Stream<RealtimeMessage> get workersStream => workersSubscription.stream;
+
+  Future<models.Document> upsert(
+      {required String databaseId,
+      required String collectionId,
+      required String documentId,
+      required Map<String, dynamic> data}) async {
+    try {
+      return await database.createDocument(
+          databaseId: databaseId,
+          collectionId: collectionId,
+          documentId: documentId,
+          data: data);
+    } on AppwriteException catch (e) {
+      if (e.code == 409) {
+        return await database.updateDocument(
+            databaseId: databaseId,
+            collectionId: collectionId,
+            documentId: documentId,
+            data: data);
+      } else {
+        rethrow;
+      }
+    }
+  }
 }

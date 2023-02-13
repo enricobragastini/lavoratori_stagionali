@@ -2,7 +2,8 @@ import 'package:person_model/person_model.dart';
 
 class EmergencyContact extends Person {
   EmergencyContact(
-      {required String firstname,
+      {this.id,
+      required String firstname,
       required String lastname,
       required String email,
       required String phone})
@@ -12,9 +13,16 @@ class EmergencyContact extends Person {
             email: email,
             phone: phone);
 
+  final String? id;
+
   EmergencyContact copyWith(
-      {String? firstname, String? lastname, String? email, String? phone}) {
+      {String? id,
+      String? firstname,
+      String? lastname,
+      String? email,
+      String? phone}) {
     return EmergencyContact(
+        id: id ?? this.id,
         firstname: firstname ?? this.firstname,
         lastname: lastname ?? this.lastname,
         email: email ?? this.email,
