@@ -6,3 +6,11 @@ abstract class NetworkEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class NetworkObserve extends NetworkEvent {}
+
+class NetworkNotify extends NetworkEvent {
+  final bool isConnected;
+
+  const NetworkNotify({this.isConnected = false});
+}

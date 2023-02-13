@@ -1,21 +1,23 @@
 import 'package:equatable/equatable.dart';
 
-class Employee extends Equatable {
+import 'package:person_model/person_model.dart';
+
+class Employee extends Person {
   const Employee({
     required this.id,
-    required this.firstname,
-    required this.lastname,
-    required this.email,
-    required this.phone,
+    required String firstname,
+    required String lastname,
+    required String email,
+    required String phone,
     required this.birthday,
     required this.username,
-  });
+  }) : super(
+            firstname: firstname,
+            lastname: lastname,
+            email: email,
+            phone: phone);
 
   final String id;
-  final String firstname;
-  final String lastname;
-  final String email;
-  final String phone;
   final DateTime? birthday;
   final String username;
 

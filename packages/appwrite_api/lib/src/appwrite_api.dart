@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
 
-class AppwriteRepository {
+class AppwriteAPI {
   // Id per accedere a database e collections
   final String _database_id = "63d6895b934434b4966a";
   final String _employees_collection_id = "63d689659673376c728e";
@@ -25,7 +25,7 @@ class AppwriteRepository {
   late final RealtimeSubscription workersSubscription;
   late final RealtimeSubscription accountSubscription;
 
-  AppwriteRepository() {
+  AppwriteAPI() {
     this.client = Client()
         .setEndpoint('http://139.144.74.141/v1')
         .setProject('63d68840443d59c7b008')

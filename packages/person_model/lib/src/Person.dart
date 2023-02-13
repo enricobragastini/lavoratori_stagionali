@@ -6,7 +6,7 @@ abstract class Person implements Equatable {
   final String phone;
   final String email;
 
-  Person(
+  const Person(
       {required this.firstname,
       required this.lastname,
       required this.phone,

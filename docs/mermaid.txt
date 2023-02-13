@@ -1,0 +1,96 @@
+classDiagram
+
+class Person
+<<abstract>> Person
+Person : +firstname String
+Person : +lastname String
+Person : +phone String
+Person : +email String
+Person : +stringify bool?
+Person : +props List~Object?~
+Equatable <|.. Person
+
+class EmployeesRepository
+
+class Employee
+Employee : +id String
+Employee : +birthday DateTime?
+Employee : +username String
+Employee : +empty$ Employee
+Employee : +isEmpty bool
+Employee : +notEmpty bool
+Employee : +props List~Object?~
+Employee : +copyWith() Employee
+Employee : +toString() String
+Person <|-- Employee
+
+class EmergencyContact
+EmergencyContact : +props List~Object?~
+EmergencyContact : +copyWith() EmergencyContact
+Person <|-- EmergencyContact
+
+class Period
+Period : +id String?
+Period : +start DateTime
+Period : +end DateTime
+Period : +props List~Object?~
+Period : +copyWith() Period
+Period : +includes() bool
+Equatable <|-- Period
+
+class Worker
+Worker : +id String?
+Worker : +birthday DateTime
+Worker : +birthplace String
+Worker : +nationality String
+Worker : +address String
+Worker : +workExperiences List~WorkExperience~
+Worker : +emergencyContacts List~EmergencyContact~
+Worker : +languages List~String~
+Worker : +licenses List~String~
+Worker : +locations List~String~
+Worker : +periods List~Period~
+Worker : +withOwnCar bool
+Worker : +allTasks List~String~
+Worker : +props List~Object?~
+Worker : +copyWith() Worker
+Person <|-- Worker
+
+class WorkExperience
+WorkExperience : +id String?
+WorkExperience : +title String
+WorkExperience : +start DateTime
+WorkExperience : +end DateTime
+WorkExperience : +companyName String
+WorkExperience : +workplace String
+WorkExperience : +dailyPay double
+WorkExperience : +tasks List~String~
+WorkExperience : +notes String
+WorkExperience : +props List~Object?~
+WorkExperience : +copyWith() WorkExperience
+Equatable <|-- WorkExperience
+
+
+class WorkersRepository
+WorkersRepository : +appwriteAPI AppwriteAPI
+WorkersRepository o-- AppwriteAPI
+WorkersRepository : +workersStream Stream~RealtimeMessage~
+WorkersRepository o-- Stream~RealtimeMessage~
+WorkersRepository : +workersList Future~List~Worker~~
+WorkersRepository : +saveWorker() Future<void>
+WorkersRepository : +deleteWorker() Future<bool>
+
+
+class Filter
+Filter : +keywords String
+Filter : +languages List~String~
+Filter : +locations List~String~
+Filter : +licences List~String~
+Filter : +tasks List~String~
+Filter : +periods List~Period~
+Filter : +withOwnCar bool
+Filter : +empty$ Filter
+Filter : +props List~Object?~
+Filter : +copyWith() Filter
+Equatable <|-- Filter
+

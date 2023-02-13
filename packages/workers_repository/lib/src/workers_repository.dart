@@ -1,6 +1,6 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
-import "package:appwrite_repository/appwrite_repository.dart";
+import "package:appwrite_api/appwrite_api.dart";
 
 import "./models/Worker.dart";
 import "./models/WorkExperience.dart";
@@ -14,16 +14,16 @@ class WorkersException implements Exception {
 }
 
 class WorkersRepository {
-  late final AppwriteRepository appwriteRepository;
+  late final AppwriteAPI appwriteAPI;
   late final Stream<RealtimeMessage> workersStream;
 
-  WorkersRepository({required this.appwriteRepository}) {
-    workersStream = appwriteRepository.workersStream;
+  WorkersRepository({required this.appwriteAPI}) {
+    workersStream = appwriteAPI.workersStream;
   }
 
   Future<void> saveWorker(Worker worker) async {
     try {
-      String workerID = await appwriteRepository.saveWorker({
+      String workerID = await appwriteAPI.saveWorker({
         "firstname": worker.firstname,
         "lastname": worker.lastname,
         "birthday": worker.birthday.toIso8601String(),
@@ -52,7 +52,7 @@ class WorkersRepository {
           "workerID": workerID,
         });
       }
-      await appwriteRepository.saveWorkExperiences(rawExperiencesDataList);
+      await appwriteAPI.saveWorkExperiences(rawExperiencesDataList);
 
       List<Map<dynamic, dynamic>> periodsRawData = [];
       for (Period period in worker.periods) {
@@ -62,7 +62,7 @@ class WorkersRepository {
           "workerID": workerID,
         });
       }
-      await appwriteRepository.savePeriod(periodsRawData);
+      await appwriteAPI.savePeriod(periodsRawData);
 
       List<Map<dynamic, dynamic>> emergencyContactsRawData = [];
       for (EmergencyContact contact in worker.emergencyContacts) {
@@ -73,7 +73,7 @@ class WorkersRepository {
           "phone": contact.phone,
         });
       }
-      await appwriteRepository.saveEmergencyContacts(emergencyContactsRawData);
+      await appwriteAPI.saveEmergencyContacts(emergencyContactsRawData);
     } on AppwriteException catch (e) {
       throw WorkersException(e.message!);
     }
@@ -83,14 +83,12 @@ class WorkersRepository {
     List<Worker> workersList = [];
 
     try {
-      DocumentList workersDocumentList =
-          await appwriteRepository.workersDocumentList;
+      DocumentList workersDocumentList = await appwriteAPI.workersDocumentList;
 
       DocumentList workExperiencesDocumentList =
-          await appwriteRepository.workExperiencesDocumentList;
+          await appwriteAPI.workExperiencesDocumentList;
 
-      DocumentList periodsDocumentList =
-          await appwriteRepository.periodsDocumentList;
+      DocumentList periodsDocumentList = await appwriteAPI.periodsDocumentList;
 
       for (Document doc in workersDocumentList.documents) {
         workersList.add(Worker(
@@ -157,9 +155,9 @@ class WorkersRepository {
 
   Future<bool> deleteWorker(Worker worker) async {
     try {
-      await appwriteRepository.deleteWorker(worker.id!);
+      await appwriteAPI.deleteWorker(worker.id!);
       for (WorkExperience exp in worker.workExperiences) {
-        appwriteRepository.deleteWorkExperience(exp.id!);
+        appwriteAPI.deleteWorkExperience(exp.id!);
       }
       return true;
     } on AppwriteException {

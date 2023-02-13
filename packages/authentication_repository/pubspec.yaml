@@ -10,8 +10,8 @@ dependencies:
   flutter:
     sdk: flutter
   appwrite: ^8.1.0
-  appwrite_repository:
-    path: ../appwrite_repository
+  appwrite_api:
+    path: ../appwrite_api
   employees_repository:
     path: ../employees_repository
   rxdart: ^0.27.7

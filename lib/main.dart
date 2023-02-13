@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:appwrite_repository/appwrite_repository.dart';
+import 'package:appwrite_api/appwrite_api.dart';
 import 'package:flutter/material.dart';
 import 'package:window_size/window_size.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,13 +20,13 @@ void main() {
     // ignore: empty_catches
   } catch (e) {}
 
-  AppwriteRepository appwriteRepository = AppwriteRepository();
+  AppwriteAPI appwriteAPI = AppwriteAPI();
 
   AuthenticationRepository authenticationRepository =
-      AuthenticationRepository(appwriteRepository: appwriteRepository);
+      AuthenticationRepository(appwriteAPI: appwriteAPI);
 
   WorkersRepository workersRepository =
-      WorkersRepository(appwriteRepository: appwriteRepository);
+      WorkersRepository(appwriteAPI: appwriteAPI);
 
   runApp(
     BlocProvider(

@@ -12,9 +12,17 @@ import 'package:filter/filter.dart';
 class GalleryPage extends StatelessWidget {
   const GalleryPage({Key? key}) : super(key: key);
 
+  // Ascolta lo stream dal database in attesa di modifiche al database
+
   @override
   Widget build(BuildContext context) {
     const double searchContainerBorderRadius = 40;
+    context.read<GalleryBloc>().workersRepository.workersStream.listen(
+      (notification) {
+        context.read<GalleryBloc>().add(const WorkersListUpdated());
+        context.read<GalleryBloc>().add(const FiltersUpdated());
+      },
+    );
 
     return BlocListener<GalleryBloc, GalleryState>(
       listenWhen: (previous, current) {
