@@ -37,6 +37,7 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
     on<PeriodAdded>(_onPeriodAdded);
     on<PeriodDeleted>(_onPeriodDeleted);
     on<WorkerEditRequested>(_onWorkerEditRequested);
+    on<ResetForm>(_onResetForm);
   }
 
   final WorkersRepository workersRepository;
@@ -359,6 +360,16 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
             emergencyContacts: [...event.worker.emergencyContacts],
             periods: [...event.worker.periods]),
       ));
+    } catch (e) {
+      emit(state.copyWith(status: CreateStatus.failure));
+    }
+  }
+
+  Future<void> _onResetForm(ResetForm event, Emitter<CreateState> emit) async {
+    emit(state.copyWith(status: CreateStatus.loading));
+
+    try {
+      emit(const CreateState());
     } catch (e) {
       emit(state.copyWith(status: CreateStatus.failure));
     }

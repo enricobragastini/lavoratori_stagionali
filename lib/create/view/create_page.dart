@@ -33,7 +33,6 @@ class CreatePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (toEdit != null) {
-      print(toEdit!.emergencyContacts);
       context.read<CreateBloc>().add(WorkerEditRequested(worker: toEdit!));
     }
 
@@ -78,29 +77,29 @@ class CreatePage extends StatelessWidget {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: const Text("AGGIUNGI UN NUOVO LAVORATORE"),
-          centerTitle: true,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "${context.read<AppBloc>().state.employee.firstname} ${context.read<AppBloc>().state.employee.lastname}",
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                  Text(
-                    context.read<AppBloc>().state.employee.email,
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
+        // appBar: AppBar(
+        //   title: const Text("AGGIUNGI UN NUOVO LAVORATORE"),
+        //   centerTitle: true,
+        //   actions: [
+        //     Padding(
+        //       padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        //       child: Column(
+        //         mainAxisAlignment: MainAxisAlignment.center,
+        //         crossAxisAlignment: CrossAxisAlignment.center,
+        //         children: [
+        //           Text(
+        //             "${context.read<AppBloc>().state.employee.firstname} ${context.read<AppBloc>().state.employee.lastname}",
+        //             style: const TextStyle(fontSize: 18),
+        //           ),
+        //           Text(
+        //             context.read<AppBloc>().state.employee.email,
+        //             style: const TextStyle(fontSize: 14),
+        //           ),
+        //         ],
+        //       ),
+        //     )
+        //   ],
+        // ),
         body: BlocBuilder<CreateBloc, CreateState>(
           builder: (context, state) {
             TextEditingController firstnameController =

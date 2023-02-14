@@ -51,6 +51,9 @@ class HomeView extends StatelessWidget {
       context.read<GalleryBloc>().add(const FiltersUpdated());
     });
 
+    final HomeTab selectedTab =
+        context.select((HomeCubit cubit) => cubit.state.selectedTab);
+
     return BlocListener<NetworkBloc, NetworkState>(
       listenWhen: (previous, current) {
         return (previous is NetworkFailure && current is NetworkSuccess) ||
@@ -76,16 +79,76 @@ class HomeView extends StatelessWidget {
         }
       },
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-            tooltip: "Logout",
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (context) => const CustomAlertDialog());
-            },
-            child: const Icon(Icons.logout)),
-        floatingActionButtonLocation:
-            FloatingActionButtonLocation.miniStartDocked,
+        appBar: AppBar(
+          title: Text(selectedTab == HomeTab.page1
+              ? "ELENCO LAVORATORI"
+              : (selectedTab == HomeTab.page2 &&
+                      context.read<HomeCubit>().state.workerToEdit != null)
+                  ? "MODIFICA LAVORATORE"
+                  : "CREA LAVORATORE"),
+          leading: context
+                      .select((HomeCubit cubit) => cubit.state.selectedTab) ==
+                  HomeTab.page1
+              ? IconButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) => const LogoutAlertDialog());
+                  },
+                  tooltip: "Esci",
+                  icon: const Icon(Icons.logout),
+                )
+              : IconButton(
+                  tooltip: "Torna alla lista",
+                  onPressed: () {
+                    if (context.read<CreateBloc>().state !=
+                        const CreateState()) {
+                      showDialog(
+                              context: context,
+                              builder: (context) => const CancelAlertDialog())
+                          .then((value) {
+                        if (value == true) {
+                          context.read<CreateBloc>().add(const ResetForm());
+                          context.read<HomeCubit>().setTab(HomeTab.page1);
+                        }
+                      });
+                    } else {
+                      context.read<HomeCubit>().setTab(HomeTab.page1);
+                    }
+                  },
+                  icon: const Icon(Icons.arrow_back),
+                ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "${context.read<AppBloc>().state.employee.firstname} ${context.read<AppBloc>().state.employee.lastname}",
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                  Text(
+                    context.read<AppBloc>().state.employee.email,
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
+            )
+          ],
+          centerTitle: true,
+        ),
+        floatingActionButton:
+            (context.select((HomeCubit cubit) => cubit.state.selectedTab) ==
+                    HomeTab.page1)
+                ? FloatingActionButton(
+                    child: const Icon(Icons.add),
+                    onPressed: () {
+                      context.read<HomeCubit>().setTab(HomeTab.page2);
+                    },
+                  )
+                : null,
         body: IndexedStack(
           index: context
               .select((HomeCubit cubit) => cubit.state.selectedTab)
@@ -98,28 +161,13 @@ class HomeView extends StatelessWidget {
             )
           ],
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: context
-              .select((HomeCubit cubit) => cubit.state.selectedTab)
-              .index,
-          onTap: (index) {
-            _tabIndex = index;
-            context.read<HomeCubit>().setTab(HomeTab.values[index]);
-          },
-          items: const [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.people), label: "Elenco lavoratori"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.add), label: "Nuovo lavoratore")
-          ],
-        ),
       ),
     );
   }
 }
 
-class CustomAlertDialog extends StatelessWidget {
-  const CustomAlertDialog({super.key});
+class LogoutAlertDialog extends StatelessWidget {
+  const LogoutAlertDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -135,6 +183,31 @@ class CustomAlertDialog extends StatelessWidget {
         TextButton(
             onPressed: () => context.read<AppBloc>().add(AppLogoutRequested()),
             child: const Text("ESCI"))
+      ],
+    );
+  }
+}
+
+class CancelAlertDialog extends StatelessWidget {
+  const CancelAlertDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text("Vuoi tornare indietro?"),
+      content: const Text(
+          "Tornando alla lista dei lavoratori perderai le attuali modifiche\nSicuro di volerlo fare?"),
+      actions: [
+        TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+            child: const Text("NO")),
+        TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+            child: const Text("SI"))
       ],
     );
   }

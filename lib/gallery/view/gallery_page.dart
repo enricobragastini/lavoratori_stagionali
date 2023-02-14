@@ -64,29 +64,29 @@ class GalleryPage extends StatelessWidget {
         builder: (context, state) {
           return Scaffold(
               backgroundColor: Colors.white,
-              appBar: AppBar(
-                title: const Text("ELENCO LAVORATORI"),
-                actions: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "${context.read<AppBloc>().state.employee.firstname} ${context.read<AppBloc>().state.employee.lastname}",
-                          style: const TextStyle(fontSize: 18),
-                        ),
-                        Text(
-                          context.read<AppBloc>().state.employee.email,
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-                centerTitle: true,
-              ),
+              // appBar: AppBar(
+              //   title: const Text("ELENCO LAVORATORI"),
+              //   actions: [
+              //     Padding(
+              //       padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              //       child: Column(
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         crossAxisAlignment: CrossAxisAlignment.center,
+              //         children: [
+              //           Text(
+              //             "${context.read<AppBloc>().state.employee.firstname} ${context.read<AppBloc>().state.employee.lastname}",
+              //             style: const TextStyle(fontSize: 18),
+              //           ),
+              //           Text(
+              //             context.read<AppBloc>().state.employee.email,
+              //             style: const TextStyle(fontSize: 14),
+              //           ),
+              //         ],
+              //       ),
+              //     )
+              //   ],
+              //   centerTitle: true,
+              // ),
               body: Center(
                 child: ListView(
                   children: [

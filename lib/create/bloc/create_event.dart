@@ -190,3 +190,7 @@ class WorkerEditRequested extends CreateEvent {
   @override
   List<Object> get props => [worker];
 }
+
+class ResetForm extends CreateEvent {
+  const ResetForm();
+}
