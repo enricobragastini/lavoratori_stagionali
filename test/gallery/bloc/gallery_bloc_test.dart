@@ -116,6 +116,14 @@ void main() {
             status: GalleryStatus.success,
             workers: mockWorkers,
           ),
+          GalleryState(
+            status: GalleryStatus.loading,
+            workers: mockWorkers,
+          ),
+          GalleryState(
+            status: GalleryStatus.success,
+            workers: mockWorkers,
+          ),
         ],
       );
     });

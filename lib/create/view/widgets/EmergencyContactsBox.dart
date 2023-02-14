@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:workers_repository/workers_repository.dart'
     show EmergencyContact;
 
-import '../widgets/CustomTextFormField.dart';
+import 'customTextFormField.dart';
 
 class EmergencyContactsBox extends StatelessWidget {
   const EmergencyContactsBox(

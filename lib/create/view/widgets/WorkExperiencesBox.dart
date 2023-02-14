@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:workers_repository/workers_repository.dart';
 
 import '../../bloc/create_bloc.dart';
-import '../widgets/CustomTextFormField.dart';
+import 'customTextFormField.dart';
 
 class WorkExperiencesBox extends StatelessWidget {
   const WorkExperiencesBox(
@@ -262,6 +262,11 @@ class ExperienceDialog extends StatelessWidget {
         TextButton(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
+                String tasks = tasksController.text.trim();
+                if (tasks.endsWith(";")) {
+                  tasks = tasksController.text
+                      .substring(0, tasksController.text.length - 1);
+                }
                 WorkExperience exp = WorkExperience(
                     title: titleController.text.trim(),
                     companyName: companyNameController.text.trim(),
@@ -271,7 +276,11 @@ class ExperienceDialog extends StatelessWidget {
                         .parse(endPeriodController.text.trim()),
                     dailyPay: double.parse(dailyPayController.text.trim()),
                     workplace: workplaceController.text.trim(),
-                    tasks: tasksController.text.split(';')
+                    tasks: tasks
+                        .trim()
+                        .split(';')
+                        .where((element) => (element.isNotEmpty))
+                        .toList()
                       ..forEach((element) => element.trim()),
                     notes: notesController.text.trim());
                 Navigator.of(context).pop(exp);
@@ -386,7 +395,7 @@ class ExperienceDialog extends StatelessWidget {
                   CustomTextFormField(
                     textFormFieldKey: _dailyPayKey,
                     textFormFieldController: dailyPayController,
-                    labelText: "Paga Lorda Giornaliera (in Euro)",
+                    labelText: "Paga Lorda Giornaliera (in Euro)*",
                     onFocusChangeAction: (focus) {
                       if (!focus) {
                         _dailyPayKey.currentState!.validate();
@@ -407,7 +416,7 @@ class ExperienceDialog extends StatelessWidget {
                   CustomTextFormField(
                     textFormFieldKey: _workplaceKey,
                     textFormFieldController: workplaceController,
-                    labelText: "Luogo di lavoro",
+                    labelText: "Luogo di lavoro*",
                     onFocusChangeAction: (focus) {
                       if (!focus) {
                         _workplaceKey.currentState!.validate();

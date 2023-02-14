@@ -45,6 +45,11 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<AppBloc>().workersRepository.workersStream.listen((event) {
+      print("Server notification");
+      context.read<GalleryBloc>().add(const WorkersListUpdated());
+    });
+
     context.read<AppBloc>().ensureAuthenticated().then((value) {
       print("HomeView -> ensureAuthenticated: $value");
       context.read<GalleryBloc>().add(const WorkersSubscriptionRequested());
@@ -85,7 +90,7 @@ class HomeView extends StatelessWidget {
               : (selectedTab == HomeTab.page2 &&
                       context.read<HomeCubit>().state.workerToEdit != null)
                   ? "MODIFICA LAVORATORE"
-                  : "CREA LAVORATORE"),
+                  : "CREA UN NUOVO LAVORATORE"),
           leading: context
                       .select((HomeCubit cubit) => cubit.state.selectedTab) ==
                   HomeTab.page1

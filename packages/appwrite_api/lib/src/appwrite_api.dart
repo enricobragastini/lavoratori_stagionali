@@ -161,6 +161,8 @@ class AppwriteAPI {
         queries: []);
   }
 
+  // Fornisce l'oggetto Stream che consente di ascoltare tutte le notifiche
+  // che arrivano dal database
   Stream<RealtimeMessage> get workersStream => workersSubscription.stream;
 
   Future<models.Document> upsert(

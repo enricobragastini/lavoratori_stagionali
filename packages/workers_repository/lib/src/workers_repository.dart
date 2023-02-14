@@ -21,7 +21,7 @@ class WorkersRepository {
     workersStream = appwriteAPI.workersStream;
   }
 
-  Future<void> saveWorker(Worker worker) async {
+  Future<void>? saveWorker(Worker worker) async {
     try {
       String workerID = await appwriteAPI.saveWorker(worker.id, {
         "firstname": worker.firstname,
@@ -184,7 +184,6 @@ class WorkersRepository {
   Future<bool> resetWorker(Worker worker) async {
     try {
       for (final exp in worker.workExperiences) {
-        print("Elimino WE");
         await appwriteAPI.deleteWorkExperience(exp.id!);
       }
     } catch (e) {
@@ -192,7 +191,6 @@ class WorkersRepository {
     }
     try {
       for (final period in worker.periods) {
-        print("Elimino periodo");
         await appwriteAPI.deletePeriod(period.id!);
       }
     } catch (e) {
@@ -200,7 +198,6 @@ class WorkersRepository {
     }
     try {
       for (final contact in worker.emergencyContacts) {
-        print("Elimino EC");
         await appwriteAPI.deleteEmergencyContact(contact.id!);
       }
     } catch (e) {

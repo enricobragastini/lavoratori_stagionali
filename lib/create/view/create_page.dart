@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import "package:flutter_bloc/flutter_bloc.dart";
 import 'package:lavoratori_stagionali/create/view/form_assets.dart';
-import 'package:lavoratori_stagionali/create/view/widgets/CustomTextFormField.dart';
-import 'package:lavoratori_stagionali/create/view/widgets/EmergencyContactsBox.dart';
-import 'package:lavoratori_stagionali/create/view/widgets/LocationsBox.dart';
-import 'package:lavoratori_stagionali/create/view/widgets/PeriodsBox.dart';
-import 'package:lavoratori_stagionali/create/view/widgets/WorkExperiencesBox.dart';
+import 'package:lavoratori_stagionali/create/view/widgets/customTextFormField.dart';
+import 'package:lavoratori_stagionali/create/view/widgets/emergencyContactsBox.dart';
+import 'package:lavoratori_stagionali/create/view/widgets/locationsBox.dart';
+import 'package:lavoratori_stagionali/create/view/widgets/periodsBox.dart';
+import 'package:lavoratori_stagionali/create/view/widgets/workExperiencesBox.dart';
 import 'package:lavoratori_stagionali/home/cubit/home_cubit.dart';
-import 'package:lavoratori_stagionali/app/bloc/app_bloc.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:workers_repository/workers_repository.dart' show Worker;
@@ -40,7 +39,9 @@ class CreatePage extends StatelessWidget {
       listenWhen: (previous, current) {
         if (previous.status == CreateStatus.loading &&
             current.status != CreateStatus.loading) {
-          Navigator.of(context).pop();
+          try {
+            Navigator.of(context).pop();
+          } catch (e) {}
         }
         if (previous.status != CreateStatus.initial &&
             current.status == CreateStatus.initial) {
@@ -66,40 +67,17 @@ class CreatePage extends StatelessWidget {
         } else if (state.status == CreateStatus.failure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(const SnackBar(
-              content: Text("C'è stato un errore!"),
+            ..showSnackBar(SnackBar(
+              content: Text("C'è stato un errore: ${state.errorMessage}"),
               showCloseIcon: true,
               closeIconColor: Colors.white,
               behavior: SnackBarBehavior.floating,
-              duration: Duration(milliseconds: 5000),
+              duration: const Duration(milliseconds: 5000),
             ));
         }
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        // appBar: AppBar(
-        //   title: const Text("AGGIUNGI UN NUOVO LAVORATORE"),
-        //   centerTitle: true,
-        //   actions: [
-        //     Padding(
-        //       padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        //       child: Column(
-        //         mainAxisAlignment: MainAxisAlignment.center,
-        //         crossAxisAlignment: CrossAxisAlignment.center,
-        //         children: [
-        //           Text(
-        //             "${context.read<AppBloc>().state.employee.firstname} ${context.read<AppBloc>().state.employee.lastname}",
-        //             style: const TextStyle(fontSize: 18),
-        //           ),
-        //           Text(
-        //             context.read<AppBloc>().state.employee.email,
-        //             style: const TextStyle(fontSize: 14),
-        //           ),
-        //         ],
-        //       ),
-        //     )
-        //   ],
-        // ),
         body: BlocBuilder<CreateBloc, CreateState>(
           builder: (context, state) {
             TextEditingController firstnameController =
@@ -357,7 +335,7 @@ class CreatePage extends StatelessWidget {
                             const SizedBox(
                                 width: double.infinity,
                                 child: Text(
-                                  "Lingue parlate",
+                                  "Lingue parlate*",
                                   style: TextStyle(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold),
@@ -404,7 +382,7 @@ class CreatePage extends StatelessWidget {
                             const SizedBox(
                                 width: double.infinity,
                                 child: Text(
-                                  "Patenti di guida / Automunito",
+                                  "Patenti di guida* / Automunito*",
                                   style: TextStyle(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold),
@@ -491,7 +469,7 @@ class CreatePage extends StatelessWidget {
                             const SizedBox(
                                 width: double.infinity,
                                 child: Text(
-                                  "Esperienze lavorative passate",
+                                  "Esperienze lavorative passate*",
                                   style: TextStyle(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold),
@@ -525,7 +503,7 @@ class CreatePage extends StatelessWidget {
                             const SizedBox(
                                 width: double.infinity,
                                 child: Text(
-                                  "Disponibilità: Quando e Dove",
+                                  "Disponibilità: Quando* e Dove*",
                                   style: TextStyle(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold),
@@ -578,7 +556,7 @@ class CreatePage extends StatelessWidget {
                             const SizedBox(
                                 width: double.infinity,
                                 child: Text(
-                                  "Contatti di Emergenza",
+                                  "Contatti di Emergenza*",
                                   style: TextStyle(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold),
@@ -612,6 +590,18 @@ class CreatePage extends StatelessWidget {
                                         context
                                             .read<CreateBloc>()
                                             .add(const SaveRequested());
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                          ..hideCurrentSnackBar()
+                                          ..showSnackBar(SnackBar(
+                                            content: Text(
+                                                "C'è stato un errore: ${state.errorMessage}"),
+                                            showCloseIcon: true,
+                                            closeIconColor: Colors.white,
+                                            behavior: SnackBarBehavior.floating,
+                                            duration: const Duration(
+                                                milliseconds: 5000),
+                                          ));
                                       }
                                     },
                                     child: Text(toEdit != null

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:workers_repository/workers_repository.dart';
 
-import 'CustomTextFormField.dart';
+import 'customTextFormField.dart';
 
 class PeriodsBox extends StatelessWidget {
   const PeriodsBox(
@@ -151,7 +151,7 @@ class Box extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Periodo ${dateFormatter.format(list[index].start)} al ${dateFormatter.format(list[index].end)}",
+                                  "Periodo dal ${dateFormatter.format(list[index].start)} al ${dateFormatter.format(list[index].end)}",
                                   style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
@@ -184,13 +184,13 @@ class PeriodsDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController startPeriodController =
-        TextEditingController(text: "");
+    TextEditingController startPeriodController = TextEditingController(
+        text: DateFormat("dd/MM/yyyy").format(DateTime.now()));
     TextEditingController endPeriodController = TextEditingController(text: "");
 
     return AlertDialog(
       title: const Text(
-        "Aggiungi una nuova Esperienza Lavorativa",
+        "Aggiungi un periodo",
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 20),
       ),
@@ -251,6 +251,11 @@ class PeriodsDialog extends StatelessWidget {
                         DateFormat('dd/MM/yyyy').parse(value);
                       } catch (e) {
                         return 'Inserire una data valida (dd/mm/yyyy)';
+                      }
+                      if (DateFormat('dd/MM/yyyy').parse(value).isBefore(
+                          DateTime(DateTime.now().year, DateTime.now().month,
+                              DateTime.now().day))) {
+                        return "La data di inizio non può essere prima di oggi";
                       }
                       return null;
                     },

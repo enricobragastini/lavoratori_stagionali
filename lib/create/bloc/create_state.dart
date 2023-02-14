@@ -22,6 +22,7 @@ class CreateState extends Equatable {
     this.periods = const [],
     this.withOwnCar = false,
     this.oldWorker,
+    this.errorMessage,
   });
 
   final CreateStatus status;
@@ -42,6 +43,8 @@ class CreateState extends Equatable {
   final List<String> locations;
   final List<Period> periods;
   final bool withOwnCar;
+
+  final String? errorMessage;
 
   final Worker? oldWorker;
 
@@ -64,26 +67,29 @@ class CreateState extends Equatable {
     List<Period>? periods,
     bool? withOwnCar,
     Worker? oldWorker,
+    String? errorMessage,
   }) {
     return CreateState(
-        status: status ?? this.status,
-        workerId: workerId ?? this.workerId,
-        firstname: firstname ?? this.firstname,
-        lastname: lastname ?? this.lastname,
-        birthday: birthday ?? this.birthday,
-        birthplace: birthplace ?? this.birthplace,
-        nationality: nationality ?? this.nationality,
-        address: address ?? this.address,
-        phone: phone ?? this.phone,
-        email: email ?? this.email,
-        workExperiences: workExperiences ?? this.workExperiences,
-        emergencyContacts: emergencyContacts ?? this.emergencyContacts,
-        languages: languages ?? this.languages,
-        licenses: licenses ?? this.licenses,
-        locations: locations ?? this.locations,
-        periods: periods ?? this.periods,
-        withOwnCar: withOwnCar ?? this.withOwnCar,
-        oldWorker: oldWorker ?? this.oldWorker);
+      status: status ?? this.status,
+      workerId: workerId ?? this.workerId,
+      firstname: firstname ?? this.firstname,
+      lastname: lastname ?? this.lastname,
+      birthday: birthday ?? this.birthday,
+      birthplace: birthplace ?? this.birthplace,
+      nationality: nationality ?? this.nationality,
+      address: address ?? this.address,
+      phone: phone ?? this.phone,
+      email: email ?? this.email,
+      workExperiences: workExperiences ?? this.workExperiences,
+      emergencyContacts: emergencyContacts ?? this.emergencyContacts,
+      languages: languages ?? this.languages,
+      licenses: licenses ?? this.licenses,
+      locations: locations ?? this.locations,
+      periods: periods ?? this.periods,
+      withOwnCar: withOwnCar ?? this.withOwnCar,
+      oldWorker: oldWorker ?? this.oldWorker,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
   }
 
   @override

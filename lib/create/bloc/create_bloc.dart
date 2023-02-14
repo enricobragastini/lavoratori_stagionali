@@ -1,4 +1,3 @@
-import 'package:appwrite/models.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:workers_repository/workers_repository.dart'
@@ -44,40 +43,43 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
 
   Future<void> _onSaveRequest(
       SaveRequested event, Emitter<CreateState> emit) async {
-    try {
-      emit(state.copyWith(status: CreateStatus.loading));
+    emit(state.copyWith(status: CreateStatus.loading));
 
-      print(state.oldWorker!.workExperiences);
-      print(state.oldWorker!.periods);
-      print(state.oldWorker!.emergencyContacts);
-      if (state.oldWorker != null && state.oldWorker!.id == state.workerId) {
-        print("Trying to RESET");
-        await workersRepository.resetWorker(state.oldWorker!);
+    if (state.emergencyContacts.isNotEmpty &&
+        state.languages.isNotEmpty &&
+        state.licenses.isNotEmpty &&
+        state.locations.isNotEmpty) {
+      try {
+        if (state.oldWorker != null && state.oldWorker!.id == state.workerId) {
+          await workersRepository.resetWorker(state.oldWorker!);
+        }
+
+        await workersRepository.saveWorker(Worker(
+            id: state.workerId,
+            firstname: state.firstname,
+            lastname: state.lastname,
+            birthday: DateFormat("dd/MM/yyyy").parse(state.birthday),
+            birthplace: state.birthplace,
+            nationality: state.nationality,
+            email: state.email,
+            phone: state.phone,
+            address: state.address,
+            workExperiences: state.workExperiences,
+            emergencyContacts: state.emergencyContacts,
+            languages: state.languages,
+            licenses: state.licenses,
+            locations: state.locations,
+            periods: state.periods,
+            withOwnCar: state.withOwnCar));
+
+        emit(const CreateState());
+      } on Exception {
+        emit(state.copyWith(status: CreateStatus.failure));
       }
-
-      await workersRepository.saveWorker(Worker(
-          id: state.workerId,
-          firstname: state.firstname,
-          lastname: state.lastname,
-          birthday: DateFormat("dd/MM/yyyy").parse(state.birthday),
-          birthplace: state.birthplace,
-          nationality: state.nationality,
-          email: state.email,
-          phone: state.phone,
-          address: state.address,
-          workExperiences: state.workExperiences,
-          emergencyContacts: state.emergencyContacts,
-          languages: state.languages,
-          licenses: state.licenses,
-          locations: state.locations,
-          periods: state.periods,
-          withOwnCar: state.withOwnCar));
-      print("[INFO] Elemento inserito nel database correttamente!");
-
-      emit(const CreateState());
-    } on WorkersException catch (e) {
-      print("[ERRORE] ${e.message}");
-      emit(state.copyWith(status: CreateStatus.failure));
+    } else {
+      emit(state.copyWith(
+          status: CreateStatus.failure,
+          errorMessage: "Compilare tutti i campi obbligatori."));
     }
   }
 

@@ -5,9 +5,6 @@ import 'package:lavoratori_stagionali/gallery/view/widgets/search_bar.dart';
 import 'package:lavoratori_stagionali/gallery/view/widgets/worker_card.dart';
 import "package:flutter_bloc/flutter_bloc.dart";
 import 'package:lavoratori_stagionali/home/cubit/home_cubit.dart';
-import 'package:lavoratori_stagionali/app/bloc/app_bloc.dart';
-
-import 'package:filter/filter.dart';
 
 class GalleryPage extends StatelessWidget {
   const GalleryPage({Key? key}) : super(key: key);
@@ -17,18 +14,14 @@ class GalleryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const double searchContainerBorderRadius = 40;
-    context.read<GalleryBloc>().workersRepository.workersStream.listen(
-      (notification) {
-        context.read<GalleryBloc>().add(const WorkersListUpdated());
-        context.read<GalleryBloc>().add(const FiltersUpdated());
-      },
-    );
 
     return BlocListener<GalleryBloc, GalleryState>(
       listenWhen: (previous, current) {
         if (previous.status == GalleryStatus.loading &&
             current.status != GalleryStatus.loading) {
-          Navigator.of(context).pop();
+          try {
+            Navigator.of(context).pop();
+          } catch (e) {}
         }
         return previous.status != current.status;
       },
@@ -64,29 +57,6 @@ class GalleryPage extends StatelessWidget {
         builder: (context, state) {
           return Scaffold(
               backgroundColor: Colors.white,
-              // appBar: AppBar(
-              //   title: const Text("ELENCO LAVORATORI"),
-              //   actions: [
-              //     Padding(
-              //       padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              //       child: Column(
-              //         mainAxisAlignment: MainAxisAlignment.center,
-              //         crossAxisAlignment: CrossAxisAlignment.center,
-              //         children: [
-              //           Text(
-              //             "${context.read<AppBloc>().state.employee.firstname} ${context.read<AppBloc>().state.employee.lastname}",
-              //             style: const TextStyle(fontSize: 18),
-              //           ),
-              //           Text(
-              //             context.read<AppBloc>().state.employee.email,
-              //             style: const TextStyle(fontSize: 14),
-              //           ),
-              //         ],
-              //       ),
-              //     )
-              //   ],
-              //   centerTitle: true,
-              // ),
               body: Center(
                 child: ListView(
                   children: [
