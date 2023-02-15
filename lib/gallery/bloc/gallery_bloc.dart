@@ -54,6 +54,7 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
       await workersRepository.workersList.then((list) async {
         emit(state.copyWith(status: GalleryStatus.success, workers: list));
       });
+      add(const FiltersUpdated());
     } catch (e) {
       emit(state.copyWith(status: GalleryStatus.failure));
     }
@@ -116,7 +117,6 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
           allTasks.addAll(workExperience.tasks);
         }
       }
-      print(allTasks);
       emit(state.copyWith(
           status: GalleryStatus.success,
           allLanguages: allLanguages.toSet().toList(),

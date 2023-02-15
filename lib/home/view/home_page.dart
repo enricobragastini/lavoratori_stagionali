@@ -29,9 +29,6 @@ class HomePage extends StatelessWidget {
         BlocProvider(
           create: (context) => CreateBloc(workersRepository: workersRepository),
         ),
-        BlocProvider(
-          create: (context) => NetworkBloc()..observeNetwork(),
-        )
       ],
       child: HomeView(),
     );

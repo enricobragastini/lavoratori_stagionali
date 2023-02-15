@@ -166,7 +166,30 @@ class GalleryPage extends StatelessWidget {
                     ),
                     BlocBuilder<GalleryBloc, GalleryState>(
                       builder: (context, state) {
-                        if (state.filteredWorkers.isNotEmpty) {
+                        if (state.workers.isEmpty) {
+                          return const Center(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 100.0),
+                              child: Text(
+                                "Nessun lavoratore presente in anagrafica\nAggiungine uno!",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 18, fontStyle: FontStyle.italic),
+                              ),
+                            ),
+                          );
+                        } else if (state.filteredWorkers.isEmpty) {
+                          return const Center(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 100.0),
+                              child: Text(
+                                "La tua ricerca non ha prodotto risultati!",
+                                style: TextStyle(
+                                    fontSize: 18, fontStyle: FontStyle.italic),
+                              ),
+                            ),
+                          );
+                        } else {
                           return Container(
                             padding: const EdgeInsets.symmetric(horizontal: 30),
                             constraints: const BoxConstraints(maxWidth: 1800),
@@ -187,28 +210,6 @@ class GalleryPage extends StatelessWidget {
                                             worker: worker)),
                                   )
                               ],
-                            ),
-                          );
-                        } else if (state.filteredWorkers.isEmpty) {
-                          return const Center(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 100.0),
-                              child: Text(
-                                "La tua ricerca non ha prodotto risultati!",
-                                style: TextStyle(
-                                    fontSize: 18, fontStyle: FontStyle.italic),
-                              ),
-                            ),
-                          );
-                        } else {
-                          return const Center(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 100.0),
-                              child: Text(
-                                "Nessun lavoratore presente in anagrafica\nAggiungine uno!",
-                                style: TextStyle(
-                                    fontSize: 18, fontStyle: FontStyle.italic),
-                              ),
                             ),
                           );
                         }

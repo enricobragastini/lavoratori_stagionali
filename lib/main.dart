@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:lavoratori_stagionali/app/app.dart';
+import 'package:lavoratori_stagionali/network/bloc/network_bloc.dart';
 import 'package:workers_repository/workers_repository.dart';
 
 void main() {
@@ -29,10 +30,17 @@ void main() {
       WorkersRepository(appwriteAPI: appwriteAPI);
 
   runApp(
-    BlocProvider(
-      create: (context) => AppBloc(
-          authenticationRepository: authenticationRepository,
-          workersRepository: workersRepository),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => AppBloc(
+              authenticationRepository: authenticationRepository,
+              workersRepository: workersRepository),
+        ),
+        BlocProvider(
+          create: (context) => NetworkBloc()..observeNetwork(),
+        )
+      ],
       child: const AppView(),
     ),
   );
