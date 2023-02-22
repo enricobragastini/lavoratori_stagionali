@@ -30,18 +30,23 @@ class AuthenticationRepository {
     loggedInEmployee = Employee.empty;
 
     controller.add(AuthenticationStatus.loading);
-    appwriteAPI.isSessionActive.then((active) {
-      if (active) {
-        // Se all'avvio c'è una sessione attiva
-        // Recupera le informazioni sull'utente autenticato
-        appwriteAPI.currentAccount.then((account) {
-          updateCurrentEmployee(account);
-          controller.add(AuthenticationStatus.authenticated);
-        });
-      } else {
-        controller.add(AuthenticationStatus.unauthenticated);
-      }
-    });
+
+    try {
+      appwriteAPI.isSessionActive.then((active) {
+        if (active) {
+          // Se all'avvio c'è una sessione attiva
+          // Recupera le informazioni sull'utente autenticato
+          appwriteAPI.currentAccount.then((account) {
+            updateCurrentEmployee(account);
+            controller.add(AuthenticationStatus.authenticated);
+          });
+        } else {
+          controller.add(AuthenticationStatus.unauthenticated);
+        }
+      });
+    } catch (e) {
+      controller.add(AuthenticationStatus.unauthenticated);
+    }
   }
 
   // Funzione per il login con email e password
